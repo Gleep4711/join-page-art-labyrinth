@@ -1,23 +1,24 @@
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
 import './App.css';
+import Form from './Form';
 
-function App() {
+function App({ background }) {
+  useEffect(() => {
+    const button = document.getElementById('language-toggle');
+    button.addEventListener('click', toggleLanguage);
+    return () => {
+      button.removeEventListener('click', toggleLanguage);
+    };
+  }, []);
+
+  const toggleLanguage = () => {
+    // Logic for switching the tongue
+    console.log('Language toggled');
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App" style={{ backgroundImage: `url(${background})` }}>
+      <Form />
     </div>
   );
 }
