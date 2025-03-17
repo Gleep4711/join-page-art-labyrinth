@@ -27,12 +27,20 @@ function App({ background }) {
     console.log('Language toggled');
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+  const handleInputChange = (event) => {
+    const { name, value, type, selectedOptions } = event.target;
+    if (type === 'select-multiple') {
+        const values = Array.from(selectedOptions).map(option => option.value);
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: values
+        }));
+    } else {
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    }
   };
 
   const handleSubmit = (e) => {
