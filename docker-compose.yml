@@ -1,0 +1,6 @@
+services:
+  art-lab-join-page:
+    build: .
+    container_name: nginx
+    ports:
+      - 3020:80

@@ -1,0 +1,17 @@
+name: Self-Hosted Runner Workflow
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    deploy-main:
+        if: github.ref == 'refs/heads/main'
+        runs-on: self-hosted
+        steps:
+            - uses: actions/checkout@v4
+            - name: Build Docker Image
+              run: docker compose build
+            - name: Deploy to Main
+              run: docker compose up -d
