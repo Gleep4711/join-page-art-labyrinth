@@ -69,8 +69,8 @@ function App({ background }) {
           </div>
         </div>
       ) : (
-        <>
-          <button onClick={handleBackClick}>Назад</button>
+        <div className='content'>
+          <button className='fw' onClick={handleBackClick}>&lt;&lt;&lt; Назад</button>
           {applicationType === 'volunteer' && (
             <FormVolunteer
               formData={formData}
@@ -85,7 +85,7 @@ function App({ background }) {
               handleSubmit={handleSubmit}
             />
           )}
-        </>
+        </div>
       )}
     </div>
   );
