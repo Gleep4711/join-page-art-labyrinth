@@ -1,7 +1,7 @@
 services:
   art-lab-join-page:
     build: ./front
-    container_name: nginx
+    container_name: art-lab-join-page-front
     ports:
       - 3020:80
     depends_on:
@@ -9,6 +9,6 @@ services:
 
   back:
     build: ./back
-    container_name: backend
-    ports:
-      - 8000:8000
+    container_name: art-lab-join-page-backend
+    # ports:
+    #   - 8000:8000
