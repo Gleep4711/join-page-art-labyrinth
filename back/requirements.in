@@ -1,0 +1,11 @@
+alembic
+asyncpg
+bcrypt==4.0.1
+fastapi
+psycopg
+psycopg-binary
+psycopg-pool
+psycopg2-binary
+pydantic_settings
+sqlalchemy
+uvicorn

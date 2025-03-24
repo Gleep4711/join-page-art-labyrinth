@@ -3,7 +3,7 @@ services:
     build: ./front
     container_name: art-lab-join-page-front
     ports:
-      - 3020:80
+      - 127.0.0.1:3020:80
     depends_on:
       - back
 
