@@ -9,7 +9,6 @@ COPY ./app ./app
 # COPY ./scripts ./scripts
 COPY ./alembic ./alembic
 COPY ./alembic.ini ./alembic.ini
-COPY ./.env ./.env
 
 CMD alembic upgrade heads && \
     python ./scripts/init_admin.py && \

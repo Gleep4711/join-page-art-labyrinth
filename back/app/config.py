@@ -10,10 +10,10 @@ class PydanticSettings(BaseSettings):
     admin_login: str = "admin"
     admin_password: str = "admin"
 
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8"
-    )
+    # model_config = SettingsConfigDict(
+    #     env_file=".env",
+    #     env_file_encoding="utf-8"
+    # )
 
 
 settings = PydanticSettings()
