@@ -4,8 +4,8 @@ from app.db.base import Base
 from sqlalchemy import Boolean, Column, DateTime, Integer, String
 
 
-class Admin(Base):
-    __tablename__ = "admins"
+class User(Base):
+    __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
     username = Column(String, unique=True, nullable=False)

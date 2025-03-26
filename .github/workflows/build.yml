@@ -12,6 +12,9 @@ jobs:
         steps:
             - uses: actions/checkout@v4
             - name: Build and Deploy Services
+              env:
+                  POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+                  JWT_SECRET: ${{ secrets.JWT_SECRET }}
               run: |
-                docker compose build
-                docker compose up -d
+                  docker compose build
+                  docker compose up -d

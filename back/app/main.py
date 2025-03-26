@@ -1,6 +1,6 @@
 import logging
 
-from back.app.api import root_route
+from app.api import root_route
 from app.config import settings
 from fastapi import FastAPI
 

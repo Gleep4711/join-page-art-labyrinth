@@ -5,3 +5,71 @@
 body {
   @apply font-sans;
 }
+
+@font-face {
+    font-family: 'Evolventa';
+    src: url('/public/Evolventa/Evolventa-Regular.ttf') format('truetype'),
+         url('/public/Evolventa/Evolventa-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Evolventa';
+    src: url('/public/Evolventa/Evolventa-Bold.ttf') format('truetype'),
+         url('/public/Evolventa/Evolventa-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Evolventa';
+    src: url('/public/Evolventa/Evolventa-Oblique.ttf') format('truetype'),
+         url('/public/Evolventa/Evolventa-Oblique.otf') format('opentype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Evolventa';
+    src: url('/public/Evolventa/Evolventa-BoldOblique.ttf') format('truetype'),
+         url('/public/Evolventa/Evolventa-BoldOblique.otf') format('opentype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+main {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+@media (max-width: 480px) {
+  main {
+    background-image: url('../assets/back-main-page-xs.jpg');
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  main {
+    background-image: url('../assets/back-main-page-s.jpg');
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1280px) {
+  main {
+    background-image: url('../assets/back-main-page-m.jpg');
+  }
+}
+
+@media (min-width: 1281px) and (max-width: 1920px) {
+  main {
+    background-image: url('../assets/back-main-page-l.jpg');
+  }
+}
+
+@media (min-width: 1921px) {
+  main {
+    background-image: url('../assets/back-main-page-f.jpg');
+  }
+}
