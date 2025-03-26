@@ -17,6 +17,9 @@ services:
   art-lab-join-page-backend:
     build: ./back
     container_name: art-lab-join-page-backend
+    environment:
+      POSTGRES_URL: ${POSTGRES_URL}
+      JWT_SECRET: ${JWT_SECRET}
     networks:
       - main
 
