@@ -1,5 +1,4 @@
 import asyncio
-import logging
 from logging.config import fileConfig
 
 from alembic import context
@@ -16,11 +15,6 @@ Base: DeclarativeMeta
 # access to the values within the .ini file in use.
 config = context.config
 
-
-# DEBUG
-print(f"postgres_url: {app_config.postgres_url}")
-logging.info(f"postgres_url: {app_config.postgres_url}")
-
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
@@ -34,7 +28,7 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 config.set_main_option(
     'sqlalchemy.url',
-    f"postgresql+psycopg://{app_config.postgres_url}"
+    f"postgresql+psycopg://{app_config.POSTGRES_URL}"
 )
 
 # other values from the config, defined by the needs of env.py,

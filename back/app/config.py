@@ -2,9 +2,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class PydanticSettings(BaseSettings):
-    postgres_url: str = ""
-    logging: str = "error"
-    jwt_secret: str = "your_secret_key"
+    POSTGRES_URL: str = ""
+    LOGGING: str = "error"
+    JWT_SECRET: str = "your_secret_key"
     access_token_expire_minutes: int = 60 * 12
 
     admin_login: str = "admin"

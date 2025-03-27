@@ -16,7 +16,5 @@ jobs:
                   POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
                   JWT_SECRET: ${{ secrets.JWT_SECRET }}
               run: |
-                  echo "POSTGRES_URL=$POSTGRES_URL" > ./back/.env
-                  echo "JWT_SECRET=$JWT_SECRET" >> ./back/.env
                   docker compose build
-                  docker compose up -d
+                  docker compose up -d --remove-orphans
