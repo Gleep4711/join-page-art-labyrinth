@@ -1,6 +1,6 @@
 import logging
 
-from app.api import root_route
+from app.api import root_route, forms
 from app.config import settings
 from fastapi import FastAPI
 
@@ -11,4 +11,5 @@ logging.basicConfig(
 
 app = FastAPI()
 
-app.include_router(root_route.router, tags=["main"], prefix="")
+app.include_router(root_route.router, tags=["Main"], prefix="")
+app.include_router(forms.router, tags=["Form"], prefix="/form")
