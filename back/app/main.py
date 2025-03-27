@@ -5,7 +5,7 @@ from app.config import settings
 from fastapi import FastAPI
 
 logging.basicConfig(
-    level=getattr(logging, settings.logging.upper(), logging.ERROR),
+    level=getattr(logging, settings.LOGGING.upper(), logging.ERROR),
     format="%(levelname)s: %(filename)s:%(lineno)d: %(message)s",
 )
 

@@ -10,9 +10,9 @@ services:
       - main
 
     # debug
-    # volumes:
-    #   - ./front/build:/usr/share/nginx/html
-    #   - ./front/nginx.conf:/etc/nginx/nginx.conf
+    volumes:
+      - ./front/build:/usr/share/nginx/html
+      - ./front/nginx.conf:/etc/nginx/nginx.conf
 
   art-lab-join-page-backend:
     build: ./back
@@ -24,11 +24,11 @@ services:
       - main
 
     # debug
-    # volumes:
-    #   - ./back:/code
-    # ports:
-    #   - 8000:8000
-    # command: sh -c "alembic upgrade heads && uvicorn app.main:app --host 0.0.0.0 --reload"
+    volumes:
+      - ./back:/code
+    ports:
+      - 8000:8000
+    command: sh -c "alembic upgrade heads && uvicorn app.main:app --host 0.0.0.0 --reload"
     # command: alembic revision --autogenerate -m "init"
 
 

@@ -28,7 +28,7 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 config.set_main_option(
     'sqlalchemy.url',
-    f"postgresql+psycopg://{app_config.postgres_url}"
+    f"postgresql+psycopg://{app_config.POSTGRES_URL}"
 )
 
 # other values from the config, defined by the needs of env.py,
