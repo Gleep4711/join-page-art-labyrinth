@@ -11,19 +11,16 @@ router = APIRouter()
 
 class FormDataMasters(BaseModel):
     name: str
-    age: Optional[int]
     phone: Optional[str]
-    prof: Optional[str]
-    department: Optional[List[str]]
     programDirection: Optional[str]
     programDescription: Optional[str]
     eventDates: Optional[str]
 
 class FormDataVolunteers(BaseModel):
-    name: str = Field(..., max_length=100)
-    age: Optional[int] = Field(None, ge=0, le=120)
-    phone: Optional[str] = Field(None, regex=r'^\+?[0-9]{10,15}$')
-    prof: Optional[str] = Field(None, max_length=144)
+    name: str
+    age: Optional[int]
+    phone: Optional[str]
+    prof: Optional[str]
     department: Optional[List[str]]
 
 class FormRequest(BaseModel):
