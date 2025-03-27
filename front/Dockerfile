@@ -2,6 +2,7 @@ FROM node:14 AS build
 
 WORKDIR /code
 COPY *.json ./
+COPY *.js ./
 RUN npm install
 
 COPY ./src ./src
