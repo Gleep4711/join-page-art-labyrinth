@@ -4,7 +4,6 @@ export function LanguageSelector() {
   return (
     <div>
       <svg
-        id="2003:157"
         width="88"
         height="44"
         viewBox="0 0 88 44"

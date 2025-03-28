@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function FormMaster({ formData, handleInputChange, handleSubmit }) {
+function FormMaster() {
     const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        programDirection: '',
+        programDescription: '',
+        eventDates: '',
+    });
+    const handleInputChange = (e: { target: { name: string; value: string; }; }) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
 
-    const submitForm = async (e) => {
+    const submitForm = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         try {
             const response = await fetch('/api/v1/form/save', {
