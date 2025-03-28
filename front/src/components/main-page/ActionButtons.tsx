@@ -17,8 +17,10 @@ export function ActionButtons() {
       </div>
       <div className="flex flex-col items-center space-y-4">
       <button
-        className="px-6 py-3 w-64 bg-customOrange hover:bg-customOrange-hover rounded-md text-xl"
+        // className="px-6 py-3 w-64 bg-customOrange hover:bg-customOrange-hover rounded-md text-xl"
+        className="px-6 py-3 w-64 bg-customOrange-disabled rounded-md text-xl"
         onClick={() => navigate("/master")}
+        disabled={true}
       >
         Сердце фестиваля
       </button>

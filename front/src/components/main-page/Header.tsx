@@ -1,10 +1,11 @@
 import React from "react";
 import { LanguageSelector } from "./LanguageSelector";
-
+import { Logo } from "../Svg/Logo";
 export function Header() {
+
   return (
-    <header className="flex justify-between items-center">
-      <img src="/art-lab-logo.svg" alt="Art Lab Logo" width="60" height="60" />
+    <header className="flex justify-between items-center text-white">
+      <a href="/"><Logo fill="white"/></a>
       <LanguageSelector />
     </header>
   );
