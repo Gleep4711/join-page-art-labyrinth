@@ -95,9 +95,9 @@ async def save_master_form(db: AsyncSession, data: FormDataMasters):
 
 async def send_to_telegram(data: dict, form_type: str):
     url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
-    message = f"Новая форма: {form_type}\n\n"
+    message = f"{form_type}\n\n"
     for key, value in data.items():
-        message += f"{key}: `{value}`\n"
+        message += f"{key}: <pre>{value}</pre>\n"
 
     payload = {
         "chat_id": settings.TELEGRAM_CHAT_ID,
