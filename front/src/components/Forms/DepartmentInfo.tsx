@@ -4,7 +4,7 @@ const DepartmentInfo = ({ onClose }: { onClose: () => void }) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" onClick={onClose}>
             <div
-                className="h-full w-4/5 bg-white shadow-md rounded-md z-50 relative overflow-y-auto max-h-screen"
+                className="h-screen w-screen bg-white shadow-md rounded-md z-50 relative overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
             >
                 <button className="absolute top-5 right-5 text-gray-500 hover:text-gray-800" onClick={onClose}>
@@ -13,8 +13,8 @@ const DepartmentInfo = ({ onClose }: { onClose: () => void }) => {
                         <path d="M11.8095 11.8095L4.19043 4.19048M11.8095 4.19048L4.19043 11.8095" stroke="#2B3723" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </button>
-                <div className="flex flex-row w-full">
-                    <div className="w-1/2 flex flex-col text-center">
+                <div className="flex flex-col md:flex-row w-full">
+                    <div className="w-full md:w-1/2 flex flex-col text-center">
                         <div className="border border-matchaGreen p-8">
                             <h2 className="text-xl font-bold">Административный Департамент</h2>
                             <h4 className="text-base text-orange-500">Подготовка фестиваля:</h4>
@@ -64,9 +64,7 @@ const DepartmentInfo = ({ onClose }: { onClose: () => void }) => {
                             </ul>
                         </div>
                     </div>
-
-
-                    <div className="w-1/2 flex flex-col text-center">
+                    <div className="w-full md:w-1/2 flex flex-col text-center">
                         <div className="border border-matchaGreen p-8">
                             <h2 className="text-xl font-bold">Рекламный Департамент</h2>
                             <h4 className="text-base text-orange-500">Подготовка фестиваля:</h4>
