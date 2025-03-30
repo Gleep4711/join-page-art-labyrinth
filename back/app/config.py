@@ -7,6 +7,9 @@ class PydanticSettings(BaseSettings):
     JWT_SECRET: str = "your_secret_key"
     access_token_expire_minutes: int = 60 * 12
 
+    TELEGRAM_BOT_TOKEN: str = ""
+    TELEGRAM_CHAT_ID: str = ""
+
     admin_login: str = "admin"
     admin_password: str = "admin"
 

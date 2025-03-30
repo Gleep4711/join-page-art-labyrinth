@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BackButton } from "./BackButton";
+import { DepartmentInfo } from "./DepartmentInfo";
 
 function FormVolunteer() {
     const navigate = useNavigate();
     const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
     const [formData, setFormData] = useState({ name: '', age: 0, social: '', prof: '' });
+    const [deptError, setDeptError] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleCheckboxChange = (e: { target: { value: any; checked: any; }; }) => {
         const { value, checked } = e.target;
@@ -14,6 +17,7 @@ function FormVolunteer() {
         } else {
             setSelectedDepartments((prev) => prev.filter((item) => item !== value));
         }
+        setDeptError(false);
     };
 
     const submitForm = async (e: { preventDefault: () => void; }) => {
@@ -23,20 +27,8 @@ function FormVolunteer() {
             department: selectedDepartments,
         };
 
-        if (formData.name.length < 3 || formData.name.length > 50) {
-            alert('Пожалуйста, введите корректное имя.');
-            return;
-        }
-        if (formData.age < 1 || formData.age > 120) {
-            alert('Пожалуйста, введите корректный возраст.');
-            return;
-        }
-        if (formData.prof.length < 2 || formData.prof.length > 144) {
-            alert('Пожалуйста, введите корректную профессию.');
-            return;
-        }
-        if (selectedDepartments.length < 1) {
-            alert('Пожалуйста, выберите департамент.');
+        if (selectedDepartments.length === 0) {
+            setDeptError(true);
             return;
         }
 
@@ -44,7 +36,7 @@ function FormVolunteer() {
             const response = await fetch('/api/v1/form/save', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({type: 'volunteer', data}),
+                body: JSON.stringify({ type: 'volunteer', data }),
             });
             if (response.ok) {
                 navigate('/');
@@ -119,8 +111,18 @@ function FormVolunteer() {
                     </div>
                     <div className="flex flex-col">
                         <label>Какой департамент вам интересен для участия? *</label>
-                        <label className="font-bold mb-3">Подробная информация о департаментах (i)</label>
-                        <div className="flex flex-col rounded-md border border-orange-500">
+                        <label className="font-bold mb-3 underline cursor-pointer" onClick={() => setIsModalOpen(true)}>
+                            Подробная информация о департаментах
+                            <svg className="shrink-0 inline w-4 h-4 me-3 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                            </svg>
+                        </label>
+                        {deptError && (
+                            <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300">
+                                Пожалуйста, выберите департамент. <span className="underline cursor-pointer" onClick={() => setIsModalOpen(true)}>Подробнее о департаментах.</span>
+                            </div>
+                        )}
+                        <div className={`flex flex-col rounded-md ${deptError ? 'border-2 border-red-500' : 'border border-orange-500'}`}>
                             <div className="bg-matchaGreen-50 pt-4 pl-5 pb-4">
                                 <label className="text-gray-400">Выберите</label>
                             </div>
@@ -143,6 +145,7 @@ function FormVolunteer() {
                     </div>
                 </form>
             </div>
+            {isModalOpen && <DepartmentInfo onClose={() => setIsModalOpen(false)} />}
         </div>
     );
 }

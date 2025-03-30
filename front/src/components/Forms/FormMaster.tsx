@@ -20,6 +20,8 @@ function FormMaster() {
         duration: '',
         raider: '',
     });
+    const [langError, setLangError] = useState(false);
+
 
     const handleCheckboxGroupChange = (e: { target: { value: any; checked: any; }; }, setState: React.Dispatch<React.SetStateAction<string[]>>) => {
         const { value, checked } = e.target;
@@ -39,12 +41,8 @@ function FormMaster() {
             lang: selectedLangs,
         };
 
-        if (formData.name.length < 3 || formData.name.length > 50) {
-            alert('Пожалуйста, введите корректное имя.');
-            return;
-        }
-        if (formData.country.length < 2 || formData.country.length > 40) {
-            alert('Пожалуйста, введите корректный возраст.');
+        if (selectedLangs.length < 1) {
+            setLangError(true);
             return;
         }
 
@@ -175,7 +173,7 @@ function FormMaster() {
                     </div>
                     <div className="flex flex-col">
                         <label>Возможные даты выступления</label>
-                        <div className="flex flex-col rounded-md border border-orange-500">
+                        <div className="flex flex-col rounded-md border border-gray-300">
                             <div className="bg-matchaGreen-50 pt-4 pl-5 pb-4">
                                 <label className="text-gray-400">Выберите</label>
                             </div>
@@ -249,7 +247,12 @@ function FormMaster() {
                     </div>
                     <div className="flex flex-col">
                         <label>Язык проведения программы *</label>
-                        <div className="flex flex-col rounded-md border border-orange-500">
+                        {langError && (
+                            <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300">
+                                Пожалуйста, выберите язык, на котором будет проводиться ваша программа. Если вы хотите провести программу на нескольких языках, выберите все подходящие варианты.
+                            </div>
+                        )}
+                        <div className={`flex flex-col rounded-md ${langError ? 'border-2 border-red-500' : 'border border-gray-300'}`}>
                             <div className="bg-matchaGreen-50 pt-4 pl-5 pb-4">
                                 <label className="text-gray-400">Выберите</label>
                             </div>
@@ -257,7 +260,16 @@ function FormMaster() {
                                 {langs.map((item) => (
                                     <label key={item.id} className="flex gap-3 cursor-pointer">
                                         <div className="h-3">
-                                            <input type="checkbox" name="lang" value={item.id} onChange={(e) => handleCheckboxGroupChange(e, setSelectedLangs)} />
+                                            <input
+                                                type="checkbox"
+                                                name="lang"
+                                                value={item.id}
+                                                onChange={(e) => {
+                                                    handleCheckboxGroupChange(e, setSelectedLangs);
+                                                    if (langError) {
+                                                        setLangError(false);
+                                                    }
+                                                }} />
                                         </div>
                                         <span className="leading-4">
                                             {item.label}
