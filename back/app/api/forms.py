@@ -9,23 +9,36 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
 
-class FormDataMasters(BaseModel):
-    name: str
-    phone: Optional[str]
-    programDirection: Optional[str]
-    programDescription: Optional[str]
-    eventDates: Optional[str]
 
 class FormDataVolunteers(BaseModel):
     name: str
     age: Optional[int]
-    phone: Optional[str]
+    social: Optional[str]
     prof: Optional[str]
     department: Optional[List[str]]
+
+
+class FormDataMasters(BaseModel):
+    name: str
+    country: Optional[str] | None
+    phone: Optional[str] | None
+    email: Optional[str] | None
+    direction: Optional[List[str]]
+    description: Optional[str] | None
+    date: Optional[List[str]] | None
+    programUrl: Optional[str] | None
+    socialUrl: Optional[str] | None
+    quantity: Optional[str] | None
+    time: Optional[str] | None
+    duration: Optional[str] | None
+    lang: Optional[List[str]] | None
+    raider: Optional[str] | None
+
 
 class FormRequest(BaseModel):
     type: str
     data: FormDataVolunteers | FormDataMasters
+
 
 @router.post('/save')
 async def save_form(body: FormRequest, db: AsyncSession = Depends(get_db)):
@@ -34,22 +47,47 @@ async def save_form(body: FormRequest, db: AsyncSession = Depends(get_db)):
     if not body.type or not body.data:
         raise HTTPException(status_code=400, detail="type and data are required")
 
-    data_dict = {key: value for key, value in body.data.model_dump().items() if value is not None}
+    if body.type == "volunteer":
+        await save_volunteer_form(db, body.data)
+    elif body.type == "master":
+        await save_master_form(db, body.data)
+    else:
+        raise HTTPException(status_code=400, detail="Invalid form type")
 
+    return {"status": "ok"}
+
+
+async def save_volunteer_form(db: AsyncSession, data: FormDataVolunteers):
     form = Form(
-        form_type=body.type,
-        name=data_dict.get("name", None),
-        age=data_dict.get("age", None),
-        phone=data_dict.get("phone", None),
-        profession=data_dict.get("prof", None),
-        department=",".join(data_dict["department"]) if "department" in data_dict else None,
-        program_direction=data_dict.get("programDirection", None),
-        program_description=data_dict.get("programDescription", None),
-        event_dates=data_dict.get("eventDates", None),
-        raw_data=body.model_dump_json()
+        form_type="volunteer",
+        name=data.name,
+        age=data.age,
+        social=data.social,
+        profession=data.prof,
+        department=",".join(data.department) if data.department else None,
+        raw_data=data.model_dump_json(),
     )
-
     db.add(form)
     await db.commit()
 
-    return {"status": "ok"}
+
+async def save_master_form(db: AsyncSession, data: FormDataMasters):
+    form = Form(
+        form_type="master",
+        name=data.name,
+        country=data.country,
+        phone=data.phone,
+        email=data.email,
+        program_direction=",".join(data.direction) if data.direction else None,
+        program_description=data.description,
+        program_example=data.programUrl,
+        event_dates=",".join(data.date) if data.date else None,
+        quantity=data.quantity,
+        time=data.time,
+        duration=data.duration,
+        lang=",".join(data.lang) if data.lang else None,
+        raider=data.raider,
+        raw_data=data.model_dump_json()
+    )
+    db.add(form)
+    await db.commit()

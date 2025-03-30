@@ -6,9 +6,8 @@ export function BackButton() {
     const navigate = useNavigate();
 
     return (
-        <div className="flex gap-3">
+        <div className="flex gap-3 w-min cursor-pointer" onClick={() => navigate("/")}>
             <button
-                onClick={() => navigate("/")}
                 className="flex gap-3 items-center text-customOrange hover:text-customOrange transition-colors"
                 aria-label="Вернуться на главную страницу"
             >
@@ -33,8 +32,7 @@ export function BackButton() {
                 </svg>
 
             </button>
-            <Logo width={24} height={24} fill="customOrange"/>
+            <Logo width={24} height={24} fill="customOrange" />
         </div>
-
     );
 }
