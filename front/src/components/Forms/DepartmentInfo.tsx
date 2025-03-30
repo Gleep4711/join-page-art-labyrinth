@@ -1,6 +1,6 @@
 import React from "react";
 
-export const DepartmentInfo = ({ onClose }: { onClose: () => void }) => {
+const DepartmentInfo = ({ onClose }: { onClose: () => void }) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" onClick={onClose}>
             <div
@@ -127,3 +127,5 @@ export const DepartmentInfo = ({ onClose }: { onClose: () => void }) => {
         </div>
     );
 };
+
+export default DepartmentInfo;

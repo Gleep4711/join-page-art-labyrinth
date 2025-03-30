@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Logo } from "../Svg/Logo";
 
-export function BackButton() {
+function BackButton() {
     const navigate = useNavigate();
 
     return (
@@ -36,3 +36,5 @@ export function BackButton() {
         </div>
     );
 }
+
+export default BackButton;
