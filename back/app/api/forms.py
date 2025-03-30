@@ -101,7 +101,9 @@ async def send_to_telegram(data: dict, form_type: str):
 
     payload = {
         "chat_id": settings.TELEGRAM_CHAT_ID,
-        "text": message
+        "text": message,
+        "parse_mode": "HTML",
+        "disable_web_page_preview": False,
     }
 
     async with httpx.AsyncClient() as client:
