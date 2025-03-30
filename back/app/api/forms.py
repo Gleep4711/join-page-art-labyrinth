@@ -1,10 +1,11 @@
-import logging
 from typing import List, Optional
 
+import httpx
+from app.config import settings
 from app.db.base import get_db
 from app.db.models import Form
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
@@ -42,15 +43,15 @@ class FormRequest(BaseModel):
 
 @router.post('/save')
 async def save_form(body: FormRequest, db: AsyncSession = Depends(get_db)):
-    logging.debug(f"type: {body.type}, data: {body.data}")
-
     if not body.type or not body.data:
         raise HTTPException(status_code=400, detail="type and data are required")
 
     if body.type == "volunteer":
         await save_volunteer_form(db, body.data)
+        await send_to_telegram(body.data.model_dump(), "volunteer")
     elif body.type == "master":
         await save_master_form(db, body.data)
+        await send_to_telegram(body.data.model_dump(), "master")
     else:
         raise HTTPException(status_code=400, detail="Invalid form type")
 
@@ -91,3 +92,17 @@ async def save_master_form(db: AsyncSession, data: FormDataMasters):
     )
     db.add(form)
     await db.commit()
+
+async def send_to_telegram(data: dict, form_type: str):
+    url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
+    message = f"Новая форма: {form_type}\n\n"
+    for key, value in data.items():
+        message += f"{key}: `{value}`\n"
+
+    payload = {
+        "chat_id": settings.TELEGRAM_CHAT_ID,
+        "text": message
+    }
+
+    async with httpx.AsyncClient() as client:
+        response = await client.post(url, json=payload)

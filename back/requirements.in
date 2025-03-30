@@ -2,6 +2,7 @@ alembic
 asyncpg
 bcrypt==4.0.1
 fastapi
+httpx
 psycopg
 psycopg-binary
 psycopg-pool
