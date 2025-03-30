@@ -97,7 +97,11 @@ async def send_to_telegram(data: dict, form_type: str):
     url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
     message = f"{form_type}\n\n"
     for key, value in data.items():
-        message += f"{key}: <pre>{value}</pre>\n"
+        if isinstance(value, list):
+            value = ", ".join(value)
+        if isinstance(value, str) and len(value) > 100:
+            value = value[:100] + "..."
+        message += f"{key}: <code>{value}</code>\n"
 
     payload = {
         "chat_id": settings.TELEGRAM_CHAT_ID,
