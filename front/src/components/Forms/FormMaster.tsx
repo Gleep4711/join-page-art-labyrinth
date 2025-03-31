@@ -88,8 +88,8 @@ function FormMaster() {
         { id: "en", label: t("forms.master.langs.en") },
     ];
 
-    const inputClass = "border border-gray-300 rounded-md mt-1 p-2 bg-matchaGreen-50";
-    const checkClass = "flex flex-col rounded-md border border-gray-300 mt-1";
+    const inputClass = "border border-gray-300 rounded-md mt-2 p-2 bg-matchaGreen-50";
+    const checkClass = "flex flex-col rounded-md border border-gray-300 mt-2";
 
     return (
         <div className="master-form leading-none">
@@ -238,7 +238,7 @@ function FormMaster() {
                                 />
                             </div>
                             <div className="flex flex-col">
-                                <label>{t("forms.master.dates.duration")} *</label>
+                                <label>{t("forms.master.duration")} *</label>
                                 <input
                                     type="text"
                                     name="duration"
