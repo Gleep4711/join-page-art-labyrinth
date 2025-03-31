@@ -156,7 +156,7 @@ function FormVolunteer() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="text-center pt-6">
+                            <div className="text-center pt-3">
                                 <button type="submit" className="font-inter px-8 py-3 bg-customOrange text-orange-50 rounded-md hover:bg-customOrange-hover">{t("forms.volunteer.submit")}</button>
                             </div>
                         </form>
