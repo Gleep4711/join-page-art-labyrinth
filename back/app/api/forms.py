@@ -101,8 +101,8 @@ async def send_to_telegram(data: dict, form_type: str):
     for key, value in data.items():
         if isinstance(value, list):
             value = "</code>, <code>".join(value)
-        if isinstance(value, str) and len(value) > 100:
-            value = value[:100] + "..."
+        if isinstance(value, str) and len(value) > 200:
+            value = value[:200] + "..."
         message += f"{key}: <code>{value}</code>\n"
 
     payload = {
