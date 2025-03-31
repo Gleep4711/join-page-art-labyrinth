@@ -4,8 +4,8 @@ import { Logo } from "../Svg/Logo";
 export function Header() {
 
   return (
-    <header className="flex justify-between items-center text-white">
-      <a href="/"><Logo fill="white"/></a>
+    <header className="flex justify-between items-center text-orange-50">
+      <a href="/"><Logo fill="#FFF9EC"/></a>
       <LanguageSelector />
     </header>
   );

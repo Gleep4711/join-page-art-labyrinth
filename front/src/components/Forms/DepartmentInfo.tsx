@@ -7,7 +7,7 @@ const DepartmentInfo = ({ onClose }: { onClose: () => void }) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" onClick={onClose}>
             <div
-                className="h-screen md:w-4/5 w-screen bg-white shadow-md rounded-md z-50 relative overflow-y-auto"
+                className="h-screen md:w-4/5 w-screen bg-orange-50 shadow-md rounded-md z-50 relative overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
             >
                 <button className="absolute top-5 right-5 text-gray-500 hover:text-gray-800" onClick={onClose}>

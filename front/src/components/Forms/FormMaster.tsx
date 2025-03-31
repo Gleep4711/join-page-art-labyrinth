@@ -10,7 +10,7 @@ function FormMaster() {
     const [formData, setFormData] = useState({
         name: '',
         country: '',
-        phone: '',
+        tg: '',
         email: '',
         description: '',
         programUrl: '',
@@ -88,10 +88,11 @@ function FormMaster() {
         { id: "en", label: t("forms.master.langs.en") },
     ];
 
-    const inputClass = "border border-gray-300 rounded-md p-2 bg-matchaGreen-50";
+    const inputClass = "border border-gray-300 rounded-md mt-1 p-2 bg-matchaGreen-50";
+    const checkClass = "flex flex-col rounded-md border border-gray-300 mt-1";
 
     return (
-        <div className="master-form">
+        <div className="master-form leading-none">
             {isSubmitted ? <ThankYouPage /> : (
                 <div className="max-w-lg px-4 py-4 bg-orange-50 shadow-md rounded-md">
                     <BackButton />
@@ -124,13 +125,12 @@ function FormMaster() {
                                 />
                             </div>
                             <div className="flex flex-col">
-                                <label>{t("forms.master.phone")} *</label>
+                                <label>{t("forms.master.tg")}</label>
                                 <input
                                     type="text"
-                                    name="phone"
-                                    value={formData?.phone}
-                                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                    required
+                                    name="tg"
+                                    value={formData?.tg}
+                                    onChange={(e) => setFormData({ ...formData, tg: e.target.value })}
                                     className={inputClass}
                                 />
                             </div>
@@ -146,7 +146,7 @@ function FormMaster() {
                             </div>
                             <div className="flex flex-col">
                                 <label>{t("forms.master.direction.title")}</label>
-                                <div className="flex flex-col rounded-md border border-gray-300">
+                                <div className={checkClass}>
                                     <div className="bg-matchaGreen-50 pt-4 pl-5 pb-4">
                                         <label className="text-gray-400">{t("forms.master.change")}</label>
                                     </div>
@@ -165,20 +165,18 @@ function FormMaster() {
                                 </div>
                             </div>
                             <div className="flex flex-col">
-                                <label>{t("forms.master.description")} *</label>
-                                <label className="italic text-sm">{t("forms.master.description-info")}</label>
+                                <label>{t("forms.master.description-info")}</label>
                                 <textarea
                                     name="description"
                                     rows={5}
                                     value={formData?.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                    required
                                     className={inputClass}
                                 />
                             </div>
                             <div className="flex flex-col">
                                 <label>{t("forms.master.dates.title")}</label>
-                                <div className="flex flex-col rounded-md border border-gray-300">
+                                <div className={checkClass}>
                                     <div className="bg-matchaGreen-50 pt-4 pl-5 pb-4">
                                         <label className="text-gray-400">{t("forms.master.change")}</label>
                                     </div>
@@ -257,7 +255,7 @@ function FormMaster() {
                                         {t("forms.master.error")}
                                     </div>
                                 )}
-                                <div className={`flex flex-col rounded-md ${langError ? 'border-2 border-red-500' : 'border border-gray-300'}`}>
+                                <div className={`flex flex-col rounded-md mt-1 ${langError ? 'border-2 border-red-500' : 'border border-gray-300'}`}>
                                     <div className="bg-matchaGreen-50 pt-4 pl-5 pb-4">
                                         <label className="text-gray-400">{t("forms.master.change")}</label>
                                     </div>
@@ -294,8 +292,8 @@ function FormMaster() {
                                     className={inputClass}
                                 />
                             </div>
-                            <div className="text-center pt-10">
-                                <button type="submit" className="font-inter px-10 py-2 bg-customOrange text-white rounded-md hover:bg-customOrange-hover">{t("forms.master.submit")}</button>
+                            <div className="text-center pt-6">
+                                <button type="submit" className="font-inter px-10 py-2 bg-customOrange text-orange-50 rounded-md hover:bg-customOrange-hover">{t("forms.master.submit")}</button>
                             </div>
                         </form>
                     </div>
