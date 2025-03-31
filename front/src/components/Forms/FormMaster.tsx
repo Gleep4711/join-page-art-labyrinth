@@ -293,7 +293,7 @@ function FormMaster() {
                                 />
                             </div>
                             <div className="text-center pt-6">
-                                <button type="submit" className="font-inter px-7 py-2.5 bg-customOrange text-orange-50 rounded-md hover:bg-customOrange-hover">{t("forms.master.submit")}</button>
+                                <button type="submit" className="font-inter px-8 py-3 bg-customOrange text-orange-50 rounded-md hover:bg-customOrange-hover">{t("forms.master.submit")}</button>
                             </div>
                         </form>
                     </div>
