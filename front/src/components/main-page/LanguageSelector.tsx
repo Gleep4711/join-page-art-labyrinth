@@ -52,7 +52,7 @@ export function LanguageSelector() {
           className="flex p-[10px_20px] justify-center items-center gap-[8px] w-full rounded-[4px] relative"
         >
           <text
-            fill="white"
+            fill="#FFF9EC"
             xmlSpace="preserve"
             style={{ whiteSpace: "pre" }}
             fontFamily="Inter"
@@ -68,7 +68,7 @@ export function LanguageSelector() {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 w-full mt-1 bg-white rounded-md shadow-lg z-50">
+        <div className="absolute top-full left-0 w-full mt-1 bg-orange-50 rounded-md shadow-lg z-50">
           {languages
             .filter((lang) => lang.code !== i18n.language)
             .map((lang) => (

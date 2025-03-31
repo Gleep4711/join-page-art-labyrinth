@@ -1,5 +1,5 @@
 import React from "react";
-export function Logo({width = 60, height = 60, fill="white"}) {
+export function Logo({width = 60, height = 60, fill="#FFF9EC"}) {
 
     return (
         <svg

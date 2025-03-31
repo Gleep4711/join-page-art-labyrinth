@@ -28,7 +28,8 @@
             "name": "Nume, Prenume",
             "age": "Vârstă",
             "social": "Link către rețeaua dvs. socială (FB/IG/Vk)",
-            "prof": "Profesie",
+            "tg": "Telegram",
+            "prof": "Specialitate",
             "dept": {
                 "title": "Ce departament vă interesează pentru participare?",
                 "info": "Informații detaliate despre departamente",
@@ -47,7 +48,7 @@
             "title": "Vă rugăm să completați formularul pentru artiști",
             "name": "Nume / Numele grupului / Pseudonim",
             "country": "Țara dvs.",
-            "phone": "Număr de telefon",
+            "tg": "Telegram",
             "email": "Email",
             "direction": {
                 "title": "Direcția programului",

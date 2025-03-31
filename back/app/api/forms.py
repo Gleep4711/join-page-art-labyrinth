@@ -15,6 +15,7 @@ class FormDataVolunteers(BaseModel):
     name: str
     age: Optional[int]
     social: Optional[str]
+    tg: Optional[str]
     prof: Optional[str]
     department: Optional[List[str]]
 
@@ -22,7 +23,7 @@ class FormDataVolunteers(BaseModel):
 class FormDataMasters(BaseModel):
     name: str
     country: Optional[str] | None
-    phone: Optional[str] | None
+    tg: Optional[str] | None
     email: Optional[str] | None
     direction: Optional[List[str]]
     description: Optional[str] | None
@@ -64,6 +65,7 @@ async def save_volunteer_form(db: AsyncSession, data: FormDataVolunteers):
         name=data.name,
         age=data.age,
         social=data.social,
+        phone=data.tg,
         profession=data.prof,
         department=",".join(data.department) if data.department else None,
         raw_data=data.model_dump_json(),
@@ -77,7 +79,7 @@ async def save_master_form(db: AsyncSession, data: FormDataMasters):
         form_type="master",
         name=data.name,
         country=data.country,
-        phone=data.phone,
+        phone=data.tg,
         email=data.email,
         program_direction=",".join(data.direction) if data.direction else None,
         program_description=data.description,

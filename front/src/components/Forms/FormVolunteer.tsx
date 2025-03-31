@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 function FormVolunteer() {
     const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
-    const [formData, setFormData] = useState({ name: '', age: 0, social: '', prof: '' });
+    const [formData, setFormData] = useState({ name: '', age: 0, social: '', tg: '', prof: '' });
     const [deptError, setDeptError] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -57,8 +57,10 @@ function FormVolunteer() {
         { id: "food", label: t("forms.volunteer.dept.food") },
     ];
 
+    const inputClass = "border border-gray-300 rounded-md p-2 bg-matchaGreen-50 mt-1";
+
     return (
-        <div className="volunteer-form min-h-screen">
+        <div className="volunteer-form min-h-screen leading-none">
             {isSubmitted ? <ThankYouPage /> : (
                 <div className="min-h-screen max-w-lg px-4 py-4 bg-orange-50 shadow-md rounded-md">
                     <BackButton />
@@ -76,7 +78,7 @@ function FormVolunteer() {
                                     value={formData?.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     required
-                                    className="border border-gray-300 rounded-md p-2 bg-matchaGreen-50"
+                                    className={inputClass}
                                 />
                             </div>
                             <div className="flex flex-col">
@@ -89,7 +91,7 @@ function FormVolunteer() {
                                     value={formData?.age > 0 ? formData.age : ''}
                                     onChange={(e) => setFormData({ ...formData, age: Number(e.target.value) })}
                                     required
-                                    className="border border-gray-300 rounded-md p-2 bg-matchaGreen-50"
+                                    className={inputClass}
                                 />
                             </div>
                             <div className="flex flex-col">
@@ -100,23 +102,32 @@ function FormVolunteer() {
                                     value={formData?.social}
                                     onChange={(e) => setFormData({ ...formData, social: e.target.value })}
                                     required
-                                    className="border border-gray-300 rounded-md p-2 bg-matchaGreen-50"
+                                    className={inputClass}
                                 />
                             </div>
                             <div className="flex flex-col">
-                                <label>{t("forms.volunteer.prof")} *</label>
+                                <label>{t("forms.volunteer.tg")}</label>
+                                <input
+                                    type="text"
+                                    name="tg"
+                                    value={formData?.tg}
+                                    onChange={(e) => setFormData({ ...formData, tg: e.target.value })}
+                                    className={inputClass}
+                                />
+                            </div>
+                            <div className="flex flex-col">
+                                <label>{t("forms.volunteer.prof")}</label>
                                 <input
                                     type="text"
                                     name="prof"
                                     value={formData?.prof}
                                     onChange={(e) => setFormData({ ...formData, prof: e.target.value })}
-                                    required
-                                    className="border border-gray-300 rounded-md p-2 bg-matchaGreen-50"
+                                    className={inputClass}
                                 />
                             </div>
                             <div className="flex flex-col">
                                 <label>{t("forms.volunteer.dept.title")} *</label>
-                                <label className="font-bold mb-3 underline cursor-pointer" onClick={() => setIsModalOpen(true)}>
+                                <label className="font-bold mb-3 mt-1 underline cursor-pointer" onClick={() => setIsModalOpen(true)}>
                                     {t("forms.volunteer.dept.info")}
                                     <svg className="shrink-0 inline w-4 h-4 me-3 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
@@ -127,14 +138,14 @@ function FormVolunteer() {
                                         {t("forms.volunteer.dept.error")} <span className="underline cursor-pointer" onClick={() => setIsModalOpen(true)}>{t("forms.volunteer.dept.err-info")}</span>
                                     </div>
                                 )}
-                                <div className={`flex flex-col rounded-md ${deptError ? 'border-2 border-red-500' : 'border border-orange-500'}`}>
+                                <div className={`flex flex-col rounded-md mt-1 ${deptError ? 'border-2 border-red-500' : 'border border-gray-300'}`}>
                                     <div className="bg-matchaGreen-50 pt-4 pl-5 pb-4">
                                         <label className="text-gray-400">{t("forms.volunteer.dept.change")}</label>
                                     </div>
                                     <div className="flex flex-col gap-3 px-4 py-3 w-full bg-amber-50">
                                         {departments.map((dept) => (
                                             <label key={dept.id} className="flex gap-3 cursor-pointer">
-                                                <div className="h-3">
+                                                <div className="flex items-center">
                                                     <input type="checkbox" name="department" value={dept.id} onChange={handleCheckboxChange} />
                                                 </div>
                                                 <span className="leading-4">
@@ -145,8 +156,8 @@ function FormVolunteer() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="text-center pt-10">
-                                <button type="submit" className="font-inter px-10 py-2 bg-customOrange text-white rounded-md hover:bg-customOrange-hover">{t("forms.volunteer.submit")}</button>
+                            <div className="text-center pt-6">
+                                <button type="submit" className="font-inter px-10 py-2 bg-customOrange text-orange-50 rounded-md hover:bg-customOrange-hover">{t("forms.volunteer.submit")}</button>
                             </div>
                         </form>
                     </div>

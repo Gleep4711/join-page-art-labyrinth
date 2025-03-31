@@ -25,7 +25,6 @@ export function ActionButtons() {
           {t("main-page.buttons.master.text")}
         </button>
         <p className="text-xs">{t("main-page.buttons.master.description")}</p>
-
       </div>
     </div>
   );

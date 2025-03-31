@@ -28,7 +28,8 @@
             "name": "Name, Surname",
             "age": "Age",
             "social": "Link to your social network (FB/IG/Vk)",
-            "prof": "Your profession",
+            "tg": "Telegram",
+            "prof": "Speciality",
             "dept": {
                 "title": "Which department are you interested in joining?",
                 "info": "Detailed information about departments",
@@ -47,7 +48,7 @@
             "title": "Please fill out the artist form",
             "name": "Name / Group Name / Alias",
             "country": "Your country",
-            "phone": "Phone number",
+            "tg": "Telegram",
             "email": "Email",
             "direction": {
                 "title": "Program direction",
