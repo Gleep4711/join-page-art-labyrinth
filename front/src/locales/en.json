@@ -1,0 +1,219 @@
+{
+    "el": {
+        "al": "Art-Labyrinth",
+        "fest": "Festival",
+        "al25": "Art-Labyrinth 2025",
+        "artlab25": "Summer Festival Art-Labyrinth 2025",
+        "welcome-team": "Welcome to the team"
+    },
+    "main-page": {
+        "hero": {
+            "title": "Participation Form for the Festival",
+            "description": "It's wonderful that you decided to become part of the Art Labyrinth festival! Your creativity and skills will make this event bright and unforgettable."
+        },
+        "buttons": {
+            "volunteer": {
+                "text": "Soul of the Festival",
+                "description": "for volunteers and organizers"
+            },
+            "master": {
+                "text": "Heart of the Festival",
+                "description": "for masters, musicians, and artists"
+            }
+        }
+    },
+    "forms": {
+        "volunteer": {
+            "title": "Please fill out the volunteer form",
+            "name": "Name, Surname",
+            "age": "Age",
+            "social": "Link to your social network (FB/IG/Vk)",
+            "prof": "Your profession",
+            "dept": {
+                "title": "Which department are you interested in joining?",
+                "info": "Detailed information about departments",
+                "change": "Choose",
+                "admin": "Administrative",
+                "promo": "Promotional",
+                "art": "Cultural",
+                "tech": "Technical",
+                "food": "Catering",
+                "error": "Please select a department you are interested in joining. If you want to participate in multiple departments, select all applicable options.",
+                "err-info": "More about departments."
+            },
+            "submit": "SUBMIT"
+        },
+        "master": {
+            "title": "Please fill out the artist form",
+            "name": "Name / Group Name / Alias",
+            "country": "Your country",
+            "phone": "Phone number",
+            "email": "Email",
+            "direction": {
+                "title": "Program direction",
+                "concert": "Concert",
+                "workshop": "Workshop",
+                "lecture": "Lecture",
+                "practice": "Practice",
+                "performance": "Performance",
+                "theatre": "Theatre performance",
+                "lesson": "Lesson",
+                "game": "Game",
+                "other": "Other"
+            },
+            "description": "Please fill out the artist form",
+            "description-info": "A few sentences for a promotional post about your cultural program",
+            "dates": {
+                "title": "Possible performance dates",
+                "10": "July 10 (Thursday)",
+                "11": "July 11 (Friday)",
+                "12": "July 12 (Saturday)",
+                "13": "July 13 (Sunday)"
+            },
+            "program-url": "Link to your program",
+            "social": "Link to your social network (FB/IG/Vk)",
+            "quantity": "Number of events",
+            "time": "What time would you like to perform?",
+            "duration": "How long is your program?",
+            "langs": {
+                "title": "Program language",
+                "ru": "RU",
+                "en": "EN",
+                "md": "MD"
+            },
+            "raider": "Technical and additional requirements",
+            "change": "Choose",
+            "error": "Please select the language(s) your program will be conducted in. If you want to conduct the program in multiple languages, select all applicable options.",
+            "submit": "SUBMIT"
+        }
+    },
+    "thanks": {
+        "title": "Thank you!",
+        "description": "A coordinator will contact you shortly",
+        "sign": "Art-Labyrinth Team"
+    },
+    "department": {
+        "admin": {
+            "title": "Administrative Department",
+            "preparation": {
+                "title": "Festival preparation:",
+                "items": [
+                    "HR department - finding a team, communicating with them, and coordinating",
+                    "Creating groups, events",
+                    "Notifying authorities (documents and permits)",
+                    "Fundraising before and during the event",
+                    "Finding sponsors",
+                    "Writing grants",
+                    "Accounting",
+                    "Making pendants"
+                ]
+            },
+            "festival": {
+                "title": "At the festival:",
+                "items": [
+                    "Logistics (transport organization)",
+                    "Welcome center",
+                    "Info center",
+                    "Public order security at the festival (Volunteers)"
+                ]
+            }
+        },
+        "tech": {
+            "title": "Technical Department",
+            "preparation": {
+                "title": "Festival preparation:",
+                "items": [
+                    "Planning objects",
+                    "Writing a technical plan",
+                    "Purchasing materials",
+                    "Developing decorations and design",
+                    "Preparing construction materials",
+                    "Planning and preparing electrification",
+                    "Planning and preparing water supply",
+                    "Collecting inventory",
+                    "Loading and transporting all inventory"
+                ]
+            },
+            "festival": {
+                "title": "At the festival:",
+                "items": [
+                    "Building objects",
+                    "Decorating",
+                    "Electrifying the entire festival",
+                    "Water supply",
+                    "Organizing waste collection",
+                    "Waste removal",
+                    "Technical maintenance of all objects",
+                    "Dismantling and cleaning up the festival",
+                    "Storage"
+                ]
+            }
+        },
+        "promo": {
+            "title": "Promotional Department",
+            "preparation": {
+                "title": "Festival preparation:",
+                "items": [
+                    "Developing a promotional strategy",
+                    "Creating groups, events",
+                    "Managing the website",
+                    "Writing and designing posts",
+                    "Translating into Romanian and English",
+                    "Publishing posts",
+                    "Promoting advertisements",
+                    "Communicating with mass media"
+                ]
+            },
+            "festival": {
+                "title": "At the festival:",
+                "items": [
+                    "Logistics (transport organization)",
+                    "Welcome center",
+                    "Info center",
+                    "Public order security at the festival (Volunteers)"
+                ]
+            }
+        },
+        "art": {
+            "title": "Cultural Department",
+            "preparation": {
+                "title": "Festival preparation:",
+                "items": [
+                    "Forming the concept of the cultural program",
+                    "Planning the schedule",
+                    "Finding and communicating with artists"
+                ]
+            },
+            "festival": {
+                "title": "At the festival:",
+                "items": [
+                    "Coordinating artists before and during the festival",
+                    "Organizing the children's area",
+                    "Organizing sound"
+                ]
+            }
+        },
+        "food": {
+            "title": "Catering",
+            "preparation": {
+                "title": "Festival preparation:",
+                "items": [
+                    "Planning all catering",
+                    "Menu",
+                    "Technical plan",
+                    "Preparing and purchasing inventory",
+                    "Assembling the team",
+                    "Purchasing products"
+                ]
+            },
+            "festival": {
+                "title": "At the festival:",
+                "items": [
+                    "Operating the kitchen at the festival",
+                    "Supplying products",
+                    "Cleaning up"
+                ]
+            }
+        }
+    }
+}

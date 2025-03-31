@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import BackButton from "./BackButton";
 import ThankYouPage from "./ThankYouPage";
+import { useTranslation } from "react-i18next";
 
 function FormMaster() {
     const [selectedDirections, setSelectedDirections] = useState<string[]>([]);
@@ -21,6 +22,8 @@ function FormMaster() {
     });
     const [langError, setLangError] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+
+    const { t } = useTranslation();
 
 
     const handleCheckboxGroupChange = (e: { target: { value: any; checked: any; }; }, setState: React.Dispatch<React.SetStateAction<string[]>>) => {
@@ -61,28 +64,28 @@ function FormMaster() {
     };
 
     const directions = [
-        { id: "concert", label: "Концерт" },
-        { id: "workshop", label: "Мастер-класс" },
-        { id: "lecture", label: "Лекция" },
-        { id: "practice", label: "Практика" },
-        { id: "performance", label: "Перформанс" },
-        { id: "theatre", label: "Театральное выступление" },
-        { id: "lesson", label: "Урок" },
-        { id: "game", label: "Игра" },
-        { id: "other", label: "Другое" },
+        { id: "concert", label: t("forms.master.direction.concert") },
+        { id: "workshop", label: t("forms.master.direction.workshop") },
+        { id: "lecture", label: t("forms.master.direction.lecture") },
+        { id: "practice", label: t("forms.master.direction.practice") },
+        { id: "performance", label: t("forms.master.direction.performance") },
+        { id: "theatre", label: t("forms.master.direction.theatre") },
+        { id: "lesson", label: t("forms.master.direction.lesson") },
+        { id: "game", label: t("forms.master.direction.game") },
+        { id: "other", label: t("forms.master.direction.other") },
     ];
 
     const dates = [
-        { id: "admin", label: "10 июля (четверг)" },
-        { id: "promo", label: "11 июля (пятница)" },
-        { id: "art", label: "12 июля (суббота)" },
-        { id: "tech", label: "13 июля (воскресенье)" },
+        { id: "10", label: t("forms.master.dates.10") },
+        { id: "11", label: t("forms.master.dates.11") },
+        { id: "12", label: t("forms.master.dates.12") },
+        { id: "13", label: t("forms.master.dates.13") },
     ];
 
     const langs = [
-        { id: "md", label: "MD" },
-        { id: "ru", label: "RU" },
-        { id: "en", label: "EN" },
+        { id: "md", label: t("forms.master.langs.md") },
+        { id: "ru", label: t("forms.master.langs.ru") },
+        { id: "en", label: t("forms.master.langs.en") },
     ];
 
     const inputClass = "border border-gray-300 rounded-md p-2 bg-matchaGreen-50";
@@ -94,12 +97,12 @@ function FormMaster() {
                     <BackButton />
                     <div className="px-8">
                         <hr className="pt-4 mt-4" />
-                        <h2 className="text-2xl">Добро пожаловать в команду</h2>
-                        <h2 className="text-2xl text-customOrange">Art Labyrinth</h2>
-                        <h3 className="mb-5 font-inter italic">Пожалуйста, заполните форму для артистов</h3>
+                        <h2 className="text-2xl">{t("el.welcome-team")}</h2>
+                        <h2 className="text-2xl text-customOrange">{t("el.al")}</h2>
+                        <h3 className="mb-5 font-inter italic">{t("forms.master.title")}</h3>
                         <form onSubmit={submitForm} className="space-y-4 font-inter">
                             <div className="flex flex-col">
-                                <label>Имя / Название группы / Псевдоним *</label>
+                                <label>{t("forms.master.name")} *</label>
                                 <input
                                     type="text"
                                     name="name"
@@ -110,7 +113,7 @@ function FormMaster() {
                                 />
                             </div>
                             <div className="flex flex-col">
-                                <label>Ваша страна  *</label>
+                                <label>{t("forms.master.country")} *</label>
                                 <input
                                     type="text"
                                     name="country"
@@ -121,7 +124,7 @@ function FormMaster() {
                                 />
                             </div>
                             <div className="flex flex-col">
-                                <label>Номер телефона  *</label>
+                                <label>{t("forms.master.phone")} *</label>
                                 <input
                                     type="text"
                                     name="phone"
@@ -132,7 +135,7 @@ function FormMaster() {
                                 />
                             </div>
                             <div className="flex flex-col">
-                                <label>Email</label>
+                                <label>{t("forms.master.email")}</label>
                                 <input
                                     type="text"
                                     name="email"
@@ -142,10 +145,10 @@ function FormMaster() {
                                 />
                             </div>
                             <div className="flex flex-col">
-                                <label>Напрвление программы</label>
+                                <label>{t("forms.master.direction.title")}</label>
                                 <div className="flex flex-col rounded-md border border-gray-300">
                                     <div className="bg-matchaGreen-50 pt-4 pl-5 pb-4">
-                                        <label className="text-gray-400">Выберите</label>
+                                        <label className="text-gray-400">{t("forms.master.change")}</label>
                                     </div>
                                     <div className="flex flex-col gap-3 px-4 py-3 w-full bg-amber-50">
                                         {directions.map((item) => (
@@ -162,8 +165,8 @@ function FormMaster() {
                                 </div>
                             </div>
                             <div className="flex flex-col">
-                                <label>Название и описание программы *</label>
-                                <label className="italic text-sm">Несколько предложений для рекламно - информационного поста о вашей культурной программе</label>
+                                <label>{t("forms.master.description")} *</label>
+                                <label className="italic text-sm">{t("forms.master.description-info")}</label>
                                 <textarea
                                     name="description"
                                     rows={5}
@@ -174,10 +177,10 @@ function FormMaster() {
                                 />
                             </div>
                             <div className="flex flex-col">
-                                <label>Возможные даты выступления</label>
+                                <label>{t("forms.master.dates.title")}</label>
                                 <div className="flex flex-col rounded-md border border-gray-300">
                                     <div className="bg-matchaGreen-50 pt-4 pl-5 pb-4">
-                                        <label className="text-gray-400">Выберите</label>
+                                        <label className="text-gray-400">{t("forms.master.change")}</label>
                                     </div>
                                     <div className="flex flex-col gap-3 px-4 py-3 w-full bg-amber-50">
                                         {dates.map((item) => (
@@ -194,7 +197,7 @@ function FormMaster() {
                                 </div>
                             </div>
                             <div className="flex flex-col">
-                                <label>Ссылка на Вашу программу</label>
+                                <label>{t("forms.master.program-url")}</label>
                                 <input
                                     type="text"
                                     name="programUrl"
@@ -204,7 +207,7 @@ function FormMaster() {
                                 />
                             </div>
                             <div className="flex flex-col">
-                                <label>Ccылка на Вашу соцсеть (FB/IG/Vk) *</label>
+                                <label>{t("forms.master.social")} *</label>
                                 <input
                                     type="text"
                                     name="socialUrl"
@@ -215,7 +218,7 @@ function FormMaster() {
                                 />
                             </div>
                             <div className="flex flex-col">
-                                <label>Кол-во мероприятий *</label>
+                                <label>{t("forms.master.quantity")} *</label>
                                 <input
                                     type="text"
                                     name="quantity"
@@ -226,7 +229,7 @@ function FormMaster() {
                                 />
                             </div>
                             <div className="flex flex-col">
-                                <label>В какое время Вы хотели бы выступать? *</label>
+                                <label>{t("forms.master.time")} *</label>
                                 <input
                                     type="text"
                                     name="time"
@@ -237,7 +240,7 @@ function FormMaster() {
                                 />
                             </div>
                             <div className="flex flex-col">
-                                <label>Сколько длится Ваша программа? *</label>
+                                <label>{t("forms.master.dates.duration")} *</label>
                                 <input
                                     type="text"
                                     name="duration"
@@ -248,15 +251,15 @@ function FormMaster() {
                                 />
                             </div>
                             <div className="flex flex-col">
-                                <label>Язык проведения программы *</label>
+                                <label>{t("forms.master.langs.title")} *</label>
                                 {langError && (
                                     <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300">
-                                        Пожалуйста, выберите язык, на котором будет проводиться ваша программа. Если вы хотите провести программу на нескольких языках, выберите все подходящие варианты.
+                                        {t("forms.master.error")}
                                     </div>
                                 )}
                                 <div className={`flex flex-col rounded-md ${langError ? 'border-2 border-red-500' : 'border border-gray-300'}`}>
                                     <div className="bg-matchaGreen-50 pt-4 pl-5 pb-4">
-                                        <label className="text-gray-400">Выберите</label>
+                                        <label className="text-gray-400">{t("forms.master.change")}</label>
                                     </div>
                                     <div className="flex flex-col gap-3 px-4 py-3 w-full bg-amber-50">
                                         {langs.map((item) => (
@@ -282,7 +285,7 @@ function FormMaster() {
                                 </div>
                             </div>
                             <div className="flex flex-col">
-                                <label>Технические и дополнительные требования </label>
+                                <label>{t("forms.master.raider")}</label>
                                 <textarea
                                     name="description"
                                     rows={5}
@@ -292,7 +295,7 @@ function FormMaster() {
                                 />
                             </div>
                             <div className="text-center pt-10">
-                                <button type="submit" className="font-inter px-10 py-2 bg-customOrange text-white rounded-md hover:bg-customOrange-hover">ОТПРАВИТЬ</button>
+                                <button type="submit" className="font-inter px-10 py-2 bg-customOrange text-white rounded-md hover:bg-customOrange-hover">{t("forms.master.submit")}</button>
                             </div>
                         </form>
                     </div>

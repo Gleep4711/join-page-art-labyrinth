@@ -1,0 +1,219 @@
+{
+    "el": {
+        "al": "Art-Labyrinth",
+        "fest": "Festival",
+        "al25": "Art-Labyrinth 2025",
+        "artlab25": "Festivalul de vară Art-Labyrinth 2025",
+        "welcome-team": "Bine ați venit în echipă"
+    },
+    "main-page": {
+        "hero": {
+            "title": "Formular de participare la festival",
+            "description": "Este minunat că ați decis să deveniți parte a festivalului Art Labyrinth! Creativitatea și abilitățile dumneavoastră vor face acest eveniment strălucitor și de neuitat."
+        },
+        "buttons": {
+            "volunteer": {
+                "text": "Sufletul Festivalului",
+                "description": "pentru voluntari și organizatori"
+            },
+            "master": {
+                "text": "Inima Festivalului",
+                "description": "pentru maeștri, muzicieni și artiști"
+            }
+        }
+    },
+    "forms": {
+        "volunteer": {
+            "title": "Vă rugăm să completați formularul pentru voluntari",
+            "name": "Nume, Prenume",
+            "age": "Vârstă",
+            "social": "Link către rețeaua dvs. socială (FB/IG/Vk)",
+            "prof": "Profesie",
+            "dept": {
+                "title": "Ce departament vă interesează pentru participare?",
+                "info": "Informații detaliate despre departamente",
+                "change": "Alegeți",
+                "admin": "Administrativ",
+                "promo": "Publicitate",
+                "art": "Cultural",
+                "tech": "Tehnic",
+                "food": "Catering",
+                "error": "Vă rugăm să selectați un departament care vă interesează pentru participare. Dacă doriți să participați în mai multe departamente, selectați toate opțiunile aplicabile.",
+                "err-info": "Mai multe despre departamente."
+            },
+            "submit": "TRIMITE"
+        },
+        "master": {
+            "title": "Vă rugăm să completați formularul pentru artiști",
+            "name": "Nume / Numele grupului / Pseudonim",
+            "country": "Țara dvs.",
+            "phone": "Număr de telefon",
+            "email": "Email",
+            "direction": {
+                "title": "Direcția programului",
+                "concert": "Concert",
+                "workshop": "Atelier",
+                "lecture": "Prelegere",
+                "practice": "Practică",
+                "performance": "Spectacol",
+                "theatre": "Spectacol de teatru",
+                "lesson": "Lecție",
+                "game": "Joc",
+                "other": "Altceva"
+            },
+            "description": "Vă rugăm să completați formularul pentru artiști",
+            "description-info": "Câteva propoziții pentru o postare promoțională despre programul dvs. cultural",
+            "dates": {
+                "title": "Date posibile pentru spectacol",
+                "10": "10 iulie (joi)",
+                "11": "11 iulie (vineri)",
+                "12": "12 iulie (sâmbătă)",
+                "13": "13 iulie (duminică)"
+            },
+            "program-url": "Link către programul dvs.",
+            "social": "Link către rețeaua dvs. socială (FB/IG/Vk)",
+            "quantity": "Numărul de evenimente",
+            "time": "La ce oră doriți să performați?",
+            "duration": "Cât durează programul dvs.?",
+            "langs": {
+                "title": "Limba programului",
+                "ru": "RU",
+                "en": "EN",
+                "md": "MD"
+            },
+            "raider": "Cerințe tehnice și suplimentare",
+            "change": "Alegeți",
+            "error": "Vă rugăm să selectați limba în care va fi desfășurat programul dvs. Dacă doriți să desfășurați programul în mai multe limbi, selectați toate opțiunile aplicabile.",
+            "submit": "TRIMITE"
+        }
+    },
+    "thanks": {
+        "title": "Mulțumim!",
+        "description": "Un coordonator vă va contacta în curând",
+        "sign": "Echipa Art-Labyrinth"
+    },
+    "department": {
+        "admin": {
+            "title": "Departamentul Administrativ",
+            "preparation": {
+                "title": "Pregătirea festivalului:",
+                "items": [
+                    "Departamentul de resurse umane - găsirea unei echipe, comunicarea cu aceasta și coordonarea",
+                    "Crearea grupurilor, evenimentelor",
+                    "Notificarea autorităților (documente și permise)",
+                    "Strângerea de fonduri înainte și în timpul evenimentului",
+                    "Găsirea sponsorilor",
+                    "Scrierea de granturi",
+                    "Contabilitate",
+                    "Confecționarea pandantivelor"
+                ]
+            },
+            "festival": {
+                "title": "La festival:",
+                "items": [
+                    "Logistică (organizarea transportului)",
+                    "Centrul de bun venit",
+                    "Centrul de informații",
+                    "Securitatea ordinii publice la festival (Voluntari)"
+                ]
+            }
+        },
+        "tech": {
+            "title": "Departamentul Tehnic",
+            "preparation": {
+                "title": "Pregătirea festivalului:",
+                "items": [
+                    "Planificarea obiectelor",
+                    "Scrierea unui plan tehnic",
+                    "Achiziționarea materialelor",
+                    "Dezvoltarea decorațiunilor și designului",
+                    "Pregătirea materialelor de construcție",
+                    "Planificarea și pregătirea electrificării",
+                    "Planificarea și pregătirea alimentării cu apă",
+                    "Colectarea inventarului",
+                    "Încărcarea și transportul întregului inventar"
+                ]
+            },
+            "festival": {
+                "title": "La festival:",
+                "items": [
+                    "Construirea obiectelor",
+                    "Decorarea",
+                    "Electrificarea întregului festival",
+                    "Alimentarea cu apă",
+                    "Organizarea colectării deșeurilor",
+                    "Eliminarea deșeurilor",
+                    "Întreținerea tehnică a tuturor obiectelor",
+                    "Demontarea și curățarea festivalului",
+                    "Depozitare"
+                ]
+            }
+        },
+        "promo": {
+            "title": "Departamentul de Publicitate",
+            "preparation": {
+                "title": "Pregătirea festivalului:",
+                "items": [
+                    "Dezvoltarea unei strategii de publicitate",
+                    "Crearea grupurilor, evenimentelor",
+                    "Gestionarea site-ului",
+                    "Scrierea și proiectarea postărilor",
+                    "Traducerea în română și engleză",
+                    "Publicarea postărilor",
+                    "Promovarea reclamelor",
+                    "Comunicarea cu mass-media"
+                ]
+            },
+            "festival": {
+                "title": "La festival:",
+                "items": [
+                    "Logistică (organizarea transportului)",
+                    "Centrul de bun venit",
+                    "Centrul de informații",
+                    "Securitatea ordinii publice la festival (Voluntari)"
+                ]
+            }
+        },
+        "art": {
+            "title": "Departamentul Cultural",
+            "preparation": {
+                "title": "Pregătirea festivalului:",
+                "items": [
+                    "Formarea conceptului programului cultural",
+                    "Planificarea programului",
+                    "Găsirea și comunicarea cu artiștii"
+                ]
+            },
+            "festival": {
+                "title": "La festival:",
+                "items": [
+                    "Coordonarea artiștilor înainte și în timpul festivalului",
+                    "Organizarea zonei pentru copii",
+                    "Organizarea sunetului"
+                ]
+            }
+        },
+        "food": {
+            "title": "Catering",
+            "preparation": {
+                "title": "Pregătirea festivalului:",
+                "items": [
+                    "Planificarea întregului catering",
+                    "Meniu",
+                    "Plan tehnic",
+                    "Pregătirea și achiziționarea inventarului",
+                    "Asamblarea echipei",
+                    "Achiziționarea produselor"
+                ]
+            },
+            "festival": {
+                "title": "La festival:",
+                "items": [
+                    "Operarea bucătăriei la festival",
+                    "Furnizarea produselor",
+                    "Curățarea"
+                ]
+            }
+        }
+    }
+}
