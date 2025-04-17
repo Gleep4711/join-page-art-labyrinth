@@ -99,23 +99,23 @@
             "preparation": {
                 "title": "Pregătirea festivalului:",
                 "items": [
-                    "Departamentul de resurse umane - găsirea unei echipe, comunicarea cu aceasta și coordonarea",
-                    "Crearea grupurilor, evenimentelor",
-                    "Notificarea autorităților (documente și permise)",
-                    "Strângerea de fonduri înainte și în timpul evenimentului",
-                    "Găsirea sponsorilor",
-                    "Scrierea de granturi",
-                    "Contabilitate",
-                    "Confecționarea pandantivelor"
+                    "Departamentul de resurse umane: găsirea unei echipe, comunicarea cu aceasta și coordonarea",
+                    "Organizarea grupurilor de lucru și a evenimentelor",
+                    "Interacțiunea cu autoritățile (documente, permise)",
+                    "Strângerea de fonduri înainte și în timpul festivalului",
+                    "Găsirea sponsorilor și partenerilor",
+                    "Scrierea și depunerea granturilor",
+                    "Contabilitate și gestionarea financiară",
+                    "Crearea de ecusoane, pandantive și permise"
                 ]
             },
             "festival": {
                 "title": "La festival:",
                 "items": [
-                    "Logistică (organizarea transportului)",
-                    "Centrul de bun venit",
-                    "Centrul de informații",
-                    "Securitatea ordinii publice la festival (Voluntari)"
+                    "Organizarea logisticii (transport, deplasări)",
+                    "Operarea centrului de bun venit (primirea și orientarea participanților)",
+                    "Operarea centrului de informații (răspunsuri la întrebări, navigare, asistență)",
+                    "Menținerea ordinii și coordonarea voluntarilor"
                 ]
             }
         },
@@ -124,29 +124,29 @@
             "preparation": {
                 "title": "Pregătirea festivalului:",
                 "items": [
-                    "Planificarea obiectelor",
-                    "Scrierea unui plan tehnic",
-                    "Achiziționarea materialelor",
-                    "Dezvoltarea decorațiunilor și designului",
-                    "Pregătirea materialelor de construcție",
+                    "Planificarea obiectelor și spațiilor",
+                    "Elaborarea și redactarea unui plan tehnic",
+                    "Achiziționarea și pregătirea materialelor de construcție și a uneltelor",
+                    "Proiectarea decorațiunilor, obiectelor de artă și instalațiilor",
+                    "Pregătirea elementelor decorative",
                     "Planificarea și pregătirea electrificării",
-                    "Planificarea și pregătirea alimentării cu apă",
-                    "Colectarea inventarului",
-                    "Încărcarea și transportul întregului inventar"
+                    "Planificarea alimentării cu apă",
+                    "Colectarea și pregătirea inventarului",
+                    "Încărcarea și transportul tuturor elementelor necesare"
                 ]
             },
             "festival": {
                 "title": "La festival:",
                 "items": [
-                    "Construirea obiectelor",
-                    "Decorarea",
-                    "Electrificarea întregului festival",
-                    "Alimentarea cu apă",
-                    "Organizarea colectării deșeurilor",
+                    "Construirea tuturor obiectelor",
+                    "Decorarea zonei, instalarea decorului și a instalațiilor",
+                    "Conectarea și întreținerea rețelelor electrice",
+                    "Organizarea și menținerea alimentării cu apă",
+                    "Organizarea și controlul colectării deșeurilor",
                     "Eliminarea deșeurilor",
-                    "Întreținerea tehnică a tuturor obiectelor",
-                    "Demontarea și curățarea festivalului",
-                    "Depozitare"
+                    "Întreținerea tehnică a obiectelor și infrastructurii",
+                    "Demontarea structurilor",
+                    "Ambalarea și depozitarea inventarului"
                 ]
             }
         },
@@ -155,23 +155,21 @@
             "preparation": {
                 "title": "Pregătirea festivalului:",
                 "items": [
-                    "Dezvoltarea unei strategii de publicitate",
-                    "Crearea grupurilor, evenimentelor",
-                    "Gestionarea site-ului",
-                    "Scrierea și proiectarea postărilor",
-                    "Traducerea în română și engleză",
-                    "Publicarea postărilor",
-                    "Promovarea reclamelor",
-                    "Comunicarea cu mass-media"
+                    "Dezvoltarea strategiilor de publicitate și PR",
+                    "Crearea și gestionarea rețelelor sociale, grupurilor și evenimentelor",
+                    "Menținerea și actualizarea site-ului",
+                    "Crearea de texte, vizuale și postări",
+                    "Traducerea conținutului în română și engleză",
+                    "Publicarea și promovarea conținutului",
+                    "Interacțiunea cu presa, mass-media și bloggerii"
                 ]
             },
             "festival": {
                 "title": "La festival:",
                 "items": [
-                    "Logistică (organizarea transportului)",
-                    "Centrul de bun venit",
-                    "Centrul de informații",
-                    "Securitatea ordinii publice la festival (Voluntari)"
+                    "Documentarea evenimentelor (fotografii/videoclipuri/povești)",
+                    "Crearea de rapoarte și postări în timp real",
+                    "Sprijinirea centrului de informații în răspândirea știrilor"
                 ]
             }
         },
@@ -180,17 +178,20 @@
             "preparation": {
                 "title": "Pregătirea festivalului:",
                 "items": [
-                    "Formarea conceptului programului cultural",
-                    "Planificarea programului",
-                    "Găsirea și comunicarea cu artiștii"
+                    "Căutarea și selectarea artiștilor, gazdelor, vorbitorilor și maeștrilor",
+                    "Colectarea și formarea programului cultural (concerte, spectacole, ateliere etc.)",
+                    "Comunicarea și coordonarea cu participanții la program",
+                    "Crearea programului și a graficului spectacolelor",
+                    "Asistență cu logistica, problemele tehnice și domestice pentru artiști"
                 ]
             },
             "festival": {
                 "title": "La festival:",
                 "items": [
-                    "Coordonarea artiștilor înainte și în timpul festivalului",
-                    "Organizarea zonei pentru copii",
-                    "Organizarea sunetului"
+                    "Primirea artiștilor, însoțirea și cazarea acestora",
+                    "Coordonarea programului cultural la fața locului (timing, scene, locații)",
+                    "Rezolvarea problemelor organizatorice în timpul spectacolelor",
+                    "Menținerea atmosferei și spiritului spațiului creativ"
                 ]
             }
         },
@@ -199,20 +200,21 @@
             "preparation": {
                 "title": "Pregătirea festivalului:",
                 "items": [
-                    "Planificarea întregului catering",
-                    "Meniu",
-                    "Plan tehnic",
-                    "Pregătirea și achiziționarea inventarului",
-                    "Asamblarea echipei",
-                    "Achiziționarea produselor"
+                    "Dezvoltarea și planificarea meniului",
+                    "Recrutarea unei echipe de bucătari, responsabili de foc, asistenți de bucătărie și spălători de vase",
+                    "Pregătirea unei liste de achiziții de produse și inventar",
+                    "Organizarea sistemului de catering (locații, program, logistică)",
+                    "Construirea bucătăriei, zonei de luat masa și spațiilor auxiliare"
                 ]
             },
             "festival": {
                 "title": "La festival:",
                 "items": [
-                    "Operarea bucătăriei la festival",
-                    "Furnizarea produselor",
-                    "Curățarea"
+                    "Organizarea și pregătirea mâncării pentru echipă și participanți",
+                    "Operarea bucătăriei, menținerea ordinii, furnizarea de apă și lemne",
+                    "Spălarea vaselor, curățenia",
+                    "Monitorizarea stocurilor, distribuirea produselor",
+                    "Coordonarea schimburilor și atribuirea sarcinilor în cadrul bucătăriei"
                 ]
             }
         }

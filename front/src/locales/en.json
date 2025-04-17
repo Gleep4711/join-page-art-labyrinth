@@ -99,23 +99,23 @@
             "preparation": {
                 "title": "Festival preparation:",
                 "items": [
-                    "HR department - finding a team, communicating with them, and coordinating",
-                    "Creating groups, events",
-                    "Notifying authorities (documents and permits)",
-                    "Fundraising before and during the event",
-                    "Finding sponsors",
-                    "Writing grants",
-                    "Accounting",
-                    "Making pendants"
+                    "HR department: finding a team, communicating with them, and coordinating",
+                    "Organizing working groups and events",
+                    "Interacting with authorities (documents, permits)",
+                    "Fundraising before and during the festival",
+                    "Finding sponsors and partners",
+                    "Writing and submitting grants",
+                    "Accounting and financial management",
+                    "Creating badges, pendants, and passes"
                 ]
             },
             "festival": {
                 "title": "At the festival:",
                 "items": [
-                    "Logistics (transport organization)",
-                    "Welcome center",
-                    "Info center",
-                    "Public order security at the festival (Volunteers)"
+                    "Organizing logistics (transport, movements)",
+                    "Welcome center operations (greeting and orienting participants)",
+                    "Info center operations (answering questions, navigation, assistance)",
+                    "Maintaining order and coordinating volunteers"
                 ]
             }
         },
@@ -124,29 +124,29 @@
             "preparation": {
                 "title": "Festival preparation:",
                 "items": [
-                    "Planning objects",
-                    "Writing a technical plan",
-                    "Purchasing materials",
-                    "Developing decorations and design",
-                    "Preparing construction materials",
+                    "Planning objects and spaces",
+                    "Developing and writing a technical plan",
+                    "Purchasing and preparing building materials and tools",
+                    "Designing decorations, art objects, and installations",
+                    "Preparing decorative elements",
                     "Planning and preparing electrification",
-                    "Planning and preparing water supply",
-                    "Collecting inventory",
-                    "Loading and transporting all inventory"
+                    "Planning water supply",
+                    "Collecting and preparing inventory",
+                    "Loading and transporting all necessary items"
                 ]
             },
             "festival": {
                 "title": "At the festival:",
                 "items": [
-                    "Building objects",
-                    "Decorating",
-                    "Electrifying the entire festival",
-                    "Water supply",
-                    "Organizing waste collection",
-                    "Waste removal",
-                    "Technical maintenance of all objects",
-                    "Dismantling and cleaning up the festival",
-                    "Storage"
+                    "Constructing all objects",
+                    "Decorating the area, installing decor and installations",
+                    "Connecting and maintaining electrical networks",
+                    "Organizing and maintaining water supply",
+                    "Organizing and controlling waste collection",
+                    "Removing waste",
+                    "Technical maintenance of objects and infrastructure",
+                    "Dismantling structures",
+                    "Packing and storing inventory"
                 ]
             }
         },
@@ -155,23 +155,21 @@
             "preparation": {
                 "title": "Festival preparation:",
                 "items": [
-                    "Developing a promotional strategy",
-                    "Creating groups, events",
-                    "Managing the website",
-                    "Writing and designing posts",
-                    "Translating into Romanian and English",
-                    "Publishing posts",
-                    "Promoting advertisements",
-                    "Communicating with mass media"
+                    "Developing advertising and PR strategies",
+                    "Creating and managing social networks, groups, and events",
+                    "Maintaining and updating the website",
+                    "Creating texts, visuals, and posts",
+                    "Translating content into Romanian and English",
+                    "Publishing and promoting content",
+                    "Interacting with press, media, and bloggers"
                 ]
             },
             "festival": {
                 "title": "At the festival:",
                 "items": [
-                    "Logistics (transport organization)",
-                    "Welcome center",
-                    "Info center",
-                    "Public order security at the festival (Volunteers)"
+                    "Documenting events (photos/videos/stories)",
+                    "Creating real-time reports and posts",
+                    "Supporting the info center in spreading news"
                 ]
             }
         },
@@ -180,17 +178,20 @@
             "preparation": {
                 "title": "Festival preparation:",
                 "items": [
-                    "Forming the concept of the cultural program",
-                    "Planning the schedule",
-                    "Finding and communicating with artists"
+                    "Searching and selecting artists, hosts, speakers, and masters",
+                    "Collecting and forming the cultural program (concerts, performances, workshops, etc.)",
+                    "Communication and coordination with program participants",
+                    "Creating schedules and performance timelines",
+                    "Assisting with logistics, technical, and domestic issues for artists"
                 ]
             },
             "festival": {
                 "title": "At the festival:",
                 "items": [
-                    "Coordinating artists before and during the festival",
-                    "Organizing the children's area",
-                    "Organizing sound"
+                    "Welcoming artists, accompanying and accommodating them",
+                    "Coordinating the cultural program on-site (timing, stages, venues)",
+                    "Resolving organizational issues during performances",
+                    "Maintaining the atmosphere and spirit of the creative space"
                 ]
             }
         },
@@ -199,20 +200,21 @@
             "preparation": {
                 "title": "Festival preparation:",
                 "items": [
-                    "Planning all catering",
-                    "Menu",
-                    "Technical plan",
-                    "Preparing and purchasing inventory",
-                    "Assembling the team",
-                    "Purchasing products"
+                    "Developing and planning the menu",
+                    "Recruiting a team of cooks, firekeepers, kitchen assistants, and dishwashers",
+                    "Preparing a list of product and inventory purchases",
+                    "Organizing the catering system (locations, schedule, logistics)",
+                    "Building the kitchen, dining area, and auxiliary spaces"
                 ]
             },
             "festival": {
                 "title": "At the festival:",
                 "items": [
-                    "Operating the kitchen at the festival",
-                    "Supplying products",
-                    "Cleaning up"
+                    "Organizing and preparing food for the team and participants",
+                    "Operating the kitchen, maintaining order, supplying water and firewood",
+                    "Washing dishes, cleaning",
+                    "Monitoring stock levels, distributing products",
+                    "Coordinating shifts and assigning tasks within the kitchen"
                 ]
             }
         }
