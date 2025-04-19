@@ -113,4 +113,4 @@ async def send_to_telegram(data: dict, form_type: str):
     }
 
     async with httpx.AsyncClient() as client:
-        response = await client.post(url, json=payload)
+        await client.post(url, json=payload)

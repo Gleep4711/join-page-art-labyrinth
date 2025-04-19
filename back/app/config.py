@@ -4,8 +4,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class PydanticSettings(BaseSettings):
     POSTGRES_URL: str = ""
     LOGGING: str = "error"
+
     JWT_SECRET: str = "your_secret_key"
-    access_token_expire_minutes: int = 60 * 12
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 12
+    ALGORITHM = "HS256"
 
     TELEGRAM_BOT_TOKEN: str = ""
     TELEGRAM_CHAT_ID: str = ""
