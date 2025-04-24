@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import BackButton from "./BackButton";
 import ThankYouPage from "./ThankYouPage";
 import { useTranslation } from "react-i18next";
+import FileUpload from "./FileUpload";
 
 function FormMaster() {
     const [selectedDirections, setSelectedDirections] = useState<string[]>([]);
@@ -19,9 +20,11 @@ function FormMaster() {
         time: '',
         duration: '',
         raider: '',
+        file: null as FileList | null,
     });
     const [langError, setLangError] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
     const { t } = useTranslation();
 
@@ -35,28 +38,43 @@ function FormMaster() {
         }
     };
 
+    const handleFilesSelected = (files: FileList | null) => {
+        if (files) {
+            setUploadedFiles(Array.from(files));
+            setFormData({ ...formData, file: files });
+        }
+    };
+
     const submitForm = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-        const data = {
+
+        const formDataToSend = new FormData();
+        formDataToSend.append("form_type", "master");
+        formDataToSend.append("data", JSON.stringify({
             ...formData,
+            file: undefined,
             direction: selectedDirections,
             date: selectedDates,
             lang: selectedLangs,
-        };
+        }));
 
-        if (selectedLangs.length < 1) {
-            setLangError(true);
-            return;
+        if (formData.file) {
+            Array.from(formData.file).forEach((file) => {
+                formDataToSend.append("file", file);
+            });
         }
 
         try {
-            const response = await fetch('/api/v1/form/save', {
+            // const response = await fetch('/api/v1/form/save', {
+            const response = await fetch('http://localhost:8000/form/save', {  // debug
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ type: 'master', data }),
+                body: formDataToSend,
             });
             if (response.ok) {
-                setIsSubmitted(true);
+                // setIsSubmitted(true);
+                setIsSubmitted(false); // debug
+            } else {
+                console.error('Error submitting form:', await response.text());
             }
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -281,6 +299,26 @@ function FormMaster() {
                                         ))}
                                     </div>
                                 </div>
+                            </div>
+                            <div className="flex flex-col">
+                                <label className="font-bold leading-6">{t("forms.master.image.title")}</label>
+                                <label className="font-light italic">{t("forms.master.image.description")}</label>
+                                <FileUpload
+                                    inputClass={inputClass}
+                                    onFilesSelected={handleFilesSelected}
+                                />
+                                {uploadedFiles.length > 0 && (
+                                    <div className="mt-4">
+                                        <h4 className="font-bold">{t("forms.master.image.added")}</h4>
+                                        <ul className="list-disc pl-5">
+                                            {uploadedFiles.map((file, index) => (
+                                                <li key={index} className="text-sm text-gray-600">
+                                                    {file.name}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
                             </div>
                             <div className="flex flex-col">
                                 <label>{t("forms.master.raider")}</label>

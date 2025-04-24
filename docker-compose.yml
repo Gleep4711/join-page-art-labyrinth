@@ -22,12 +22,13 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
       TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
+    volumes:
+      - /srv/data/media:/srv/data/media
+      # - ./back:/code # debug
     networks:
       - main
 
     # # debug
-    # volumes:
-    #   - ./back:/code
     # ports:
     #   - 8000:8000
     # command: sh -c "alembic upgrade heads && uvicorn app.main:app --host 0.0.0.0 --reload"
