@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -7,7 +9,7 @@ class PydanticSettings(BaseSettings):
 
     JWT_SECRET: str = "your_secret_key"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 12
-    ALGORITHM = "HS256"
+    ALGORITHM: ClassVar[str] = "HS256"
 
     TELEGRAM_BOT_TOKEN: str = ""
     TELEGRAM_CHAT_ID: str = ""

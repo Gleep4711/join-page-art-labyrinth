@@ -1,10 +1,18 @@
+import asyncio
+import json
+import os
+import random
+import re
+from io import BytesIO
 from typing import List, Optional
 
 import httpx
 from app.config import settings
 from app.db.base import get_db
 from app.db.models import Form
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, File
+from fastapi import Form as FastAPIForm
+from fastapi import HTTPException, UploadFile
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -21,6 +29,7 @@ class FormDataVolunteers(BaseModel):
 
 
 class FormDataMasters(BaseModel):
+    id: Optional[int] = None
     name: str
     country: Optional[str] | None
     tg: Optional[str] | None
@@ -35,65 +44,117 @@ class FormDataMasters(BaseModel):
     duration: Optional[str] | None
     lang: Optional[List[str]] | None
     raider: Optional[str] | None
+    file: Optional[List[UploadFile]] = None
 
 
 class FormRequest(BaseModel):
-    type: str
+    form_type: str
     data: FormDataVolunteers | FormDataMasters
 
 
-@router.post('/save')
-async def save_form(body: FormRequest, db: AsyncSession = Depends(get_db)):
-    if not body.type or not body.data:
-        raise HTTPException(status_code=400, detail="type and data are required")
-
-    if body.type == "volunteer":
-        await save_volunteer_form(db, body.data)
-        await send_to_telegram(body.data.model_dump(), "volunteer")
-    elif body.type == "master":
-        await save_master_form(db, body.data)
-        await send_to_telegram(body.data.model_dump(), "master")
+async def save_form_data(
+    db: AsyncSession,
+    form_type: str,
+    data: BaseModel,
+    files: Optional[List[UploadFile]] = None
+):
+    if form_type == "volunteer":
+        form = Form(
+            form_type="volunteer",
+            name=data.name,
+            age=data.age,
+            social=data.social,
+            phone=data.tg,
+            profession=data.prof,
+            department=",".join(data.department) if data.department else None,
+            raw_data=data.model_dump_json(),
+        )
+    elif form_type == "master":
+        form = Form(
+            form_type="master",
+            name=data.name,
+            country=data.country,
+            phone=data.tg,
+            email=data.email,
+            program_direction=",".join(data.direction) if data.direction else None,
+            program_description=data.description,
+            program_example=data.programUrl,
+            event_dates=",".join(data.date) if data.date else None,
+            quantity=data.quantity,
+            time=data.time,
+            duration=data.duration,
+            lang=",".join(data.lang) if data.lang else None,
+            raider=data.raider,
+            raw_data=data.model_dump_json(),
+        )
     else:
         raise HTTPException(status_code=400, detail="Invalid form type")
 
-    return {"status": "ok"}
-
-
-async def save_volunteer_form(db: AsyncSession, data: FormDataVolunteers):
-    form = Form(
-        form_type="volunteer",
-        name=data.name,
-        age=data.age,
-        social=data.social,
-        phone=data.tg,
-        profession=data.prof,
-        department=",".join(data.department) if data.department else None,
-        raw_data=data.model_dump_json(),
-    )
     db.add(form)
     await db.commit()
 
+    if form_type == "master" and files:
+        await db.refresh(form)
+        await save_files_to_disk_and_telegram(form.id, files)
 
-async def save_master_form(db: AsyncSession, data: FormDataMasters):
-    form = Form(
-        form_type="master",
-        name=data.name,
-        country=data.country,
-        phone=data.tg,
-        email=data.email,
-        program_direction=",".join(data.direction) if data.direction else None,
-        program_description=data.description,
-        program_example=data.programUrl,
-        event_dates=",".join(data.date) if data.date else None,
-        quantity=data.quantity,
-        time=data.time,
-        duration=data.duration,
-        lang=",".join(data.lang) if data.lang else None,
-        raider=data.raider,
-        raw_data=data.model_dump_json()
-    )
-    db.add(form)
-    await db.commit()
+    return form.id if form_type == "master" else None
+
+
+async def save_files_to_disk_and_telegram(form_id: int, files: List[UploadFile]):
+    media_dir = f"/srv/data/media/fest2025/form/{form_id}"
+    os.makedirs(media_dir, exist_ok=True)
+
+    url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendDocument"
+
+    for file in files:
+        sanitized_filename = re.sub(r'[^\w\-.]', '', file.filename)
+        sanitized_filename = f"{random.randint(100, 999)}_{sanitized_filename[:20]}"
+
+        file_content = await file.read()
+        file_path = os.path.join(media_dir, sanitized_filename)
+
+        with open(file_path, "wb") as buffer:
+            buffer.write(file_content)
+
+        file_buffer = BytesIO(file_content)
+        file_buffer.seek(0)
+
+        payload = {
+            "chat_id": settings.TELEGRAM_CHAT_ID,
+            "disable_notification": True,
+        }
+        telegram_file = {
+            "document": (sanitized_filename, file_buffer, file.content_type),
+        }
+
+        async with httpx.AsyncClient() as client:
+            response = await client.post(url, data=payload, files=telegram_file)
+            if response.status_code != 200:
+                raise HTTPException(status_code=500, detail=f"Failed to send file: {response.text}")
+
+        file_buffer.close()
+        asyncio.sleep(1)
+
+
+@router.post('/save')
+async def save_form(
+    form_type: str = FastAPIForm(...),
+    data: str = FastAPIForm(...),
+    file: Optional[List[UploadFile]] = File(None),
+    db: AsyncSession = Depends(get_db)
+):
+    if form_type == "master":
+        parsed_data = FormDataMasters(**json.loads(data))
+    elif form_type == "volunteer":
+        parsed_data = FormDataVolunteers(**json.loads(data))
+    else:
+        raise HTTPException(status_code=400, detail="Invalid form type")
+
+    form_id = await save_form_data(db, form_type, parsed_data, file)
+    await send_to_telegram(parsed_data.model_dump(), form_type)
+
+    return {"status": "ok", "form_id": form_id}
+
 
 async def send_to_telegram(data: dict, form_type: str):
     url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"

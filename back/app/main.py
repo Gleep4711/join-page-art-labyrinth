@@ -1,6 +1,6 @@
 import logging
 
-from app.api import root_route, forms
+from app.api import forms, root_route
 from app.config import settings
 from fastapi import FastAPI
 

@@ -82,6 +82,13 @@
                 "en": "EN",
                 "md": "MD"
             },
+            "image": {
+                "title": "Încărcați imagini",
+                "description": "Atașați câteva fotografii ale programului dvs. la răspuns",
+                "input": "Faceți clic sau trageți fișierele dvs. în această zonă",
+                "drag": "Trageți fișierele aici...",
+                "added": "Fișierele au fost adăugate"
+            },
             "raider": "Cerințe tehnice și suplimentare",
             "change": "Alegeți",
             "error": "Vă rugăm să selectați limba în care va fi desfășurat programul dvs. Dacă doriți să desfășurați programul în mai multe limbi, selectați toate opțiunile aplicabile.",

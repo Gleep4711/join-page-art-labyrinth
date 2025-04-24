@@ -5,6 +5,8 @@ Revises: 002
 Create Date: 2025-03-28 12:00:00.000000
 
 """
+import datetime
+
 import sqlalchemy as sa
 from alembic import op
 from sqlalchemy.sql import column, table
@@ -35,7 +37,7 @@ def upgrade() -> None:
             'password_hash': generate_password_hash('admin123'),
             'is_active': True,
             'role': 1,  # 1 - admin
-            'created_at': sa.func.now(),
+            'created_at': datetime.datetime.now(),
         }
     ])
 

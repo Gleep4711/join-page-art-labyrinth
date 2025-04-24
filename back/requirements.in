@@ -3,12 +3,13 @@ asyncpg
 bcrypt==4.0.1
 fastapi
 httpx
-python-jose
 psycopg
 psycopg-binary
 psycopg-pool
 psycopg2-binary
 pydantic_settings
+python-jose
+python-multipart
 sqlalchemy
 uvicorn
 werkzeug

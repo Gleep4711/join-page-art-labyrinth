@@ -25,24 +25,28 @@ function FormVolunteer() {
 
     const submitForm = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-        const data = {
-            ...formData,
-            department: selectedDepartments,
-        };
 
         if (selectedDepartments.length === 0) {
             setDeptError(true);
             return;
         }
 
+        const formDataToSend = new FormData();
+        formDataToSend.append("form_type", "volunteer");
+        formDataToSend.append("data", JSON.stringify({
+            ...formData,
+            department: selectedDepartments,
+        }));
+
         try {
             const response = await fetch('/api/v1/form/save', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ type: 'volunteer', data }),
+                body: formDataToSend,
             });
             if (response.ok) {
                 setIsSubmitted(true);
+            } else {
+                console.error('Error submitting form:', await response.text());
             }
         } catch (error) {
             console.error('Error submitting form:', error);

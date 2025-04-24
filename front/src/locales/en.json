@@ -82,6 +82,13 @@
                 "en": "EN",
                 "md": "MD"
             },
+            "image": {
+                "title": "Upload images",
+                "description": "Attach a few photos of your program to the response",
+                "input": "Click or drag your files into this area",
+                "drag": "Drag files here...",
+                "added": "Added"
+            },
             "raider": "Technical and additional requirements",
             "change": "Choose",
             "error": "Please select the language(s) your program will be conducted in. If you want to conduct the program in multiple languages, select all applicable options.",
