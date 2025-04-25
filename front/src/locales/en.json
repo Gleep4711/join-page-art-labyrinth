@@ -23,6 +23,10 @@
         }
     },
     "forms": {
+        "csrf-error": {
+            "title": "Error",
+            "description": "Please refresh the page and try again"
+        },
         "volunteer": {
             "title": "Please fill out the volunteer form",
             "name": "Name, Surname",

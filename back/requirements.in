@@ -3,6 +3,7 @@ asyncpg
 bcrypt==4.0.1
 fastapi
 httpx
+itsdangerous
 psycopg
 psycopg-binary
 psycopg-pool

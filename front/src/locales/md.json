@@ -23,6 +23,10 @@
         }
     },
     "forms": {
+        "csrf-error": {
+            "title": "Eroare",
+            "description": "Vă rugăm să reîmprospătați pagina și să încercați din nou"
+        },
         "volunteer": {
             "title": "Vă rugăm să completați formularul pentru voluntari",
             "name": "Nume, Prenume",

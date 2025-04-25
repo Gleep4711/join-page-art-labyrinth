@@ -1,18 +1,21 @@
 import asyncio
 import json
+import logging
 import os
 import random
 import re
 from io import BytesIO
 from typing import List, Optional
+import uuid
 
 import httpx
 from app.config import settings
+from app.csrf import generate_csrf_token, validate_csrf_token
 from app.db.base import get_db
 from app.db.models import Form
 from fastapi import APIRouter, Depends, File
 from fastapi import Form as FastAPIForm
-from fastapi import HTTPException, UploadFile
+from fastapi import HTTPException, Request, UploadFile
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -133,16 +136,25 @@ async def save_files_to_disk_and_telegram(form_id: int, files: List[UploadFile])
                 raise HTTPException(status_code=500, detail=f"Failed to send file: {response.text}")
 
         file_buffer.close()
-        asyncio.sleep(1)
+        await asyncio.sleep(1)
 
 
 @router.post('/save')
 async def save_form(
+    request: Request,
     form_type: str = FastAPIForm(...),
     data: str = FastAPIForm(...),
+    csrf_token: str = FastAPIForm(...),
     file: Optional[List[UploadFile]] = File(None),
     db: AsyncSession = Depends(get_db)
 ):
+    session_id = request.headers.get("X-Session-ID")
+
+    if not session_id:
+        return {"status": "ok", "form_id": random.randint(100, 999)}
+
+    validate_csrf_token(csrf_token, session_id + request.client.host)
+
     if form_type == "master":
         parsed_data = FormDataMasters(**json.loads(data))
     elif form_type == "volunteer":
@@ -175,3 +187,17 @@ async def send_to_telegram(data: dict, form_type: str):
 
     async with httpx.AsyncClient() as client:
         await client.post(url, json=payload)
+
+
+
+@router.get('/csrf-token')
+async def get_csrf_token(request: Request):
+    session_id = request.headers.get("X-Session-ID")
+    logging.debug(f"Session ID: {session_id}")
+    logging.debug(request.client.host)
+    if not session_id:
+        csrf_token = generate_csrf_token(uuid.uuid4().hex + str(random.randint(100000, 999999)) * 2)
+    else:
+        csrf_token = generate_csrf_token(session_id + request.client.host)
+
+    return {"csrf_token": csrf_token}
