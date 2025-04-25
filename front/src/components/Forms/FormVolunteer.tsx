@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BackButton from "./BackButton";
 import DepartmentInfo from "./DepartmentInfo";
 import ThankYouPage from "./ThankYouPage";
 import { useTranslation } from "react-i18next";
+import { fetchCsrfToken } from "../../utils/fetchCsrfToken";
+import { API_URL } from '../../config';
 
 function FormVolunteer() {
     const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
@@ -10,6 +12,9 @@ function FormVolunteer() {
     const [deptError, setDeptError] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [csrfToken, setCsrfToken] = useState<string | null>(null);
+    const [csrfError, setCsrfError] = useState(false);
+    const [sessionId, setSessionId] = useState<string | null>(null);
 
     const { t } = useTranslation();
 
@@ -33,18 +38,25 @@ function FormVolunteer() {
 
         const formDataToSend = new FormData();
         formDataToSend.append("form_type", "volunteer");
+        formDataToSend.append("csrf_token", csrfToken || "");
         formDataToSend.append("data", JSON.stringify({
             ...formData,
             department: selectedDepartments,
         }));
 
         try {
-            const response = await fetch('/api/v1/form/save', {
+            const response = await fetch(`${API_URL}/form/save`, {
                 method: 'POST',
+                headers: {
+                    "X-Session-ID": sessionId || "",
+                },
                 body: formDataToSend,
             });
+            setCsrfToken(null);
             if (response.ok) {
                 setIsSubmitted(true);
+            } else if (response.status === 403) {
+                setCsrfError(true);
             } else {
                 console.error('Error submitting form:', await response.text());
             }
@@ -62,6 +74,20 @@ function FormVolunteer() {
     ];
 
     const inputClass = "border border-gray-300 rounded-md p-2 bg-matchaGreen-50 mt-1";
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            if (!csrfToken && !isSubmitted) {
+                const newSessionId = crypto.randomUUID();
+                setSessionId(newSessionId);
+                fetchCsrfToken(newSessionId).then(setCsrfToken).catch((error) => {
+                    console.error("Error fetching CSRF token:", error);
+                });
+            }
+        }, Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000);
+
+        return () => clearTimeout(timeoutId);
+    }, [csrfToken, sessionId, isSubmitted]);
 
     return (
         <div className="volunteer-form min-h-screen leading-none">
@@ -160,6 +186,12 @@ function FormVolunteer() {
                                     </div>
                                 </div>
                             </div>
+                            {csrfError && (
+                                <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300">
+                                    <h1>{t("forms.csrf-error.title")}</h1>
+                                    <h2>{t("forms.csrf-error.description")}</h2>
+                                </div>
+                            )}
                             <div className="text-center pt-1">
                                 <button type="submit" className="font-inter w-full py-3 bg-customOrange text-orange-50 rounded-md hover:bg-customOrange-hover">{t("forms.volunteer.submit")}</button>
                             </div>

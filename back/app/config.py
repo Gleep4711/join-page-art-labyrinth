@@ -17,6 +17,8 @@ class PydanticSettings(BaseSettings):
     admin_login: str = "admin"
     admin_password: str = "admin"
 
+    DEV_MODE: bool = False
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8"

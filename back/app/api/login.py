@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 
+from app.config import settings
 from app.db.base import get_db
 from app.db.models import User
-from app.config import settings
 from fastapi import APIRouter, Depends, HTTPException
 from jose import jwt
 from sqlalchemy import select
