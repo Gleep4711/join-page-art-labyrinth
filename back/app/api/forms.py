@@ -4,9 +4,9 @@ import logging
 import os
 import random
 import re
+import uuid
 from io import BytesIO
 from typing import List, Optional
-import uuid
 
 import httpx
 from app.config import settings
@@ -50,15 +50,10 @@ class FormDataMasters(BaseModel):
     file: Optional[List[UploadFile]] = None
 
 
-class FormRequest(BaseModel):
-    form_type: str
-    data: FormDataVolunteers | FormDataMasters
-
-
 async def save_form_data(
     db: AsyncSession,
     form_type: str,
-    data: BaseModel,
+    data: FormDataVolunteers | FormDataMasters,
     files: Optional[List[UploadFile]] = None
 ):
     if form_type == "volunteer":
@@ -95,16 +90,16 @@ async def save_form_data(
 
     db.add(form)
     await db.commit()
+    await db.refresh(form)
 
     if form_type == "master" and files:
-        await db.refresh(form)
         await save_files_to_disk_and_telegram(form.id, files)
 
-    return form.id if form_type == "master" else None
+    return form
 
 
 async def save_files_to_disk_and_telegram(form_id: int, files: List[UploadFile]):
-    media_dir = f"/srv/data/media/fest2025/form/{form_id}"
+    media_dir = f"/srv/data/media/art-lab/fest2025/form/{form_id}"
     os.makedirs(media_dir, exist_ok=True)
 
     url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendDocument"
@@ -157,15 +152,16 @@ async def save_form(
 
     if form_type == "master":
         parsed_data = FormDataMasters(**json.loads(data))
+        parsed_data.file = ', '.join([file.filename for file in file]) if file else None
     elif form_type == "volunteer":
         parsed_data = FormDataVolunteers(**json.loads(data))
     else:
         raise HTTPException(status_code=400, detail="Invalid form type")
 
-    form_id = await save_form_data(db, form_type, parsed_data, file)
+    parsed_data.id = await save_form_data(db, form_type, parsed_data, file)
     await send_to_telegram(parsed_data.model_dump(), form_type)
 
-    return {"status": "ok", "form_id": form_id}
+    return {"status": "ok"}
 
 
 async def send_to_telegram(data: dict, form_type: str):
