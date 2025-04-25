@@ -158,7 +158,9 @@ async def save_form(
     else:
         raise HTTPException(status_code=400, detail="Invalid form type")
 
-    parsed_data.id = await save_form_data(db, form_type, parsed_data, file)
+    form = await save_form_data(db, form_type, parsed_data, file)
+    if form_type == "master":
+        parsed_data.id = form.id
     await send_to_telegram(parsed_data.model_dump(), form_type)
 
     return {"status": "ok"}
