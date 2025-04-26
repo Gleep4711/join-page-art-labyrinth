@@ -115,6 +115,9 @@ async def save_files_to_disk_and_telegram(form_id: int, files: List[UploadFile])
         with open(file_path, "wb") as buffer:
             buffer.write(file_content)
 
+        if len(file_content) > 49 * 1024 * 1024:
+            continue
+
         file_buffer = BytesIO(file_content)
         file_buffer.seek(0)
 
