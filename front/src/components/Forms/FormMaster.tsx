@@ -28,8 +28,12 @@ function FormMaster() {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
     const [csrfToken, setCsrfToken] = useState<string | null>(null);
-    const [csrfError, setCsrfError] = useState(false);
     const [sessionId, setSessionId] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const [csrfError, setCsrfError] = useState(false);
+    const [tooLargeError, setTooLargeError] = useState(false);
+    const [unknownfError, setUnknownfError] = useState(false);
 
     const { t } = useTranslation();
 
@@ -51,6 +55,9 @@ function FormMaster() {
 
     const submitForm = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
+
+        if (isSubmitting) return;
+        setIsSubmitting(true);
 
         const formDataToSend = new FormData();
         formDataToSend.append("form_type", "master");
@@ -79,15 +86,24 @@ function FormMaster() {
             });
             setSessionId(null);
             setCsrfToken(null);
+
+            setCsrfError(false);
+            setTooLargeError(false);
+            setUnknownfError(false);
             if (response.ok) {
                 setIsSubmitted(true);
             } else if (response.status === 403) {
                 setCsrfError(true);
+            } else if (response.status === 413) {
+                setTooLargeError(true);
             } else {
+                setUnknownfError(true);
                 console.error('Error submitting form:', await response.text());
             }
         } catch (error) {
             console.error('Error submitting form:', error);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -122,14 +138,14 @@ function FormMaster() {
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             if (!csrfToken && !isSubmitted) {
-                console.log("Fetching CSRF token...");
                 const newSessionId = crypto.randomUUID();
                 setSessionId(newSessionId);
                 fetchCsrfToken(newSessionId).then(setCsrfToken).catch((error) => {
                     console.error("Error fetching CSRF token:", error);
                 });
             }
-        }, Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000);
+            console.log("csrfToken:", csrfToken);
+        }, Math.floor(Math.random() * 5000));
 
         return () => clearTimeout(timeoutId);
     }, [csrfToken, sessionId, isSubmitted]);
@@ -357,12 +373,30 @@ function FormMaster() {
                             </div>
                             {csrfError && (
                                 <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300">
-                                    <h1>{t("forms.csrf-error.title")}</h1>
-                                    <h2>{t("forms.csrf-error.description")}</h2>
+                                    <h1>{t("forms.error.csrf.title")}</h1>
+                                    <h2>{t("forms.error.csrf.description")}</h2>
+                                </div>
+                            )}
+                            {tooLargeError && (
+                                <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300">
+                                    <h1>{t("forms.error.content-too-large.title")}</h1>
+                                    <h2>{t("forms.error.content-too-large.description")}</h2>
+                                </div>
+                            )}
+                            {unknownfError && (
+                                <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300">
+                                    <h1>{t("forms.error.unknown.title")}</h1>
+                                    <h2>{t("forms.error.unknown.description")}</h2>
                                 </div>
                             )}
                             <div className="text-center pt-1">
-                                <button type="submit" className="font-inter w-full py-3 bg-customOrange text-orange-50 rounded-md hover:bg-customOrange-hover">{t("forms.master.submit")}</button>
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className={`font-inter w-full py-3 ${isSubmitting ? 'bg-gray-400' : 'bg-customOrange'} text-orange-50 rounded-md hover:bg-customOrange-hover`}
+                                >
+                                    {isSubmitting ? t("forms.submitting") : t("forms.master.submit")}
+                                </button>
                             </div>
                         </form>
                     </div>

@@ -15,9 +15,9 @@ export async function fetchCsrfToken(sessionId: string): Promise<string | null> 
         }
 
         const data = await response.json();
-        return data.csrf_token || null;
+        return data.csrf_token || sessionId;
     } catch (error) {
         console.error("Error fetching CSRF token:", error);
-        return null;
+        return sessionId;
     }
 }

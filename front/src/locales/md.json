@@ -23,10 +23,21 @@
         }
     },
     "forms": {
-        "csrf-error": {
-            "title": "Eroare",
-            "description": "Vă rugăm să reîmprospătați pagina și să încercați din nou"
+        "error": {
+            "csrf": {
+                "title": "Eroare CSRF",
+                "description": "Vă rugăm să reîmprospătați pagina și să încercați din nou"
+            },
+            "unknown": {
+                "title": "Eroare necunoscută",
+                "description": "Ceva nu a mers bine. Vă rugăm să încercați din nou mai târziu"
+            },
+            "content-too-large": {
+                "title": "Eroare",
+                "description": "Dimensiunea fișierului este prea mare. Vă rugăm să selectați un fișier mai mic și să încercați din nou"
+            }
         },
+        "submitting": "Trimiterea formularului",
         "volunteer": {
             "title": "Vă rugăm să completați formularul pentru voluntari",
             "name": "Nume, Prenume",

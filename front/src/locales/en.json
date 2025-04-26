@@ -23,10 +23,21 @@
         }
     },
     "forms": {
-        "csrf-error": {
-            "title": "Error",
-            "description": "Please refresh the page and try again"
+        "error": {
+            "csrf": {
+                "title": "CSRF Error",
+                "description": "Please refresh the page and try again"
+            },
+            "unknown": {
+                "title": "Unknown Error",
+                "description": "Something went wrong. Please try again later"
+            },
+            "content-too-large": {
+                "title": "Error",
+                "description": "The file size is too large. Please select a smaller file and try again"
+            }
         },
+        "submitting": "Submitting form",
         "volunteer": {
             "title": "Please fill out the volunteer form",
             "name": "Name, Surname",

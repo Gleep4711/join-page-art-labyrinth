@@ -13,8 +13,12 @@ function FormVolunteer() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [csrfToken, setCsrfToken] = useState<string | null>(null);
-    const [csrfError, setCsrfError] = useState(false);
     const [sessionId, setSessionId] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const [csrfError, setCsrfError] = useState(false);
+    const [tooLargeError, setTooLargeError] = useState(false);
+    const [unknownfError, setUnknownfError] = useState(false);
 
     const { t } = useTranslation();
 
@@ -31,8 +35,12 @@ function FormVolunteer() {
     const submitForm = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
 
+        if (isSubmitting) return;
+        setIsSubmitting(true);
+
         if (selectedDepartments.length === 0) {
             setDeptError(true);
+            setIsSubmitting(false);
             return;
         }
 
@@ -52,16 +60,26 @@ function FormVolunteer() {
                 },
                 body: formDataToSend,
             });
+            setSessionId(null);
             setCsrfToken(null);
+
+            setCsrfError(false);
+            setTooLargeError(false);
+            setUnknownfError(false);
             if (response.ok) {
                 setIsSubmitted(true);
             } else if (response.status === 403) {
                 setCsrfError(true);
+            } else if (response.status === 413) {
+                setTooLargeError(true);
             } else {
+                setUnknownfError(true);
                 console.error('Error submitting form:', await response.text());
             }
         } catch (error) {
             console.error('Error submitting form:', error);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -188,12 +206,30 @@ function FormVolunteer() {
                             </div>
                             {csrfError && (
                                 <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300">
-                                    <h1>{t("forms.csrf-error.title")}</h1>
-                                    <h2>{t("forms.csrf-error.description")}</h2>
+                                    <h1>{t("forms.error.csrf.title")}</h1>
+                                    <h2>{t("forms.error.csrf.description")}</h2>
+                                </div>
+                            )}
+                            {tooLargeError && (
+                                <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300">
+                                    <h1>{t("forms.error.content-too-large.title")}</h1>
+                                    <h2>{t("forms.error.content-too-large.description")}</h2>
+                                </div>
+                            )}
+                            {unknownfError && (
+                                <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300">
+                                    <h1>{t("forms.error.unknown.title")}</h1>
+                                    <h2>{t("forms.error.unknown.description")}</h2>
                                 </div>
                             )}
                             <div className="text-center pt-1">
-                                <button type="submit" className="font-inter w-full py-3 bg-customOrange text-orange-50 rounded-md hover:bg-customOrange-hover">{t("forms.volunteer.submit")}</button>
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className={`font-inter w-full py-3 ${isSubmitting ? 'bg-gray-400' : 'bg-customOrange'} text-orange-50 rounded-md hover:bg-customOrange-hover`}
+                                >
+                                    {isSubmitting ? 'Submitting...' : t("forms.volunteer.submit")}
+                                </button>
                             </div>
                         </form>
                     </div>
