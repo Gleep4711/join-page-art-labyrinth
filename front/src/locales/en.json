@@ -98,7 +98,7 @@
                 "md": "MD"
             },
             "image": {
-                "title": "Upload images",
+                "title": "Upload images (up to 200 MB)",
                 "description": "Attach a few photos of your program to the response",
                 "input": "Click or drag your files into this area",
                 "drag": "Drag files here...",

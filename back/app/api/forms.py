@@ -106,7 +106,8 @@ async def save_files_to_disk_and_telegram(form_id: int, files: List[UploadFile])
 
     for file in files:
         sanitized_filename = re.sub(r'[^\w\-.]', '', file.filename)
-        sanitized_filename = f"{random.randint(100, 999)}_{sanitized_filename[:20]}"
+        name, ext = os.path.splitext(sanitized_filename)
+        sanitized_filename = f"{random.randint(100, 999)}_{name[:20]}{ext}"
 
         file_content = await file.read()
         file_path = os.path.join(media_dir, sanitized_filename)

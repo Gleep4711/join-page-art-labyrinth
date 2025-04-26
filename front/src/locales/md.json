@@ -98,7 +98,7 @@
                 "md": "MD"
             },
             "image": {
-                "title": "Încărcați imagini",
+                "title": "Încărcați imagini (până la 200 MB)",
                 "description": "Atașați câteva fotografii ale programului dvs. la răspuns",
                 "input": "Faceți clic sau trageți fișierele dvs. în această zonă",
                 "drag": "Trageți fișierele aici...",
