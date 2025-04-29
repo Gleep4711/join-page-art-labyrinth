@@ -1,6 +1,6 @@
 import logging
 
-from app.api import forms, root_route
+from app.api import feedback, forms, root_route
 from app.config import settings
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -10,10 +10,15 @@ logging.basicConfig(
     format="%(levelname)s: %(filename)s:%(lineno)d: %(message)s",
 )
 
-app = FastAPI()
+app = FastAPI(
+    title="Art-Labyrinth",
+    docs_url=None,
+    redoc_url=None
+)
 
 app.include_router(root_route.router, tags=["Main"], prefix="")
 app.include_router(forms.router, tags=["Form"], prefix="/form")
+app.include_router(feedback.router, tags=["Feedback"], prefix="/feedback")
 
 if settings.DEV_MODE:
     app.add_middleware(

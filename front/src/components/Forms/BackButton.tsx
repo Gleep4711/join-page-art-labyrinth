@@ -5,8 +5,16 @@ import { Logo } from "../Svg/Logo";
 function BackButton() {
     const navigate = useNavigate();
 
+    const handleBackClick = () => {
+        if (document.referrer && new URL(document.referrer).pathname === "/") {
+            navigate(-1);
+        } else {
+            navigate("/");
+        }
+    };
+
     return (
-        <div className="flex gap-3 w-min cursor-pointer" onClick={() => navigate("/")}>
+        <div className="flex gap-3 w-min cursor-pointer" onClick={handleBackClick}>
             <button
                 className="flex gap-3 items-center text-customOrange hover:text-customOrange transition-colors"
                 aria-label="Вернуться на главную страницу"

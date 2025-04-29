@@ -1,7 +1,6 @@
-from itsdangerous import URLSafeTimedSerializer
-from fastapi import Request, HTTPException
-
 from app.config import settings
+from fastapi import HTTPException, Request
+from itsdangerous import URLSafeTimedSerializer
 
 SECRET_KEY = f"csrf_{settings.JWT_SECRET}"
 CSRF_TOKEN_EXPIRATION = 1800
