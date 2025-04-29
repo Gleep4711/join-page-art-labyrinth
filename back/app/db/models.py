@@ -44,3 +44,14 @@ class Form(Base):
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
 
+class Feedback(Base):
+    __tablename__ = "feedback_forms"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=True)
+    phone = Column(String, nullable=True)
+    email = Column(String, nullable=False)
+    message = Column(String, nullable=False)
+    dest = Column(String, nullable=True)
+
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
