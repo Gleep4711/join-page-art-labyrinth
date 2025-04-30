@@ -2,6 +2,15 @@ from fastapi import APIRouter, Request
 
 router = APIRouter()
 
+
+@router.get("/payment")
+async def payment_get():
+    return {
+        "code": -1,
+        "text": "This endpoint only accepts POST requests."
+    }
+
+
 @router.post("/payment")
 async def payment(request: dict):
     try:
@@ -26,7 +35,7 @@ async def payment(request: dict):
         else:
             return {
                 "code": 50,
-                "text": "fail"
+                "text": "Order not found",
             }
     except Exception as e:
         return {
