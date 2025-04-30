@@ -1,4 +1,4 @@
-FROM node:14 AS build
+FROM node:22-bookworm-slim AS build
 
 WORKDIR /code
 COPY *.json ./
@@ -9,7 +9,7 @@ COPY ./src ./src
 COPY ./public ./public
 RUN npm run build
 
-FROM nginx:latest
+FROM openresty/openresty
 
 COPY --from=build /code/build /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
