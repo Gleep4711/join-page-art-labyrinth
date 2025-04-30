@@ -1,0 +1,18 @@
+services:
+  art-lab-join-page-front:
+    build: ./front
+    container_name: art-lab-join-page-front
+    ports:
+      - 127.0.0.1:3020:80
+    networks:
+      - main
+
+    volumes:
+      - ./front/build:/usr/share/nginx/html
+      - ./front/nginx.conf:/etc/nginx/nginx.conf
+
+networks:
+  main:
+    external: true
+
+# docker compose -f docker-compose-debug-front.yml up

@@ -1,6 +1,6 @@
 import logging
 
-from app.api import feedback, forms, root_route
+from app.api import feedback, forms, payment, root_route
 from app.config import settings
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -10,15 +10,25 @@ logging.basicConfig(
     format="%(levelname)s: %(filename)s:%(lineno)d: %(message)s",
 )
 
-app = FastAPI(
-    title="Art-Labyrinth",
-    docs_url=None,
-    redoc_url=None
-)
+options = {
+    "title": "Art-Labyrinth",
+    "description": "API for Art-Labyrinth project",
+    "contact": {
+        "name": "Art-Labyrinth Team",
+        "url": "https://art-labyrinth.org",
+        "email": "team.art-labyrinth.org",
+    },
+}
+if not settings.DEV_MODE:
+    options["docs_url"] = None
+    options["redoc_url"] = None
+
+app = FastAPI(**options)
 
 app.include_router(root_route.router, tags=["Main"], prefix="")
 app.include_router(forms.router, tags=["Form"], prefix="/form")
 app.include_router(feedback.router, tags=["Feedback"], prefix="/feedback")
+app.include_router(payment.router, tags=["Payment"], prefix="/api/v1")
 
 if settings.DEV_MODE:
     app.add_middleware(
