@@ -27,6 +27,13 @@ async def payment(request: dict):
 
 
         order_id = request.get("order_id")
+        try:
+            order_id = int(order_id)
+        except (ValueError, TypeError):
+            order_id = 0
+
+        print(order_id == 0)
+
         if order_id == 12345:
             return {
                 "code": 100,
