@@ -28,7 +28,7 @@ app = FastAPI(**options)
 app.include_router(root_route.router, tags=["Main"], prefix="")
 app.include_router(forms.router, tags=["Form"], prefix="/form")
 app.include_router(feedback.router, tags=["Feedback"], prefix="/feedback")
-app.include_router(payment.router, tags=["Payment"], prefix="/api/v1")
+app.include_router(payment.router, tags=["Payment"], prefix="")
 
 if settings.DEV_MODE:
     app.add_middleware(
