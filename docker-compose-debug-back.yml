@@ -1,14 +1,4 @@
 services:
-  art-lab-join-page-front:
-    build: ./front
-    container_name: art-lab-join-page-front
-    ports:
-      - 127.0.0.1:3020:80
-    depends_on:
-      - art-lab-join-page-backend
-    networks:
-      - main
-
   art-lab-join-page-backend:
     build: ./back
     container_name: art-lab-join-page-backend
@@ -19,9 +9,18 @@ services:
       TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
     volumes:
       - /srv/data/media:/srv/data/media
+      - ./back:/code
     networks:
       - main
+
+    ports:
+      - 8000:8000
+    command: sh -c "alembic upgrade heads && uvicorn app.main:app --host 0.0.0.0 --reload"
+    # command: alembic revision --autogenerate -m "init"
+
 
 networks:
   main:
     external: true
+
+# docker compose -f docker-compose-debug-back.yml up
