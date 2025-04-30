@@ -15,15 +15,15 @@ async def payment_get():
 async def payment(request: dict):
     try:
         print("Received payment data:", request)
-        print("Merchant ID:", request.get("merchantid"))
-        print("Command:", request.get("comand"))
-        print("Order ID:", request.get("order_id"))
-        print("Amount:", request.get("amount"))
-        print("Currency:", request.get("valute"))
-        print("Params:", request.get("params"))
-        print("Customer Name:", request.get("params", {}).get("customer_name"))
-        print("Phone Number:", request.get("params", {}).get("phone_number"))
-        print("Email:", request.get("params", {}).get("email"))
+        print("Merchant ID:", request.get("merchantid", ""))
+        print("Command:", request.get("comand", ""))
+        print("Order ID:", request.get("order_id", 0))
+        print("Amount:", request.get("amount", ""))
+        print("Currency:", request.get("valute", ""))
+        print("Params:", request.get("params", {}))
+        print("Customer Name:", request.get("params", {}).get("customer_name", ""))
+        print("Phone Number:", request.get("params", {}).get("phone_number", ""))
+        print("Email:", request.get("params", {}).get("email", ""))
 
 
         order_id = request.get("order_id")
@@ -31,6 +31,11 @@ async def payment(request: dict):
             return {
                 "code": 100,
                 "text": "success"
+            }
+        elif order_id == 0:
+            return {
+                "code": -1,
+                "text": "Order ID is missing",
             }
         else:
             return {
