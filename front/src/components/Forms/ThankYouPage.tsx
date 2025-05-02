@@ -14,14 +14,14 @@ const ThankYouPage: React.FC<ThankYouPageProps> = ({ type }) => {
                 <p className="text-gray-700 mb-4">{t("thanks.description")}</p>
                 <p className="text-gray-500 mb-4 italic">{t("thanks.sign")}</p>
                 <p className="text-gray-700 mb-4">{t("thanks.feedback")}</p>
-                {type !== "master" ? (
+                {type === "master" ? (
                     <>
                         <p className="text-gray-700 mb-4">{t("thanks.master.general")} <a href={`https://t.me/${t("thanks.master.general_contact")}`} target="_blank" rel="noreferrer" className="underline text-blue-700 font-bold italic">@{t("thanks.master.general_contact")}</a> ({t("thanks.master.general_role")})</p>
                         <p className="text-gray-700 mb-4">{t("thanks.master.music")} <a href={`https://t.me/${t("thanks.master.music_contact")}`} target="_blank" rel="noreferrer" className="underline text-blue-700 font-bold italic">@{t("thanks.master.music_contact")}</a> ({t("thanks.master.music_role")})</p>
                     </>
                 ) : (
                     <>
-                        <p className="text-gray-700 mb-4">{t("thanks.volunteer.general")} <a href={`https://t.me/${t("thanks.volunteer.general_contact")}`} target="_blank" rel="noreferrer" className="underline text-blue-700 font-bold italic">@{t("thanks.volunteer.general_contact")}</a> ({t("thanks.volunteer.general_role")})</p>
+                        <p className="text-gray-700 mb-4">{t("thanks.volunteer.general")} <a href={`https://t.me/${t("thanks.volunteer.general_contact")}`} target="_blank" rel="noreferrer" className="underline text-blue-700 font-bold italic">@{t("thanks.volunteer.general_contact")}</a></p>
                         <p><a href={`tel:${t("thanks.volunteer.phone_link")}`}>{t("thanks.volunteer.phone")}</a></p>
 
                     </>
