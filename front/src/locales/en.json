@@ -95,7 +95,7 @@
                 "title": "Program language",
                 "ru": "RU",
                 "en": "EN",
-                "md": "MD"
+                "md": "RO"
             },
             "image": {
                 "title": "Upload images (up to 200 MB)",
@@ -113,7 +113,23 @@
     "thanks": {
         "title": "Thank you!",
         "description": "A coordinator will contact you shortly",
-        "sign": "Art-Labyrinth Team"
+        "sign": "Art-Labyrinth Family",
+        "feedback": "Feedback -🙏🏽",
+        "master": {
+            "general": "Nastya",
+            "general_contact": "SAVITRI_anastasiya",
+            "general_role": "general cultural program",
+            "music": "Marina",
+            "music_contact": "burningmannnn",
+            "music_role": "musical part"
+        },
+        "volunteer": {
+            "general": "Daniela",
+            "general_contact": "sziromszirup",
+            "general_role": "general cultural program",
+            "phone_link": "+37368127786",
+            "phone": "+373 68 127 786"
+        }
     },
     "department": {
         "admin": {

@@ -152,7 +152,7 @@ function FormMaster() {
 
     return (
         <div className="master-form leading-none">
-            {isSubmitted ? <ThankYouPage /> : (
+            {isSubmitted ? <ThankYouPage type="master" /> : (
                 <div className="max-w-lg px-4 py-4 bg-orange-50 shadow-md rounded-md">
                     <BackButton />
                     <div className="px-8">

@@ -109,7 +109,7 @@ function FormVolunteer() {
 
     return (
         <div className="volunteer-form min-h-screen leading-none">
-            {isSubmitted ? <ThankYouPage /> : (
+            {isSubmitted ? <ThankYouPage type="volunteer" /> : (
                 <div className="min-h-screen max-w-lg px-4 py-4 bg-orange-50 shadow-md rounded-md">
                     <BackButton />
                     <div className="px-8">

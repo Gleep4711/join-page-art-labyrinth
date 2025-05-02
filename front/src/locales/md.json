@@ -95,7 +95,7 @@
                 "title": "Limba programului",
                 "ru": "RU",
                 "en": "EN",
-                "md": "MD"
+                "md": "RO"
             },
             "image": {
                 "title": "Încărcați imagini (până la 200 MB)",
@@ -113,7 +113,23 @@
     "thanks": {
         "title": "Mulțumim!",
         "description": "Un coordonator vă va contacta în curând",
-        "sign": "Echipa Art-Labyrinth"
+        "sign": "Art-Labyrinth Family",
+        "feedback": "Feedback -🙏🏽",
+        "master": {
+            "general": "Nastya",
+            "general_contact": "SAVITRI_anastasiya",
+            "general_role": "programul cultural general",
+            "music": "Marina",
+            "music_contact": "burningmannnn",
+            "music_role": "partea muzicală"
+        },
+        "volunteer": {
+            "general": "Daniela",
+            "general_contact": "sziromszirup",
+            "general_role": "programul cultural general",
+            "phone_link": "+37368127786",
+            "phone": "+373 68 127 786"
+        }
     },
     "department": {
         "admin": {
