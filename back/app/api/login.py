@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash, generate_password_hash
 
 router = APIRouter()
@@ -78,7 +79,12 @@ async def add_user(
         is_active=True
     )
     db.add(new_user)
-    await db.commit()
+    try:
+        await db.commit()
+    except IntegrityError as e:
+        await db.rollback()
+        raise HTTPException(status_code=400, detail="Integrity error: duplicate entry") from e
+
     return {"message": "User added successfully"}
 
 
