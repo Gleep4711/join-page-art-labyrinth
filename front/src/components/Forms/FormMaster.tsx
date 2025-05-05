@@ -209,10 +209,18 @@ function FormMaster() {
                                     className={inputClass}
                                 />
                             </div>
+
                             <div className="flex flex-col">
-                                <label>{t("forms.master.previously-participated")}</label>
-                                <input type="checkbox" name="previously-participated" value="previously-participated" onChange={(e) => handleCheckboxGroupChange(e, setSelectedPreviouslyParticipated)} />
+                                <label className="flex gap-3 cursor-pointer">
+                                    <div className="h-3 p-2">
+                                        <input type="checkbox" name="direction" value="previously-participated" onChange={(e) => handleCheckboxGroupChange(e, setSelectedPreviouslyParticipated)} />
+                                    </div>
+                                    <span className="leading-4">
+                                        {t("forms.master.previously-participated")}
+                                    </span>
+                                </label>
                             </div>
+
                             <div className="flex flex-col">
                                 <label>{t("forms.master.direction.title")}</label>
                                 <div className={checkClass}>
