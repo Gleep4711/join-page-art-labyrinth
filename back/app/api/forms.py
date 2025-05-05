@@ -12,11 +12,13 @@ import httpx
 from app.config import settings
 from app.csrf import generate_csrf_token, validate_csrf_token
 from app.db.base import get_db
-from app.db.models import Form
+from app.db.models import Form, User
+from app.jwt import verify_token
 from fastapi import APIRouter, Depends, File
 from fastapi import Form as FastAPIForm
 from fastapi import HTTPException, Request, UploadFile
 from pydantic import BaseModel
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
@@ -203,3 +205,20 @@ async def get_csrf_token(request: Request):
         csrf_token = generate_csrf_token(session_id + request.client.host)
 
     return {"csrf_token": csrf_token}
+
+@router.get('/get_forms')
+async def get_forms(
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(verify_token)
+):
+
+    if current_user.get("role") == 1:
+        query = await db.execute(select(Form))
+    elif current_user.get("role") == 2:
+        query = await db.execute(select(Form).where(Form.form_type == "master"))
+    elif current_user.get("role") == 3:
+        query = await db.execute(select(Form).where(Form.form_type == "volunteer"))
+
+    return query.scalars().all()
+

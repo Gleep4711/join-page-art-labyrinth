@@ -7,7 +7,7 @@ from sqlalchemy import JSON, Boolean, Column, DateTime, Integer, String
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String, unique=True, nullable=False)
     password_hash = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
@@ -19,7 +19,7 @@ class User(Base):
 class Form(Base):
     __tablename__ = "participation_forms"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     form_type = Column(String, nullable=True)
 
     name = Column(String, nullable=True)
@@ -47,7 +47,7 @@ class Form(Base):
 class Feedback(Base):
     __tablename__ = "feedback_forms"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=True)
     phone = Column(String, nullable=True)
     email = Column(String, nullable=False)
