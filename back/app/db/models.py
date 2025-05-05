@@ -30,6 +30,7 @@ class Form(Base):
     country = Column(String, nullable=True)
     phone = Column(String, nullable=True)
     email = Column(String, nullable=True)
+    previously_participated = Column(String, nullable=True)
     program_direction = Column(String, nullable=True)
     program_description = Column(String, nullable=True)
     program_example = Column(String, nullable=True)
@@ -39,6 +40,7 @@ class Form(Base):
     duration = Column(String, nullable=True)
     lang = Column(String, nullable=True)
     raider = Column(String, nullable=True)
+    additional_info = Column(String, nullable=True)
 
     raw_data = Column(JSON, nullable=True)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))

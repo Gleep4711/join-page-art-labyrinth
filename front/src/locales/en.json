@@ -60,11 +60,12 @@
             "submit": "SUBMIT"
         },
         "master": {
-            "title": "Please fill out the artist form",
-            "name": "Name / Group Name / Alias",
-            "country": "Your country",
-            "tg": "Telegram",
+            "title": "Please introduce yourself:",
+            "name": "Name / creative pseudonym (if any) / band name.",
+            "country": "Where are you from?",
+            "tg": "Telegram (WhatsApp or contact number)",
             "email": "Email",
+            "previously-participated": "Have you previously participated in the Art Labyrinth Festival as a facilitator?",
             "direction": {
                 "title": "Program direction",
                 "concert": "Concert",
@@ -78,7 +79,8 @@
                 "other": "Other"
             },
             "description": "Please fill out the artist form",
-            "description-info": "A few sentences for a promotional post about your cultural program",
+            "description-info": "Tell us what you would like to conduct at the festival? In which field do you create? (What can festival participants learn, feel, or create with you?)",
+            "description-info-italic": "Describe your experience in a way that is engaging and visually appealing for our Instagram audience.",
             "dates": {
                 "title": "Possible performance dates",
                 "10": "July 10 (Thursday)",
@@ -88,9 +90,9 @@
             },
             "program-url": "Link to your program",
             "social": "Link to your social network (FB/IG/Vk)",
-            "quantity": "Number of events",
-            "time": "What time would you like to perform?",
-            "duration": "How long is your program?",
+            "quantity": "Number of desired events",
+            "time": "Preferred time of your performance",
+            "duration": "Duration of your program",
             "langs": {
                 "title": "Program language",
                 "ru": "RU",
@@ -99,12 +101,13 @@
             },
             "image": {
                 "title": "Upload images (up to 200 MB)",
-                "description": "Attach a few photos of your program to the response",
+                "description": "Add photos here and, if possible, a short video capturing the atmosphere of your workshop + one high-quality photo, professional or semi-professional, where you are clearly visible. Thank you:)",
                 "input": "Click or drag your files into this area",
                 "drag": "Drag files here...",
                 "added": "Added"
             },
-            "raider": "Technical and additional requirements",
+            "raider": "Your technical requirements and anything else you would like to add",
+            "additional": "If you could convey one important message to the participants, what would it be? It could be a thought, philosophy, or feeling related to your art.",
             "change": "Choose",
             "error": "Please select the language(s) your program will be conducted in. If you want to conduct the program in multiple languages, select all applicable options.",
             "submit": "SUBMIT"

@@ -10,6 +10,7 @@ function FormMaster() {
     const [selectedDirections, setSelectedDirections] = useState<string[]>([]);
     const [selectedDates, setSelectedDates] = useState<string[]>([]);
     const [selectedLangs, setSelectedLangs] = useState<string[]>([]);
+    const [selectedPreviouslyParticipated, setSelectedPreviouslyParticipated] = useState<string[]>([]);
     const [formData, setFormData] = useState({
         name: '',
         country: '',
@@ -22,6 +23,7 @@ function FormMaster() {
         time: '',
         duration: '',
         raider: '',
+        additional_info: '',
         file: null as FileList | null,
     });
     const [langError, setLangError] = useState(false);
@@ -68,6 +70,7 @@ function FormMaster() {
             direction: selectedDirections,
             date: selectedDates,
             lang: selectedLangs,
+            previously_participated: selectedPreviouslyParticipated,
         }));
 
         if (formData.file) {
@@ -87,6 +90,8 @@ function FormMaster() {
             setSessionId(null);
             setCsrfToken(null);
 
+            console.log(response.status)
+
             setCsrfError(false);
             setTooLargeError(false);
             setUnknownfError(false);
@@ -102,6 +107,7 @@ function FormMaster() {
             }
         } catch (error) {
             console.error('Error submitting form:', error);
+            setUnknownfError(true);
         } finally {
             setIsSubmitting(false);
         }
@@ -204,6 +210,10 @@ function FormMaster() {
                                 />
                             </div>
                             <div className="flex flex-col">
+                                <label>{t("forms.master.previously-participated")}</label>
+                                <input type="checkbox" name="previously-participated" value="previously-participated" onChange={(e) => handleCheckboxGroupChange(e, setSelectedPreviouslyParticipated)} />
+                            </div>
+                            <div className="flex flex-col">
                                 <label>{t("forms.master.direction.title")}</label>
                                 <div className={checkClass}>
                                     <div className="bg-matchaGreen-50 pt-4 pl-5 pb-4">
@@ -224,12 +234,14 @@ function FormMaster() {
                                 </div>
                             </div>
                             <div className="flex flex-col">
-                                <label>{t("forms.master.description-info")}</label>
+                                <label>{t("forms.master.description-info")} *</label>
+                                <label className="font-light italic">{t("forms.master.description-info-italic")}</label>
                                 <textarea
                                     name="description"
                                     rows={5}
                                     value={formData?.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                    required={true}
                                     className={inputClass}
                                 />
                             </div>
@@ -364,10 +376,20 @@ function FormMaster() {
                             <div className="flex flex-col">
                                 <label>{t("forms.master.raider")}</label>
                                 <textarea
-                                    name="description"
+                                    name="raider"
                                     rows={5}
                                     value={formData?.raider}
                                     onChange={(e) => setFormData({ ...formData, raider: e.target.value })}
+                                    className={inputClass}
+                                />
+                            </div>
+                            <div className="flex flex-col">
+                                <label>{t("forms.master.additional")}</label>
+                                <textarea
+                                    name="additional_info"
+                                    rows={5}
+                                    value={formData?.additional_info}
+                                    onChange={(e) => setFormData({ ...formData, additional_info: e.target.value })}
                                     className={inputClass}
                                 />
                             </div>
