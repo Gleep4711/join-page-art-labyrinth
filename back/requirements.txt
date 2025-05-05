@@ -48,6 +48,8 @@ markupsafe==3.0.2
     # via
     #   mako
     #   werkzeug
+passlib==1.7.4
+    # via -r requirements.in
 psycopg==3.2.6
     # via -r requirements.in
 psycopg-binary==3.2.6
