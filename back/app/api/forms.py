@@ -39,6 +39,7 @@ class FormDataMasters(BaseModel):
     country: Optional[str] | None
     tg: Optional[str] | None
     email: Optional[str] | None
+    previously_participated: Optional[List[str]] | None
     direction: Optional[List[str]]
     description: Optional[str] | None
     date: Optional[List[str]] | None
@@ -49,6 +50,7 @@ class FormDataMasters(BaseModel):
     duration: Optional[str] | None
     lang: Optional[List[str]] | None
     raider: Optional[str] | None
+    additional_info: Optional[str] | None
     file: Optional[List[UploadFile]] = None
 
 

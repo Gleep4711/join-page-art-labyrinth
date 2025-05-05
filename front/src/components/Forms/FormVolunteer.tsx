@@ -77,6 +77,7 @@ function FormVolunteer() {
                 console.error('Error submitting form:', await response.text());
             }
         } catch (error) {
+            setUnknownfError(true);
             console.error('Error submitting form:', error);
         } finally {
             setIsSubmitting(false);
