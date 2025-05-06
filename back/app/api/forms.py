@@ -210,11 +210,9 @@ async def get_csrf_token(request: Request):
 
 @router.get('/get_forms')
 async def get_forms(
-    request: Request,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(verify_token)
 ):
-
     if current_user.get("role") == 1:
         query = await db.execute(select(Form))
     elif current_user.get("role") == 2:
@@ -222,5 +220,19 @@ async def get_forms(
     elif current_user.get("role") == 3:
         query = await db.execute(select(Form).where(Form.form_type == "volunteer"))
 
-    return query.scalars().all()
+    data = query.scalars().all()
+    return_data = []
+    for form in data:
+        form_dict: dict = {key: value for key, value in vars(form).items() if not key.startswith('_') and key != "raw_data"}
+        form_dict["files"] = []
+
+        media_dir = f"/srv/data/media/art-lab/fest2025/form/{form_dict.get("id")}"
+
+        if os.path.exists(media_dir):
+            files = os.listdir(media_dir)
+            for file in files:
+                form_dict["files"].append(f"https://files.art-labyrinth.org/fest2025/form/{form_dict.get("id")}/{file}")
+
+        return_data.append(form_dict)
+    return return_data
 
