@@ -1,10 +1,6 @@
 import { API_URL } from '../config';
 
 export async function fetchCsrfToken() {
-    const csrfToken = localStorage.getItem("csrfToken");
-    if (csrfToken) {
-        return csrfToken;
-    }
     let sessionId = localStorage.getItem("sessionId");
     if (!sessionId) {
         sessionId = crypto.randomUUID();
