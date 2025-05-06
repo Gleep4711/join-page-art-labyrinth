@@ -11,12 +11,14 @@
     "@testing-library/user-event": "^13.5.0",
     "i18next": "^23.16.8",
     "i18next-browser-languagedetector": "^8.0.4",
+    "postcss": "^8.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
     "react-i18next": "^15.4.1",
     "react-router-dom": "^7.4.0",
     "react-scripts": "^5.0.1",
+    "react-toastify": "^11.0.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

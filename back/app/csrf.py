@@ -3,7 +3,7 @@ from fastapi import HTTPException, Request
 from itsdangerous import URLSafeTimedSerializer
 
 SECRET_KEY = f"csrf_{settings.JWT_SECRET}"
-CSRF_TOKEN_EXPIRATION = 1800
+CSRF_TOKEN_EXPIRATION = 3600  # 1 hour
 
 serializer = URLSafeTimedSerializer(SECRET_KEY)
 
