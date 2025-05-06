@@ -160,7 +160,7 @@ async def save_form(
 
     if form_type == "master":
         parsed_data = FormDataMasters(**json.loads(data))
-        parsed_data.file = ', '.join([file.filename for file in file]) if file else None
+        parsed_data.file = [file.filename for file in file] if file else []
     elif form_type == "volunteer":
         parsed_data = FormDataVolunteers(**json.loads(data))
     else:
