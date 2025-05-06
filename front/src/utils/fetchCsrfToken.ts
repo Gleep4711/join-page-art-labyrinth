@@ -1,6 +1,15 @@
 import { API_URL } from '../config';
 
-export async function fetchCsrfToken(sessionId: string): Promise<string | null> {
+export async function fetchCsrfToken() {
+    const csrfToken = localStorage.getItem("csrfToken");
+    if (csrfToken) {
+        return csrfToken;
+    }
+    let sessionId = localStorage.getItem("sessionId");
+    if (!sessionId) {
+        sessionId = crypto.randomUUID();
+        localStorage.setItem("sessionId", sessionId);
+    }
     try {
         const response = await fetch(`${API_URL}/form/csrf-token`, {
             method: "GET",
@@ -15,9 +24,8 @@ export async function fetchCsrfToken(sessionId: string): Promise<string | null> 
         }
 
         const data = await response.json();
-        return data.csrf_token || sessionId;
+        localStorage.setItem("csrfToken", data.csrf_token);
     } catch (error) {
         console.error("Error fetching CSRF token:", error);
-        return sessionId;
     }
 }

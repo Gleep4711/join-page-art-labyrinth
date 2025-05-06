@@ -5,6 +5,7 @@ import ThankYouPage from "./ThankYouPage";
 import { useTranslation } from "react-i18next";
 import { fetchCsrfToken } from "../../utils/fetchCsrfToken";
 import { API_URL } from '../../config';
+import Checkbox from "./Checkbox";
 
 function FormVolunteer() {
     const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
@@ -12,8 +13,6 @@ function FormVolunteer() {
     const [deptError, setDeptError] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const [csrfToken, setCsrfToken] = useState<string | null>(null);
-    const [sessionId, setSessionId] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [csrfError, setCsrfError] = useState(false);
@@ -22,18 +21,11 @@ function FormVolunteer() {
 
     const { t } = useTranslation();
 
-    const handleCheckboxChange = (e: { target: { value: any; checked: any; }; }) => {
-        const { value, checked } = e.target;
-        if (checked) {
-            setSelectedDepartments((prev) => [...prev, value]);
-        } else {
-            setSelectedDepartments((prev) => prev.filter((item) => item !== value));
-        }
-        setDeptError(false);
-    };
-
     const submitForm = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
+        setCsrfError(false);
+        setTooLargeError(false);
+        setUnknownfError(false);
 
         if (isSubmitting) return;
         setIsSubmitting(true);
@@ -46,7 +38,7 @@ function FormVolunteer() {
 
         const formDataToSend = new FormData();
         formDataToSend.append("form_type", "volunteer");
-        formDataToSend.append("csrf_token", csrfToken || "");
+        formDataToSend.append("csrf_token", localStorage.getItem("csrfToken") || "");
         formDataToSend.append("data", JSON.stringify({
             ...formData,
             department: selectedDepartments,
@@ -56,16 +48,10 @@ function FormVolunteer() {
             const response = await fetch(`${API_URL}/form/save`, {
                 method: 'POST',
                 headers: {
-                    "X-Session-ID": sessionId || "",
+                    "X-Session-ID": localStorage.getItem("sessionId") || crypto.randomUUID(),
                 },
                 body: formDataToSend,
             });
-            setSessionId(null);
-            setCsrfToken(null);
-
-            setCsrfError(false);
-            setTooLargeError(false);
-            setUnknownfError(false);
             if (response.ok) {
                 setIsSubmitted(true);
             } else if (response.status === 403) {
@@ -96,17 +82,15 @@ function FormVolunteer() {
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            if (!csrfToken && !isSubmitted) {
-                const newSessionId = crypto.randomUUID();
-                setSessionId(newSessionId);
-                fetchCsrfToken(newSessionId).then(setCsrfToken).catch((error) => {
+            if (!localStorage.getItem("csrfToken") && !isSubmitted) {
+                fetchCsrfToken().catch((error) => {
                     console.error("Error fetching CSRF token:", error);
                 });
             }
         }, Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000);
 
         return () => clearTimeout(timeoutId);
-    }, [csrfToken, sessionId, isSubmitted]);
+    }, [isSubmitted]);
 
     return (
         <div className="volunteer-form min-h-screen leading-none">
@@ -193,14 +177,19 @@ function FormVolunteer() {
                                     </div>
                                     <div className="flex flex-col gap-3 px-4 py-3 w-full bg-amber-50">
                                         {departments.map((dept) => (
-                                            <label key={dept.id} className="flex gap-3 cursor-pointer">
-                                                <div className="flex items-center">
-                                                    <input type="checkbox" name="department" value={dept.id} onChange={handleCheckboxChange} />
-                                                </div>
-                                                <span className="leading-4">
-                                                    {dept.label}
-                                                </span>
-                                            </label>
+                                            <Checkbox
+                                                key={dept.id}
+                                                id={dept.id}
+                                                label={dept.label}
+                                                onChange={(checked) => {
+                                                    setDeptError(false);
+                                                    if (checked) {
+                                                        setSelectedDepartments((prev) => [...prev, dept.id]);
+                                                    } else {
+                                                        setSelectedDepartments((prev) => prev.filter((item) => item !== dept.id));
+                                                    }
+                                                }}
+                                            />
                                         ))}
                                     </div>
                                 </div>

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import FileUpload from "./FileUpload";
 import { fetchCsrfToken } from "../../utils/fetchCsrfToken";
 import { API_URL } from '../../config';
+import Checkbox from "./Checkbox";
 
 function FormMaster() {
     const [selectedDirections, setSelectedDirections] = useState<string[]>([]);
@@ -29,8 +30,6 @@ function FormMaster() {
     const [langError, setLangError] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-    const [csrfToken, setCsrfToken] = useState<string | null>(null);
-    const [sessionId, setSessionId] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [csrfError, setCsrfError] = useState(false);
@@ -57,13 +56,16 @@ function FormMaster() {
 
     const submitForm = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
+        setCsrfError(false);
+        setTooLargeError(false);
+        setUnknownfError(false);
 
         if (isSubmitting) return;
         setIsSubmitting(true);
 
         const formDataToSend = new FormData();
         formDataToSend.append("form_type", "master");
-        formDataToSend.append("csrf_token", csrfToken || "");
+        formDataToSend.append("csrf_token", localStorage.getItem("csrfToken") || "");
         formDataToSend.append("data", JSON.stringify({
             ...formData,
             file: undefined,
@@ -83,18 +85,11 @@ function FormMaster() {
             const response = await fetch(`${API_URL}/form/save`, {
                 method: 'POST',
                 headers: {
-                    "X-Session-ID": sessionId || "",
+                    "X-Session-ID": localStorage.getItem("sessionId") || crypto.randomUUID(),
                 },
                 body: formDataToSend,
             });
-            setSessionId(null);
-            setCsrfToken(null);
 
-            console.log(response.status)
-
-            setCsrfError(false);
-            setTooLargeError(false);
-            setUnknownfError(false);
             if (response.ok) {
                 setIsSubmitted(true);
             } else if (response.status === 403) {
@@ -143,18 +138,15 @@ function FormMaster() {
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            if (!csrfToken && !isSubmitted) {
-                const newSessionId = crypto.randomUUID();
-                setSessionId(newSessionId);
-                fetchCsrfToken(newSessionId).then(setCsrfToken).catch((error) => {
+            if (!localStorage.getItem("csrfToken") && !isSubmitted) {
+                fetchCsrfToken().then().catch((error) => {
                     console.error("Error fetching CSRF token:", error);
                 });
             }
-            console.log("csrfToken:", csrfToken);
         }, Math.floor(Math.random() * 5000));
 
         return () => clearTimeout(timeoutId);
-    }, [csrfToken, sessionId, isSubmitted]);
+    }, [isSubmitted]);
 
     return (
         <div className="master-form leading-none">
@@ -190,12 +182,13 @@ function FormMaster() {
                                 />
                             </div>
                             <div className="flex flex-col">
-                                <label>{t("forms.master.tg")}</label>
+                                <label>{t("forms.master.tg")} *</label>
                                 <input
                                     type="text"
                                     name="tg"
                                     value={formData?.tg}
                                     onChange={(e) => setFormData({ ...formData, tg: e.target.value })}
+                                    required={true}
                                     className={inputClass}
                                 />
                             </div>
@@ -210,15 +203,20 @@ function FormMaster() {
                                 />
                             </div>
 
+
+
                             <div className="flex flex-col">
-                                <label className="flex gap-3 cursor-pointer">
-                                    <div className="h-3 p-2">
-                                        <input type="checkbox" name="direction" value="previously-participated" onChange={(e) => handleCheckboxGroupChange(e, setSelectedPreviouslyParticipated)} />
-                                    </div>
-                                    <span className="leading-4">
-                                        {t("forms.master.previously-participated")}
-                                    </span>
-                                </label>
+                                <Checkbox
+                                    id="previously-participated"
+                                    label={t("forms.master.previously-participated")}
+                                    onChange={(checked) => {
+                                        if (checked) {
+                                            setSelectedPreviouslyParticipated((prev) => [...prev, "previously-participated"]);
+                                        } else {
+                                            setSelectedPreviouslyParticipated((prev) => prev.filter((item) => item !== "previously-participated"));
+                                        }
+                                    }}
+                                />
                             </div>
 
                             <div className="flex flex-col">
@@ -229,14 +227,14 @@ function FormMaster() {
                                     </div>
                                     <div className="flex flex-col gap-3 px-4 py-3 w-full bg-amber-50">
                                         {directions.map((item) => (
-                                            <label key={item.id} className="flex gap-3 cursor-pointer">
-                                                <div className="h-3">
-                                                    <input type="checkbox" name="direction" value={item.id} onChange={(e) => handleCheckboxGroupChange(e, setSelectedDirections)} />
-                                                </div>
-                                                <span className="leading-4">
-                                                    {item.label}
-                                                </span>
-                                            </label>
+                                            <Checkbox
+                                                key={item.id}
+                                                id={item.id}
+                                                label={item.label}
+                                                onChange={(checked) => {
+                                                    handleCheckboxGroupChange({ target: { value: item.id, checked } }, setSelectedDirections);
+                                                }}
+                                            />
                                         ))}
                                     </div>
                                 </div>
@@ -261,14 +259,14 @@ function FormMaster() {
                                     </div>
                                     <div className="flex flex-col gap-3 px-4 py-3 w-full bg-amber-50">
                                         {dates.map((item) => (
-                                            <label key={item.id} className="flex gap-3 cursor-pointer">
-                                                <div className="h-3">
-                                                    <input type="checkbox" name="date" value={item.id} onChange={(e) => handleCheckboxGroupChange(e, setSelectedDates)} />
-                                                </div>
-                                                <span className="leading-4">
-                                                    {item.label}
-                                                </span>
-                                            </label>
+                                            <Checkbox
+                                                key={item.id}
+                                                id={item.id}
+                                                label={item.label}
+                                                onChange={(checked) => {
+                                                    handleCheckboxGroupChange({ target: { value: item.id, checked } }, setSelectedDates);
+                                                }}
+                                            />
                                         ))}
                                     </div>
                                 </div>
@@ -340,23 +338,17 @@ function FormMaster() {
                                     </div>
                                     <div className="flex flex-col gap-3 px-4 py-3 w-full bg-amber-50">
                                         {langs.map((item) => (
-                                            <label key={item.id} className="flex gap-3 cursor-pointer">
-                                                <div className="h-3">
-                                                    <input
-                                                        type="checkbox"
-                                                        name="lang"
-                                                        value={item.id}
-                                                        onChange={(e) => {
-                                                            handleCheckboxGroupChange(e, setSelectedLangs);
-                                                            if (langError) {
-                                                                setLangError(false);
-                                                            }
-                                                        }} />
-                                                </div>
-                                                <span className="leading-4">
-                                                    {item.label}
-                                                </span>
-                                            </label>
+                                            <Checkbox
+                                                key={item.id}
+                                                id={item.id}
+                                                label={item.label}
+                                                onChange={(checked) => {
+                                                    handleCheckboxGroupChange({ target: { value: item.id, checked } }, setSelectedLangs);
+                                                    if (langError) {
+                                                        setLangError(false);
+                                                    }
+                                                }}
+                                            />
                                         ))}
                                     </div>
                                 </div>

@@ -199,8 +199,6 @@ async def send_to_telegram(data: dict, form_type: str):
 @router.get('/csrf-token')
 async def get_csrf_token(request: Request):
     session_id = request.headers.get("X-Session-ID")
-    logging.debug(f"Session ID: {session_id}")
-    logging.debug(request.client.host)
     if not session_id:
         csrf_token = generate_csrf_token(uuid.uuid4().hex + str(random.randint(100000, 999999)) * 2)
     else:
