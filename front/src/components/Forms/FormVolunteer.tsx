@@ -82,7 +82,7 @@ function FormVolunteer() {
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            if (!localStorage.getItem("csrfToken") && !isSubmitted) {
+            if (!isSubmitted) {
                 fetchCsrfToken().catch((error) => {
                     console.error("Error fetching CSRF token:", error);
                 });

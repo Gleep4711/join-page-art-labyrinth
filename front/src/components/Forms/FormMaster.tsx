@@ -138,7 +138,7 @@ function FormMaster() {
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            if (!localStorage.getItem("csrfToken") && !isSubmitted) {
+            if (!isSubmitted) {
                 fetchCsrfToken().then().catch((error) => {
                     console.error("Error fetching CSRF token:", error);
                 });
