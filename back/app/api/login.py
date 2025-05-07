@@ -39,7 +39,7 @@ async def login(request: Request, data: LoginRequest, db: AsyncSession = Depends
     query = await db.execute(
         select(User).where(User.username == data.username)
     )
-    user = query.scalar_one_or_none()
+    user: User = query.scalar_one_or_none()
 
     if not user or not check_password_hash(user.password_hash, data.password):
         raise HTTPException(status_code=401, detail="Invalid username or password")
@@ -53,7 +53,14 @@ async def login(request: Request, data: LoginRequest, db: AsyncSession = Depends
         "ip": request.headers.get("CF-Connecting-IP", request.client.host)
     }
     access_token = await create_access_token(data=jwt_data)
-    return {"access_token": access_token, "token_type": "bearer"}
+
+    redirect_url = "dashboard"
+    if user.username == "VolnaFest":
+        redirect_url = "volunteers"
+    elif user.username == "MuzArt":
+        redirect_url = "masters"
+
+    return {"access_token": access_token, "token_type": "bearer", redirect_url: redirect_url}
 
 
 @router.post("/add")

@@ -214,15 +214,12 @@ async def get_forms(
     db: AsyncSession = Depends(get_db),
     current_user: JWTPayload = Depends(verify_token)
 ):
-    redirect_url = "dashboard"
     if current_user.get("role") == 1:
         query = await db.execute(select(Form))
     elif current_user.name == "VolnaFest":
         query = await db.execute(select(Form).where(Form.form_type == "volunteer"))
-        redirect_url = "volunteers"
     elif current_user.name == "MuzArt":
         query = await db.execute(select(Form).where(Form.form_type == "master"))
-        redirect_url = "masters"
     else:
         raise HTTPException(status_code=403, detail="Access denied")
 
