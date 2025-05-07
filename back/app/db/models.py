@@ -57,3 +57,16 @@ class Feedback(Base):
     dest = Column(String, nullable=True)
 
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+class Ticket(Base):
+    __tablename__ = "tickets"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    ticket_id = Column(String, unique=True, nullable=False)
+    name = Column(String, nullable=True)
+    email = Column(String, nullable=True)
+    is_sold = Column(Boolean, default=False)
+    is_used = Column(Boolean, default=False)
+    comment = Column(String, nullable=True)
+
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))

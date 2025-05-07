@@ -13,6 +13,7 @@ psycopg2-binary
 pydantic_settings
 python-jose
 python-multipart
+qrcode
 sqlalchemy
 uvicorn
 werkzeug
