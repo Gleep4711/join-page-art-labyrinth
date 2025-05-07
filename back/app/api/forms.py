@@ -12,11 +12,12 @@ import httpx
 from app.config import settings
 from app.csrf import generate_csrf_token, validate_csrf_token
 from app.db.base import get_db
-from app.db.models import Form, User
-from app.jwt import verify_token
+from app.db.models import Form
+from app.jwt import JWTPayload, verify_token
 from fastapi import APIRouter, Depends, File
 from fastapi import Form as FastAPIForm
 from fastapi import HTTPException, Request, UploadFile
+from fastapi.background import BackgroundTasks
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -58,7 +59,6 @@ async def save_form_data(
     db: AsyncSession,
     form_type: str,
     data: FormDataVolunteers | FormDataMasters,
-    files: Optional[List[UploadFile]] = None
 ):
     if form_type == "volunteer":
         form = Form(
@@ -96,24 +96,20 @@ async def save_form_data(
     await db.commit()
     await db.refresh(form)
 
-    if form_type == "master" and files:
-        await save_files_to_disk_and_telegram(form.id, files)
-
     return form
 
 
-async def save_files_to_disk_and_telegram(form_id: int, files: List[UploadFile]):
+async def save_files_to_disk_and_telegram(form_id: int, files: List[tuple]):
     media_dir = f"/srv/data/media/art-lab/fest2025/form/{form_id}"
     os.makedirs(media_dir, exist_ok=True)
 
     url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendDocument"
 
-    for file in files:
-        sanitized_filename = re.sub(r'[^\w\-.]', '', file.filename)
+    for filename, file_content, content_type in files:
+        sanitized_filename = re.sub(r'[^\w\-.]', '', filename)
         name, ext = os.path.splitext(sanitized_filename)
         sanitized_filename = f"{random.randint(100, 999)}_{name[:20]}{ext}"
 
-        file_content = await file.read()
         file_path = os.path.join(media_dir, sanitized_filename)
 
         with open(file_path, "wb") as buffer:
@@ -130,7 +126,7 @@ async def save_files_to_disk_and_telegram(form_id: int, files: List[UploadFile])
             "disable_notification": True,
         }
         telegram_file = {
-            "document": (sanitized_filename, file_buffer, file.content_type),
+            "document": (sanitized_filename, file_buffer, content_type),
         }
 
         async with httpx.AsyncClient() as client:
@@ -139,18 +135,20 @@ async def save_files_to_disk_and_telegram(form_id: int, files: List[UploadFile])
                 raise HTTPException(status_code=500, detail=f"Failed to send file: {response.text}")
 
         file_buffer.close()
-        await asyncio.sleep(1)
+        await asyncio.sleep(2)
 
 
 @router.post('/save')
 async def save_form(
     request: Request,
+    background_tasks: BackgroundTasks,
     form_type: str = FastAPIForm(...),
     data: str = FastAPIForm(...),
     csrf_token: str = FastAPIForm(...),
     file: Optional[List[UploadFile]] = File(None),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
+    logging.debug(f"Received form data: {form_type}, {data}, {csrf_token}")
     session_id = request.headers.get("X-Session-ID")
 
     if not session_id:
@@ -166,10 +164,15 @@ async def save_form(
     else:
         raise HTTPException(status_code=400, detail="Invalid form type")
 
-    form = await save_form_data(db, form_type, parsed_data, file)
+    form = await save_form_data(db, form_type, parsed_data)
     if form_type == "master":
         parsed_data.id = form.id
-    await send_to_telegram(parsed_data.model_dump(), form_type)
+        if file:
+            file_contents = [(f.filename, await f.read(), f.content_type) for f in file]
+            background_tasks.add_task(save_files_to_disk_and_telegram, form.id, file_contents)
+    background_tasks.add_task(send_to_telegram, parsed_data.model_dump(), form_type)
+
+    logging.debug(f"Form saved: {form.id}")
 
     return {"status": "ok"}
 
@@ -209,14 +212,19 @@ async def get_csrf_token(request: Request):
 @router.get('/get_forms')
 async def get_forms(
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(verify_token)
+    current_user: JWTPayload = Depends(verify_token)
 ):
+    redirect_url = "dashboard"
     if current_user.get("role") == 1:
         query = await db.execute(select(Form))
-    elif current_user.get("role") == 2:
-        query = await db.execute(select(Form).where(Form.form_type == "master"))
-    elif current_user.get("role") == 3:
+    elif current_user.name == "VolnaFest":
         query = await db.execute(select(Form).where(Form.form_type == "volunteer"))
+        redirect_url = "volunteers"
+    elif current_user.name == "MuzArt":
+        query = await db.execute(select(Form).where(Form.form_type == "master"))
+        redirect_url = "masters"
+    else:
+        raise HTTPException(status_code=403, detail="Access denied")
 
     data = query.scalars().all()
     return_data = []
