@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import BackButton from "./BackButton";
-import ThankYouPage from "./ThankYouPage";
-import { useTranslation } from "react-i18next";
-import FileUpload from "./FileUpload";
-import { fetchCsrfToken } from "../../utils/fetchCsrfToken";
-import { API_URL } from '../../config';
 import Checkbox from "./Checkbox";
+import DropzoneUI from "./Dropzone";
+import ThankYouPage from "./ThankYouPage";
+
+import { API_URL } from '../../config';
+import { fetchCsrfToken } from "../../utils/fetchCsrfToken";
+import { useTranslation } from "react-i18next";
 
 function FormMaster() {
     const [selectedDirections, setSelectedDirections] = useState<string[]>([]);
@@ -25,11 +26,10 @@ function FormMaster() {
         duration: '',
         raider: '',
         additional_info: '',
-        file: null as FileList | null,
+        file: null as File[] | null,
     });
     const [langError, setLangError] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [csrfError, setCsrfError] = useState(false);
@@ -37,6 +37,7 @@ function FormMaster() {
     const [unknownfError, setUnknownfError] = useState(false);
 
     const { t } = useTranslation();
+
 
     const handleCheckboxGroupChange = (e: { target: { value: any; checked: any; }; }, setState: React.Dispatch<React.SetStateAction<string[]>>) => {
         const { value, checked } = e.target;
@@ -47,11 +48,11 @@ function FormMaster() {
         }
     };
 
-    const handleFilesSelected = (files: FileList | null) => {
-        if (files) {
-            setUploadedFiles(Array.from(files));
-            setFormData({ ...formData, file: files });
-        }
+    const handleFilesFromDropzone = (incomingFiles: File[]) => {
+        setFormData((prev) => ({
+            ...prev,
+            file: incomingFiles,
+        }));
     };
 
     const submitForm = async (e: { preventDefault: () => void; }) => {
@@ -356,22 +357,7 @@ function FormMaster() {
                             <div className="flex flex-col">
                                 <label className="font-bold leading-6">{t("forms.master.image.title")}</label>
                                 <label className="font-light italic">{t("forms.master.image.description")}</label>
-                                <FileUpload
-                                    inputClass={inputClass}
-                                    onFilesSelected={handleFilesSelected}
-                                />
-                                {uploadedFiles.length > 0 && (
-                                    <div className="mt-4">
-                                        <h4 className="font-bold">{t("forms.master.image.added")}</h4>
-                                        <ul className="list-disc pl-5">
-                                            {uploadedFiles.map((file, index) => (
-                                                <li key={index} className="text-sm text-gray-600">
-                                                    {file.name}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                )}
+                                <DropzoneUI onFilesChange={handleFilesFromDropzone} />
                             </div>
                             <div className="flex flex-col">
                                 <label>{t("forms.master.raider")}</label>
@@ -415,7 +401,7 @@ function FormMaster() {
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className={`font-inter w-full py-3 ${isSubmitting ? 'bg-gray-400' : 'bg-customOrange'} text-orange-50 rounded-md hover:bg-customOrange-hover`}
+                                    className={`font-inter w-full py-3 ${isSubmitting ? 'bg-gray-400' : 'bg-customOrange hover:bg-customOrange-hover'} text-orange-50 rounded-md `}
                                 >
                                     {isSubmitting ? t("forms.submitting") : t("forms.master.submit")}
                                 </button>
