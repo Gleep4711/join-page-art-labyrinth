@@ -88,7 +88,7 @@
                 "12": "July 12 (Saturday)",
                 "13": "July 13 (Sunday)"
             },
-            "program-url": "Link to your program",
+            "program-url": "Link to a video or photo report from your workshop or concert, if available",
             "social": "Link to your social network (FB/IG/Vk)",
             "quantity": "Number of desired events",
             "time": "Preferred time of your performance",
@@ -100,7 +100,7 @@
                 "md": "RO"
             },
             "image": {
-                "title": "Upload images (up to 200 MB)",
+                "title": "Upload images",
                 "description": "Add photos here and, if possible, a short video capturing the atmosphere of your workshop + one high-quality photo, professional or semi-professional, where you are clearly visible. Thank you:)",
                 "input": "Click or drag your files into this area",
                 "drag": "Drag files here...",

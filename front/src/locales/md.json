@@ -88,7 +88,7 @@
                 "12": "12 iulie (sâmbătă)",
                 "13": "13 iulie (duminică)"
             },
-            "program-url": "Link către programul dvs.",
+            "program-url": "Link către videoclip, dacă există, sau un raport foto de la atelierul dumneavoastră sau concert",
             "social": "Link către rețeaua dvs. socială (FB/IG/Vk)",
             "quantity": "Numărul de evenimente dorite",
             "time": "Ora preferată pentru prestația dumneavoastră",
@@ -100,7 +100,7 @@
                 "md": "RO"
             },
             "image": {
-                "title": "Încărcați imagini (până la 200 MB)",
+                "title": "Încărcați imagini",
                 "description": "Adăugați aici fotografii și, dacă este posibil, un videoclip scurt care să surprindă atmosfera atelierului dumneavoastră + o fotografie de calitate, profesională sau semiprofesională, în care să fiți clar vizibil. Mulțumim :)",
                 "input": "Faceți clic sau trageți fișierele dvs. în această zonă",
                 "drag": "Trageți fișierele aici...",
