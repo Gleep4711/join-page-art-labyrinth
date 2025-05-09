@@ -216,9 +216,9 @@ async def get_forms(
 ):
     if current_user.get("role") == 1:
         query = await db.execute(select(Form))
-    elif current_user.name == "VolnaFest":
+    elif current_user.get("name") == "VolnaFest":
         query = await db.execute(select(Form).where(Form.form_type == "volunteer"))
-    elif current_user.name == "MuzArt":
+    elif current_user.get("name") == "MuzArt":
         query = await db.execute(select(Form).where(Form.form_type == "master"))
     else:
         raise HTTPException(status_code=403, detail="Access denied")
