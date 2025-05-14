@@ -44,6 +44,7 @@ class Form(Base):
 
     raw_data = Column(JSON, nullable=True)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    deleted_at = Column(DateTime(timezone=True), nullable=True)
 
 
 class Feedback(Base):
@@ -64,7 +65,9 @@ class Ticket(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     ticket_id = Column(String, unique=True, nullable=False)
     name = Column(String, nullable=True)
+    phone= Column(String, nullable=True)
     email = Column(String, nullable=True)
+    active = Column(Boolean, default=True)
     is_sold = Column(Boolean, default=False)
     is_used = Column(Boolean, default=False)
     comment = Column(String, nullable=True)
