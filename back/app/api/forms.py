@@ -5,6 +5,7 @@ import os
 import random
 import re
 import uuid
+from datetime import datetime, timezone
 from io import BytesIO
 from typing import List, Optional
 
@@ -69,7 +70,7 @@ async def save_form_data(
             phone=data.tg,
             profession=data.prof,
             department=",".join(data.department) if data.department else None,
-            raw_data=data.model_dump_json(),
+            # raw_data=data.model_dump_json(),
         )
     elif form_type == "master":
         form = Form(
@@ -87,7 +88,7 @@ async def save_form_data(
             duration=data.duration,
             lang=",".join(data.lang) if data.lang else None,
             raider=data.raider,
-            raw_data=data.model_dump_json(),
+            # raw_data=data.model_dump_json(),
         )
     else:
         raise HTTPException(status_code=400, detail="Invalid form type")
@@ -198,7 +199,6 @@ async def send_to_telegram(data: dict, form_type: str):
         await client.post(url, json=payload)
 
 
-
 @router.get('/csrf-token')
 async def get_csrf_token(request: Request):
     session_id = request.headers.get("X-Session-ID")
@@ -209,24 +209,27 @@ async def get_csrf_token(request: Request):
 
     return {"csrf_token": csrf_token}
 
+
 @router.get('/get_forms')
 async def get_forms(
     db: AsyncSession = Depends(get_db),
     current_user: JWTPayload = Depends(verify_token)
 ):
-    if current_user.get("role") == 1:
-        query = await db.execute(select(Form))
-    elif current_user.get("name") == "VolnaFest":
-        query = await db.execute(select(Form).where(Form.form_type == "volunteer"))
+    query = select(Form)
+    if current_user.get("name") == "VolnaFest":
+        query = query.where(Form.form_type == "volunteer", Form.deleted_at.is_(None))
     elif current_user.get("name") == "MuzArt":
-        query = await db.execute(select(Form).where(Form.form_type == "master"))
+        query = query.where(Form.form_type == "master", Form.deleted_at.is_(None))
     else:
         raise HTTPException(status_code=403, detail="Access denied")
+
+    query = await db.execute(query)
 
     data = query.scalars().all()
     return_data = []
     for form in data:
-        form_dict: dict = {key: value for key, value in vars(form).items() if not key.startswith('_') and key != "raw_data"}
+        form_dict: dict = {key: value for key, value in vars(
+            form).items() if not key.startswith('_') and key != "raw_data"}
         form_dict["files"] = []
 
         media_dir = f"/srv/data/media/art-lab/fest2025/form/{form_dict.get("id")}"
@@ -239,3 +242,34 @@ async def get_forms(
         return_data.append(form_dict)
     return return_data
 
+
+@router.get('/delete/{form_id}')
+async def delete_form(
+    form_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: JWTPayload = Depends(verify_token)
+):
+    query = await db.execute(select(Form).where(Form.id == form_id))
+    form = query.scalars().first()
+    if not form:
+        raise HTTPException(status_code=404, detail="Form not found")
+
+    if current_user.get("role") != 1:
+        if form.form_type == "master":
+            if current_user.get("name") != "MuzArt":
+                raise HTTPException(status_code=403, detail="Access denied")
+        elif form.form_type == "volunteer":
+            if current_user.get("name") != "VolnaFest":
+                raise HTTPException(status_code=403, detail="Access denied")
+        else:
+            raise HTTPException(status_code=403, detail="Access denied")
+
+    form.deleted_at = datetime.now(timezone.utc)
+    await db.commit()
+    await db.refresh(form)
+
+    # media_dir = f"/srv/data/media/art-lab/fest2025/form/{form_id}"
+    # if os.path.exists(media_dir):
+    #     os.rmdir(media_dir)
+
+    return {"status": "ok"}

@@ -1,5 +1,4 @@
 import datetime
-import logging
 from typing import NotRequired, TypedDict
 
 from app.config import settings
@@ -9,7 +8,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login/auth")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 credentials_exception = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail="Could not validate credentials",
@@ -26,7 +25,7 @@ class JWTPayload(TypedDict):
     token: NotRequired[str]
 
 
-async def create_access_token(data: JWTPayload):
+async def create_access_token(data: JWTPayload) -> JWTPayload:
     to_encode = data.copy()
 
     to_encode.update({
