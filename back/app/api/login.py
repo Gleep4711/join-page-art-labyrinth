@@ -75,7 +75,7 @@ async def login(
     # if username:
     #     return {"access_token": access_token.get("token"), "token_type": "bearer"}
 
-    return {"access_token": access_token, "token_type": "bearer", redirect_url: redirect_url}
+    return {"access_token": access_token, "token_type": "bearer", "redirect_url": redirect_url, "debug": username}
 
 
 @router.post("/add")

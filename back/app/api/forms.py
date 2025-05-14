@@ -220,7 +220,7 @@ async def get_forms(
         query = query.where(Form.form_type == "volunteer", Form.deleted_at.is_(None))
     elif current_user.get("name") == "MuzArt":
         query = query.where(Form.form_type == "master", Form.deleted_at.is_(None))
-    else:
+    elif current_user.get("role") != 1:
         raise HTTPException(status_code=403, detail="Access denied")
 
     query = await db.execute(query)
