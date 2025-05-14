@@ -1,14 +1,13 @@
-import logging
 from typing import Optional
-from app.config import settings
+
 from app.db.base import get_db
-from app.db.models import User
+from app.db.models import Form, User
 from app.jwt import JWTPayload, create_access_token, verify_token
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Body, Depends, Form as FastForm, HTTPException, Request
 from pydantic import BaseModel, Field
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.asyncio import AsyncSession
 from werkzeug.security import check_password_hash, generate_password_hash
 
 router = APIRouter()
@@ -32,7 +31,20 @@ class UserUpdateRequest(BaseModel):
 
 
 @router.post("/login")
-async def login(request: Request, data: LoginRequest, db: AsyncSession = Depends(get_db)):
+async def login(
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    username: str = FastForm(None),
+    password: str = FastForm(None),
+):
+    if username or password:
+        data = LoginRequest(
+            username=username,
+            password=password
+        )
+    else:
+        data = LoginRequest(**(await request.json()))
+
     if not data.username or not data.password:
         raise HTTPException(status_code=400, detail="Username and password are required")
 
@@ -59,6 +71,9 @@ async def login(request: Request, data: LoginRequest, db: AsyncSession = Depends
         redirect_url = "volunteers"
     elif user.username == "MuzArt":
         redirect_url = "masters"
+
+    if username:
+        return {"access_token": access_token.get("token"), "token_type": "bearer"}
 
     return {"access_token": access_token, "token_type": "bearer", redirect_url: redirect_url}
 
@@ -102,7 +117,7 @@ async def edit_user(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(verify_token)
 ):
-    if current_user.get("role") != 1:  # Only admin can edit users
+    if current_user.get("role") != 1:
         raise HTTPException(status_code=403, detail="Not authorized")
 
     query = await db.execute(select(User).where(User.id == user_id))

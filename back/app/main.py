@@ -1,6 +1,6 @@
 import logging
 
-from app.api import feedback, forms, payment, root_route, login
+from app.api import feedback, forms, login, payment, root_route, tickets
 from app.config import settings
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,7 +16,7 @@ options = {
     "contact": {
         "name": "Art-Labyrinth Team",
         "url": "https://art-labyrinth.org",
-        "email": "team.art-labyrinth.org",
+        "email": "team@art-labyrinth.org",
     },
 }
 if not settings.DEV_MODE:
@@ -30,6 +30,7 @@ app.include_router(forms.router, tags=["Form"], prefix="/form")
 app.include_router(feedback.router, tags=["Feedback"], prefix="/feedback")
 app.include_router(payment.router, tags=["Payment"], prefix="")
 app.include_router(login.router, tags=["Login"], prefix="/user")
+app.include_router(tickets.router, tags=["Tickets"], prefix="/tickets")
 
 if settings.DEV_MODE:
     app.add_middleware(

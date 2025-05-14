@@ -6,6 +6,7 @@ fastapi
 httpx
 itsdangerous
 passlib
+pillow
 psycopg
 psycopg-binary
 psycopg-pool
