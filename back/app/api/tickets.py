@@ -4,15 +4,22 @@ from io import BytesIO
 
 import httpx
 import qrcode
+from sqlalchemy import select
 from app.config import settings
-from fastapi import APIRouter
+from app.db.models import Ticket
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.db.base import get_db
+from fastapi import Depends
+from fastapi.responses import JSONResponse
 
+from back.app.jwt import JWTPayload, verify_token
 router = APIRouter()
 
 
-def generate_ticket_id(prefix: str) -> str:
+def generate_ticket_id(prefix: str, part: int) -> str:
     """ Generate a unique ticket ID based on the prefix and random numbers.
     The ticket ID format is as follows:
     prefix-XXX-XXXX, where XXX is a random 3-digit number and XXXX is a random 4-digit number.
@@ -31,9 +38,10 @@ def generate_ticket_id(prefix: str) -> str:
     Returns:
         str: Generated ticket ID in the format prefix-XXX-XXXX.
     """
-    return "{}-{}-{}".format(
+    return "{}-{}{}-{}".format(
         prefix,
-        "".join(map(str, random.sample(range(10), 3))),
+        part,
+        "".join(map(str, random.sample(range(10), 2))),
         "".join(map(str, random.sample(range(10), 4)))
     )
 
@@ -60,7 +68,7 @@ class TicketRequest(BaseModel):
     ),
 
 @router.post('/generate_ticket')
-async def generate_ticket(request: TicketRequest):
+async def generate_ticket(request: TicketRequest) -> StreamingResponse:
     """ Generate a ticket with a QR code and return the ticket ID.
 
     Args:
@@ -97,3 +105,42 @@ async def send_to_telegram(img_stream):
         response = await client.post(url, data=payload, files=files)
         if response.status_code != 200:
             print(f"Failed to send image to Telegram: {response.text}")
+
+@router.get('get_tickets')
+async def get_tickets(
+    offset: int = 0,
+    limit: int = 100,
+    prefix: str = "",
+    part: int = 0,
+    db: AsyncSession = Depends(get_db),
+    current_user: JWTPayload = Depends(verify_token),
+):
+    """ Get a list of tickets with pagination.
+
+    Args:
+        offset (int): The offset for pagination.
+        limit (int): The limit for pagination.
+
+    Returns:
+        list: A list of tickets.
+    """
+    if current_user.get("role") != 1:
+        raise HTTPException(status_code=403, detail="Access denied")
+
+    try:
+        if part > 0 and part < 10:
+            if prefix:
+                like_pattern = f"{prefix}-{part}%"
+            else:
+                like_pattern = f"_-{part}%"
+        else:
+            like_pattern = f"{prefix}%" if prefix else "%"
+        query = await db.execute(
+            select(Ticket).where(Ticket.ticket_id.like(like_pattern)).offset(offset).limit(limit)
+        )
+
+        tickets: Ticket = query.scalars().all()
+        return tickets
+    except Exception as e:
+        return {"status": "fail", "error": str(e)}
+
