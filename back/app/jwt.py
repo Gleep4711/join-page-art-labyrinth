@@ -1,4 +1,5 @@
 import datetime
+import logging
 from typing import NotRequired, TypedDict
 
 from app.config import settings
@@ -25,7 +26,7 @@ class JWTPayload(TypedDict):
     token: NotRequired[str]
 
 
-async def create_access_token(data: JWTPayload) -> JWTPayload:
+async def create_access_token(data: dict) -> JWTPayload:
     to_encode = data.copy()
 
     to_encode.update({
@@ -36,16 +37,15 @@ async def create_access_token(data: JWTPayload) -> JWTPayload:
     data.update({
         "token": jwt.encode(to_encode, settings.JWT_SECRET, algorithm=settings.ALGORITHM)
     })
-    return data
+    return JWTPayload(**data)
 
 
 async def verify_token(request: Request, token: str = Depends(oauth2_scheme)) -> JWTPayload:
     try:
-        payload: JWTPayload = jwt.decode(token, settings.JWT_SECRET,
-                                         algorithms=[settings.ALGORITHM])
-        username: str = payload.get("name", None)
-        if username is None or payload.get("ip") != request.headers.get("CF-Connecting-IP", request.client.host):
+        payload: dict = jwt.decode(str(token), settings.JWT_SECRET, algorithms=[settings.ALGORITHM])
+        username: str = payload.get("name", "")
+        if username is None or payload.get("ip") != request.headers.get("CF-Connecting-IP", request.client.host if request.client else 'unknown'):
             raise credentials_exception
-        return payload
+        return JWTPayload(**payload)
     except JWTError:
         raise credentials_exception

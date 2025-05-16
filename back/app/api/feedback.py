@@ -4,7 +4,7 @@ from typing import Optional
 from app.csrf import validate_csrf_token
 from app.db.base import get_db
 from app.db.models import Feedback
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -33,7 +33,13 @@ async def save_form_data(
     if not session_id:
         logging.error("Session ID is missing")
         return {"status": "ok"}
-    validate_csrf_token(feedback.csrf_token, session_id + request.client.host)
+
+    if request.client:
+        host = request.client.host
+    else:
+        raise HTTPException(status_code=403, detail="Invalid or expired CSRF token")
+
+    validate_csrf_token(feedback.csrf_token, session_id + host)
 
     try:
         form = Feedback(

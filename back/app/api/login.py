@@ -1,9 +1,12 @@
+import logging
 from typing import Optional
 
 from app.db.base import get_db
-from app.db.models import Form, User
+from app.db.models import User
 from app.jwt import JWTPayload, create_access_token, verify_token
-from fastapi import APIRouter, Body, Depends, Form as FastForm, HTTPException, Request
+from fastapi import APIRouter, Depends
+from fastapi import Form as FastForm
+from fastapi import HTTPException, Request
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
@@ -53,29 +56,32 @@ async def login(
     )
     user: User = query.scalar_one_or_none()
 
-    if not user or not check_password_hash(user.password_hash, data.password):
+    if not user or not check_password_hash(str(user.password_hash), data.password):
         raise HTTPException(status_code=401, detail="Invalid username or password")
 
-    if not user.is_active:
+    if not bool(user.is_active):
         raise HTTPException(status_code=403, detail="User is inactive")
 
     jwt_data = {
+        "id": user.id,
         "name": user.username,
         "role": user.role,
-        "ip": request.headers.get("CF-Connecting-IP", request.client.host)
+        "ip": request.headers.get("CF-Connecting-IP", request.client.host if request.client else 'unknown'),
     }
-    access_token = await create_access_token(data=jwt_data)
+
+    access_token = await create_access_token(jwt_data)
 
     redirect_url = "dashboard"
-    if user.username == "VolnaFest":
+    if str(user.username) == "VolnaFest":
         redirect_url = "volunteers"
-    elif user.username == "MuzArt":
+    elif str(user.username) == "MuzArt":
         redirect_url = "masters"
 
-    # if username:
-    #     return {"access_token": access_token.get("token"), "token_type": "bearer"}
+    if username:
+        logging.info(f"User {user.username} logged in from {request.headers.get('CF-Connecting-IP', request.client.host if request.client else 'unknown')}")
+        # return {"access_token": access_token.get("token"), "token_type": "bearer"}
 
-    return {"access_token": access_token, "token_type": "bearer", "redirect_url": redirect_url, "debug": username}
+    return {"access_token": access_token, "token": access_token.get("token"), "token_type": "bearer", "redirect_url": redirect_url}
 
 
 @router.post("/add")
@@ -127,11 +133,11 @@ async def edit_user(
         raise HTTPException(status_code=404, detail="User not found")
 
     if request.username:
-        user.username = request.username
+        setattr(user, "username", request.username)
     if request.password:
-        user.password_hash = generate_password_hash(request.password)
+        setattr(user, "password_hash", generate_password_hash(request.password))
     if request.role is not None:
-        user.role = request.role
+        setattr(user, "role", request.role)
 
     await db.commit()
     return {"message": "User updated successfully"}

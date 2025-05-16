@@ -255,10 +255,10 @@ async def delete_form(
         raise HTTPException(status_code=404, detail="Form not found")
 
     if current_user.get("role") != 1:
-        if form.form_type == "master":
+        if str(form.form_type) == "master":
             if current_user.get("name") != "MuzArt":
                 raise HTTPException(status_code=403, detail="Access denied")
-        elif form.form_type == "volunteer":
+        elif str(form.form_type) == "volunteer":
             if current_user.get("name") != "VolnaFest":
                 raise HTTPException(status_code=403, detail="Access denied")
         else:
