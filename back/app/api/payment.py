@@ -1,70 +1,39 @@
-from fastapi import APIRouter, Request
+import logging
+
+from app.api.bpay import (bpay_get, decode_base64, process_bpay_callback,
+                          process_bpay_check, verify_signature)
+from app.db.base import get_db
+from fastapi import APIRouter, Depends, Form
+from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
 
 
 @router.get("/payment")
 async def payment_get():
-    return {
-        "code": -1,
-        "text": "This endpoint only accepts POST requests."
-    }
+    return await bpay_get()
 
 
 @router.post("/payment")
-async def payment(request: dict):
-    try:
-        print("Received payment data:", request)
-        print("Merchant ID:", request.get("merchantid", ""))
-        print("Command:", request.get("comand", ""))
-        print("Order ID:", request.get("order_id", 0))
-        print("Amount:", request.get("amount", ""))
-        print("Currency:", request.get("valute", ""))
-        print("Params:", request.get("params", {}))
-        print("Customer Name:", request.get("params", {}).get("customer_name", ""))
-        print("Phone Number:", request.get("params", {}).get("phone_number", ""))
-        print("Email:", request.get("params", {}).get("email", ""))
+@router.post("/callback")
+async def payment(
+    data: str = Form(...),
+    key: str = Form(...),
+    db: AsyncSession = Depends(get_db),
+):
+    # Signature check
+    if not verify_signature(data, key):
+        logging.error("Signature verification failed")
+        # return JSONResponse(status_code=400, content={
+        #     "code": -21,
+        #     "text": "Incorrect signature"
+        # })
 
+    # Decode base64
+    payload = decode_base64(data)
 
-        order_id = request.get("order_id")
-        try:
-            order_id = int(order_id)
-        except (ValueError, TypeError):
-            order_id = 0
+    if payload.get("comand") == "check":
+        return await process_bpay_check(payload, db)
 
-        print(order_id == 0)
-
-        if order_id == 12345:
-            return {
-                "code": 100,
-                "text": "success"
-            }
-        elif order_id == 0:
-            return {
-                "code": -1,
-                "text": "Order ID is missing",
-            }
-        else:
-            return {
-                "code": 50,
-                "text": "Order not found",
-            }
-    except Exception as e:
-        return {
-            "code": -1,
-            "text": e
-        }
-
-
-# {
-#     "merchantid": "test_merchant",
-#     "comand": "check",
-#     "order_id": "123456789",
-#     "amount": 10000,
-#     "valute": 498,
-#     "params": {
-#         "customer_name": "John Doe",
-#         "phone_number": "069123456",
-#         "email": "john.doe@example.com"
-#     }
-# }
+    return await process_bpay_callback(payload, db)
+    # return await bpay_check(data, key)

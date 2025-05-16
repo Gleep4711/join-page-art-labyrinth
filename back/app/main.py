@@ -1,6 +1,6 @@
 import logging
 
-from app.api import feedback, forms, login, payment, root_route, tickets
+from app.api import bpay, feedback, forms, login, payment, root_route, tickets
 from app.config import settings
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -31,6 +31,7 @@ app.include_router(feedback.router, tags=["Feedback"], prefix="/feedback")
 app.include_router(payment.router, tags=["Payment"], prefix="")
 app.include_router(login.router, tags=["Login"], prefix="/user")
 app.include_router(tickets.router, tags=["Tickets"], prefix="/tickets")
+app.include_router(bpay.router, tags=["BPAY"], prefix="/bpay")
 
 if settings.DEV_MODE:
     app.add_middleware(

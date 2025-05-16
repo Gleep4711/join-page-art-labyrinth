@@ -19,6 +19,12 @@ class PydanticSettings(BaseSettings):
 
     DEV_MODE: bool = False
 
+    BPAY_SECRET_KEY: str = ""
+    BPAY_MERCHANT_ID: str = ""
+    DEV_BPAY_SECRET_KEY: str = "xPm40k96"
+    DEV_BPAY_MERCHANT_ID: str = "testMerchant44"
+
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8"
