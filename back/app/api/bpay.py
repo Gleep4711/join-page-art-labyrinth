@@ -45,7 +45,7 @@ async def process_bpay_callback(payload: dict, db: AsyncSession):
         order_id = payload.get("order_id")
         if not order_id:
             return JSONResponse(status_code=400, content={
-                "code": -1,
+                "code": "-1",
                 "text": "Order ID is missing"
             })
 
@@ -54,7 +54,7 @@ async def process_bpay_callback(payload: dict, db: AsyncSession):
 
         if not order or str(order.status) == "paid":
             return JSONResponse(status_code=200, content={
-                "code": 50,
+                "code": "50",
                 "text": "Order not found"
             })
 
@@ -62,17 +62,17 @@ async def process_bpay_callback(payload: dict, db: AsyncSession):
             setattr(order, "status", "paid")
             await db.commit()
             return JSONResponse(status_code=200, content={
-                "code": 100,
+                "code": "100",
                 "text": "success"
             })
 
         return JSONResponse(status_code=200, content={
-            "code": -40,
+            "code": "-40",
             "text": "An error occurred while processing your request."
         })
     except Exception as e:
         return JSONResponse(status_code=500, content={
-            "code": -500,
+            "code": "-500",
             "text": f"Internal error: {str(e)}"
         })
 
@@ -82,7 +82,7 @@ async def process_bpay_check(payload: dict, db: AsyncSession):
         order_id = payload.get("order_id")
         if not order_id:
             return JSONResponse(status_code=400, content={
-                "code": -1,
+                "code": "-1",
                 "text": "Order ID is missing"
             })
 
@@ -91,17 +91,17 @@ async def process_bpay_check(payload: dict, db: AsyncSession):
 
         if not order or str(order.status) == "paid":
             return JSONResponse(status_code=200, content={
-                "code": 50,
+                "code": "50",
                 "text": "Order not found"
             })
 
         return JSONResponse(status_code=200, content={
-            "code": 100,
+            "code": "100",
             "text": "success"
         })
     except Exception as e:
         return JSONResponse(status_code=500, content={
-            "code": -500,
+            "code": "-500",
             "text": f"Internal error: {str(e)}"
         })
 
@@ -111,7 +111,7 @@ async def process_bpay_check(payload: dict, db: AsyncSession):
 @router.get("/callback")
 async def bpay_get():
     return {
-        "code": -1,
+        "code": "-1",
         "text": "This endpoint only accepts POST requests."
     }
 
@@ -128,7 +128,7 @@ async def bpay_check(
     if not verify_signature(data, key):
         logging.error("Signature verification failed")
         # return JSONResponse(status_code=400, content={
-        #     "code": -21,
+        #     "code": "-21",
         #     "text": "Incorrect signature"
         # })
 
@@ -141,7 +141,7 @@ async def bpay_check(
         return await process_bpay_check(payload, db)
 
     return JSONResponse(status_code=400, content={
-        "code": -10,
+        "code": "-10",
         "text": "Invalid command"
     })
 
