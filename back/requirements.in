@@ -15,6 +15,7 @@ pydantic_settings
 python-jose
 python-multipart
 qrcode
+requests
 sqlalchemy
 uvicorn
 werkzeug

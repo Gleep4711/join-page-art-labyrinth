@@ -2,8 +2,11 @@ import asyncio
 import random
 from io import BytesIO
 
+import PIL.Image
 import httpx
 import qrcode
+import PIL
+
 from app.config import settings
 from app.db.base import get_db
 from app.db.models import Ticket
@@ -48,10 +51,10 @@ def generate_ticket_id(prefix: str, part: int = 0) -> str:
 
 class TicketRequest(BaseModel):
     """ Request model for generating a ticket. """
-    prefix: str = "G",
-    name: str = "",
-    email: str = "",
-    part: int = 0,
+    prefix: str = "G"
+    name: str = ""
+    email: str = ""
+    part: int = 0
 
 
 @router.post('/generate_ticket')
@@ -80,7 +83,7 @@ async def generate_ticket(
     img = qr.make_image(fill_color="black", back_color="white")
 
     img_stream = BytesIO()
-    img.save(img_stream, format="PNG")
+    img.save(img_stream, format="PNG") # type: ignore
     img_stream.seek(0)
 
     asyncio.create_task(send_to_telegram(img_stream))
@@ -132,8 +135,7 @@ async def get_tickets(
             select(Ticket).where(Ticket.ticket_id.like(like_pattern)).offset(offset).limit(limit)
         )
 
-        tickets: Ticket = query.scalars().all()
-        return tickets
+        return query.scalars().all()
     except Exception as e:
         return {"status": "fail", "error": str(e)}
 
