@@ -248,7 +248,7 @@ async def get_forms(
     elif current_user.get("role") != 1:
         raise HTTPException(status_code=403, detail="Access denied")
 
-    query = await db.execute(query)
+    query = await db.execute(query.order_by(Form.created_at.desc()))
 
     data = query.scalars().all()
     return_data = []
