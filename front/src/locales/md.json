@@ -45,6 +45,9 @@
             "social": "Link către rețeaua dvs. socială (FB/IG/Vk)",
             "tg": "Telegram",
             "prof": "Specialitate",
+            "conditions": "Ce vă motivează să deveniți voluntar la Art Labyrinth? (sincer, în 2-3 rânduri)",
+            "experience": "Aveți experiență în voluntariat/festivaluri? (dacă da, unde și ce ați făcut)",
+            "camping": "Condiții: veți putea trăi într-un cort, fără semnal și confort? (da/nu/restricții — dacă există, descrieți)",
             "dept": {
                 "title": "Ce departament vă interesează pentru participare?",
                 "info": "Informații detaliate despre departamente",
@@ -57,6 +60,9 @@
                 "error": "Vă rugăm să selectați un departament care vă interesează pentru participare. Dacă doriți să participați în mai multe departamente, selectați toate opțiunile aplicabile.",
                 "err-info": "Mai multe despre departamente."
             },
+            "negative": "Există ceva ce nu doriți să faceți? (ca să nu vă trimitem în zona greșită 😄)",
+            "help_now": "Vreau să ajut deja acum! ✅ (bifează — super)",
+            "inspiration": "Și în cele din urmă — împărtășiți ceva personal: Ce vă inspiră? De ce vă temeți? Ce superputere ați dori să aveți?",
             "submit": "TRIMITE"
         },
         "master": {
@@ -64,7 +70,7 @@
             "name": "Nume / pseudonim artistic (dacă există) / numele trupei.",
             "country": "De unde sunteți?",
             "tg": "Telegram (WhatsApp sau număr de contact)",
-            "email": "Email",
+            "email": "Facebook",
             "previously-participated": "Ați participat anterior la Festivalul Art Labyrinth în calitate de maestru?",
             "direction": {
                 "title": "Direcția programului",

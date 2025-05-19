@@ -6,6 +6,7 @@ import logging
 import uuid
 from typing import Optional
 
+from pydantic import BaseModel
 import requests
 
 from app.api.tickets import generate_ticket_id
@@ -180,7 +181,7 @@ async def bpay_check(
 # }
 
 
-class Orderdata:
+class Orderdata(BaseModel):
     type_order: str
     quantity: int
     name: str

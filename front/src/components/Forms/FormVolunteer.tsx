@@ -9,7 +9,19 @@ import Checkbox from "./Checkbox";
 
 function FormVolunteer() {
     const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
-    const [formData, setFormData] = useState({ name: '', age: 0, social: '', tg: '', prof: '' });
+    const [formData, setFormData] = useState({
+        name: '',
+        age: 0,
+        social: '',
+        tg: '',
+        prof: '',
+        conditions: '',
+        experience: '',
+        camping: '',
+        negative: '',
+        help_now: false,
+        inspiration: '',
+    });
     const [deptError, setDeptError] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -158,6 +170,37 @@ function FormVolunteer() {
                                     className={inputClass}
                                 />
                             </div>
+
+                            <div className="flex flex-col">
+                                <label>{t("forms.volunteer.conditions")}</label>
+                                <textarea
+                                    name="conditions"
+                                    value={formData?.conditions}
+                                    onChange={(e) => setFormData({ ...formData, conditions: e.target.value })}
+                                    className={`${inputClass} h-32`}
+                                />
+                            </div>
+
+                            <div className="flex flex-col">
+                                <label>{t("forms.volunteer.experience")}</label>
+                                <textarea
+                                    name="experience"
+                                    value={formData?.experience}
+                                    onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                                    className={`${inputClass} h-32`}
+                                />
+                            </div>
+
+                            <div className="flex flex-col">
+                                <label>{t("forms.volunteer.camping")}</label>
+                                <textarea
+                                    name="camping"
+                                    value={formData?.camping}
+                                    onChange={(e) => setFormData({ ...formData, camping: e.target.value })}
+                                    className={`${inputClass} h-32`}
+                                />
+                            </div>
+
                             <div className="flex flex-col">
                                 <label>{t("forms.volunteer.dept.title")} *</label>
                                 <label className="font-bold mb-3 mt-1 underline cursor-pointer" onClick={() => setIsModalOpen(true)}>
@@ -194,6 +237,38 @@ function FormVolunteer() {
                                     </div>
                                 </div>
                             </div>
+
+
+                            <div className="flex flex-col">
+                                <label>{t("forms.volunteer.negative")}</label>
+                                <textarea
+                                    name="negative"
+                                    value={formData?.negative}
+                                    onChange={(e) => setFormData({ ...formData, negative: e.target.value })}
+                                    className={`${inputClass} h-32`}
+                                    />
+                            </div>
+
+                            <div className="flex flex-col">
+                                <Checkbox
+                                    id="help_now"
+                                    label={t("forms.volunteer.help_now")}
+                                    onChange={(checked) => {
+                                        setFormData({ ...formData, help_now: checked });
+                                    }}
+                                />
+                            </div>
+
+                            <div className="flex flex-col">
+                                <label>{t("forms.volunteer.inspiration")}</label>
+                                <textarea
+                                    name="inspiration"
+                                    value={formData?.inspiration}
+                                    onChange={(e) => setFormData({ ...formData, inspiration: e.target.value })}
+                                    className={`${inputClass} h-32`}
+                                    />
+                            </div>
+
                             {csrfError && (
                                 <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300">
                                     <h1>{t("forms.error.csrf.title")}</h1>
