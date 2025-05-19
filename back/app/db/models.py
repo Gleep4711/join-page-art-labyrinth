@@ -42,7 +42,14 @@ class Form(Base):
     raider = Column(String, nullable=True)
     additional_info = Column(String, nullable=True)
 
-    raw_data = Column(JSON, nullable=True)
+    conditions = Column(String, nullable=True)
+    experience = Column(String, nullable=True)
+    camping = Column(String, nullable=True)
+    negative = Column(String, nullable=True)
+    help_now = Column(Boolean, default=False)
+    inspiration = Column(String, nullable=True)
+    # raw_data = Column(JSON, nullable=True)
+
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     deleted_at = Column(DateTime(timezone=True), nullable=True)
 
@@ -78,9 +85,10 @@ class Order(Base):
     __tablename__ = "orders"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    uuid = Column(String, unique=True, nullable=True)
     ticket_ids = Column(String, nullable=False)
     amount = Column(Integer, nullable=False)
-    status = Column(String, nullable=False)
+    status = Column(String, server_default="new")
     customer = Column(String, nullable=False)
     phone = Column(String, nullable=False)
     email = Column(String, nullable=False)

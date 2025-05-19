@@ -1,19 +1,19 @@
 services:
-  art-lab-join-page-front:
+  art-lab-join-page:
     build: ./front
-    container_name: art-lab-join-page-front
+    container_name: art-lab-join-page
     restart: unless-stopped
 
     ports:
       - 127.0.0.1:3020:80
     depends_on:
-      - art-lab-join-page-backend
+      - art-lab-backend
     networks:
       - main
 
-  art-lab-join-page-backend:
+  art-lab-backend:
     build: ./back
-    container_name: art-lab-join-page-backend
+    container_name: art-lab-backend
     restart: unless-stopped
 
     environment:

@@ -21,8 +21,11 @@ class PydanticSettings(BaseSettings):
 
     BPAY_SECRET_KEY: str = ""
     BPAY_MERCHANT_ID: str = ""
+    BPAY_SERVER_URL: str = "https://pay.bpay.md/"
+
     DEV_BPAY_SECRET_KEY: str = "xPm40k96"
     DEV_BPAY_MERCHANT_ID: str = "testMerchant44"
+    DEV_BPAY_SERVER_URL: str = "https://pay.dev5.bpay.md/"
 
 
     model_config = SettingsConfigDict(

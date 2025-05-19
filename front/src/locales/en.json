@@ -45,6 +45,9 @@
             "social": "Link to your social network (FB/IG/Vk)",
             "tg": "Telegram",
             "prof": "Speciality",
+            "conditions": "Why do you want to be a volunteer at Art Labyrinth? (honestly, in 2-3 lines)",
+            "experience": "Do you have any experience in volunteering/festivals? (if yes, where and what did you do)",
+            "camping": "Conditions: will you be able to live in a tent, be without communication and comfort? (yes/no/limitations — if any, please describe)",
             "dept": {
                 "title": "Which department are you interested in joining?",
                 "info": "Detailed information about departments",
@@ -57,6 +60,9 @@
                 "error": "Please select a department you are interested in joining. If you want to participate in multiple departments, select all applicable options.",
                 "err-info": "More about departments."
             },
+            "negative": "Is there anything you definitely DO NOT want to do? (so we don't send you to the wrong area 😄)",
+            "help_now": "Do you want to help us now?",
+            "inspiration": "And finally, share something personal: What inspires you? What are you afraid of? What superpower would you like to have?",
             "submit": "SUBMIT"
         },
         "master": {
@@ -64,7 +70,7 @@
             "name": "Name / creative pseudonym (if any) / band name.",
             "country": "Where are you from?",
             "tg": "Telegram (WhatsApp or contact number)",
-            "email": "Email",
+            "email": "Facebook",
             "previously-participated": "Have you previously participated in the Art Labyrinth Festival as a facilitator?",
             "direction": {
                 "title": "Program direction",

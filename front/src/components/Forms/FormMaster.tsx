@@ -12,12 +12,12 @@ function FormMaster() {
     const [selectedDirections, setSelectedDirections] = useState<string[]>([]);
     const [selectedDates, setSelectedDates] = useState<string[]>([]);
     const [selectedLangs, setSelectedLangs] = useState<string[]>([]);
-    const [selectedPreviouslyParticipated, setSelectedPreviouslyParticipated] = useState<string[]>([]);
     const [formData, setFormData] = useState({
         name: '',
         country: '',
         tg: '',
         email: '',
+        previously_participated: false,
         description: '',
         programUrl: '',
         socialUrl: '',
@@ -57,12 +57,19 @@ function FormMaster() {
 
     const submitForm = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
+
+        if (isSubmitting) return;
+        setIsSubmitting(true);
+
         setCsrfError(false);
         setTooLargeError(false);
         setUnknownfError(false);
 
-        if (isSubmitting) return;
-        setIsSubmitting(true);
+        if (selectedLangs.length === 0) {
+            setLangError(true);
+            setIsSubmitting(false);
+            return;
+        }
 
         const formDataToSend = new FormData();
         formDataToSend.append("form_type", "master");
@@ -73,7 +80,6 @@ function FormMaster() {
             direction: selectedDirections,
             date: selectedDates,
             lang: selectedLangs,
-            previously_participated: selectedPreviouslyParticipated,
         }));
 
         if (formData.file) {
@@ -211,11 +217,7 @@ function FormMaster() {
                                     id="previously-participated"
                                     label={t("forms.master.previously-participated")}
                                     onChange={(checked) => {
-                                        if (checked) {
-                                            setSelectedPreviouslyParticipated((prev) => [...prev, "previously-participated"]);
-                                        } else {
-                                            setSelectedPreviouslyParticipated((prev) => prev.filter((item) => item !== "previously-participated"));
-                                        }
+                                        setFormData({ ...formData, previously_participated: checked });
                                     }}
                                 />
                             </div>

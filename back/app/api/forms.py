@@ -7,7 +7,7 @@ import re
 import uuid
 from datetime import datetime, timezone
 from io import BytesIO
-from typing import List, Optional
+from typing import List, Optional, cast
 
 import httpx
 from app.config import settings
@@ -32,7 +32,13 @@ class FormDataVolunteers(BaseModel):
     social: Optional[str]
     tg: Optional[str]
     prof: Optional[str]
+    conditions: Optional[str] = None
+    experience: Optional[str] = None
+    camping: Optional[str] = None
     department: Optional[List[str]]
+    negative: Optional[str] = None
+    help_now: Optional[bool] = False
+    inspiration: Optional[str] = None
 
 
 class FormDataMasters(BaseModel):
@@ -41,7 +47,7 @@ class FormDataMasters(BaseModel):
     country: Optional[str] | None
     tg: Optional[str] | None
     email: Optional[str] | None
-    previously_participated: Optional[List[str]] | None
+    previously_participated: Optional[bool] | None
     direction: Optional[List[str]]
     description: Optional[str] | None
     date: Optional[List[str]] | None
@@ -62,33 +68,45 @@ async def save_form_data(
     data: FormDataVolunteers | FormDataMasters,
 ):
     if form_type == "volunteer":
+        volunteer_data = cast(FormDataVolunteers, data)
         form = Form(
             form_type="volunteer",
-            name=data.name,
-            age=data.age,
-            social=data.social,
-            phone=data.tg,
-            profession=data.prof,
-            department=",".join(data.department) if data.department else None,
-            # raw_data=data.model_dump_json(),
+            name=volunteer_data.name,
+            age=volunteer_data.age,
+            social=volunteer_data.social,
+            phone=volunteer_data.tg,
+            profession=volunteer_data.prof,
+            conditions=volunteer_data.conditions,
+            experience=volunteer_data.experience,
+            camping=volunteer_data.camping,
+            department=",".join(volunteer_data.department) if volunteer_data.department else None,
+            negative=volunteer_data.negative,
+            help_now=volunteer_data.help_now,
+            inspiration=volunteer_data.inspiration,
+
+            # raw_data=volunteer_data.model_dump_json(),
         )
     elif form_type == "master":
+        master_data = cast(FormDataMasters, data)
         form = Form(
             form_type="master",
-            name=data.name,
-            country=data.country,
-            phone=data.tg,
-            email=data.email,
-            program_direction=",".join(data.direction) if data.direction else None,
-            program_description=data.description,
-            program_example=data.programUrl,
-            event_dates=",".join(data.date) if data.date else None,
-            quantity=data.quantity,
-            time=data.time,
-            duration=data.duration,
-            lang=",".join(data.lang) if data.lang else None,
-            raider=data.raider,
-            # raw_data=data.model_dump_json(),
+            name=master_data.name,
+            country=master_data.country,
+            phone=master_data.tg,
+            email=master_data.email,
+            previously_participated=str(master_data.previously_participated) if master_data.previously_participated else None,
+            program_direction=",".join(master_data.direction) if master_data.direction else None,
+            program_description=master_data.description,
+            event_dates=",".join(master_data.date) if master_data.date else None,
+            program_example=master_data.programUrl,
+            social=master_data.socialUrl,
+            quantity=master_data.quantity,
+            time=master_data.time,
+            duration=master_data.duration,
+            lang=",".join(master_data.lang) if master_data.lang else None,
+            raider=master_data.raider,
+            additional_info=master_data.additional_info,
+            # raw_data=master_data.model_dump_json(),
         )
     else:
         raise HTTPException(status_code=400, detail="Invalid form type")
@@ -149,17 +167,17 @@ async def save_form(
     file: Optional[List[UploadFile]] = File(None),
     db: AsyncSession = Depends(get_db),
 ):
-    logging.debug(f"Received form data: {form_type}, {data}, {csrf_token}")
     session_id = request.headers.get("X-Session-ID")
 
     if not session_id:
         return {"status": "ok", "form_id": random.randint(100, 999)}
 
-    validate_csrf_token(csrf_token, session_id + request.client.host)
+    validate_csrf_token(csrf_token, session_id + request.client.host if request.client else "")
 
     if form_type == "master":
         parsed_data = FormDataMasters(**json.loads(data))
-        parsed_data.file = [file.filename for file in file] if file else []
+        # parsed_data.file = [file.filename for file in file] if file else []
+        parsed_data.file = file
     elif form_type == "volunteer":
         parsed_data = FormDataVolunteers(**json.loads(data))
     else:
@@ -167,13 +185,13 @@ async def save_form(
 
     form = await save_form_data(db, form_type, parsed_data)
     if form_type == "master":
-        parsed_data.id = form.id
+        # parsed_data.id = form.id
+        setattr(parsed_data, "id", form.id)
         if file:
             file_contents = [(f.filename, await f.read(), f.content_type) for f in file]
-            background_tasks.add_task(save_files_to_disk_and_telegram, form.id, file_contents)
-    background_tasks.add_task(send_to_telegram, parsed_data.model_dump(), form_type)
+            background_tasks.add_task(save_files_to_disk_and_telegram, int(str(form.id)), file_contents)
 
-    logging.debug(f"Form saved: {form.id}")
+    background_tasks.add_task(send_to_telegram, parsed_data.model_dump(), form_type)
 
     return {"status": "ok"}
 
@@ -182,11 +200,18 @@ async def send_to_telegram(data: dict, form_type: str):
     url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
     message = f"{form_type}\n\n"
     for key, value in data.items():
+        text = ""
         if isinstance(value, list):
-            value = "</code>, <code>".join(value)
-        if isinstance(value, str) and len(value) > 200:
-            value = value[:200] + "..."
-        message += f"{key}: <code>{value}</code>\n"
+            for item in value:
+                item: UploadFile | str
+                if isinstance(item, str):
+                    text += f"<code>{item}</code>\n"
+                elif isinstance(item.filename, str):
+                    text += f"<code>{item.filename}</code>\n"
+        else:
+            text = f"<code>{str(value)[:400]}</code>"
+
+        message += f"{key}: {text}\n"
 
     payload = {
         "chat_id": settings.TELEGRAM_CHAT_ID,
@@ -205,7 +230,7 @@ async def get_csrf_token(request: Request):
     if not session_id:
         csrf_token = generate_csrf_token(uuid.uuid4().hex + str(random.randint(100000, 999999)) * 2)
     else:
-        csrf_token = generate_csrf_token(session_id + request.client.host)
+        csrf_token = generate_csrf_token(session_id + request.client.host if request.client else "")
 
     return {"csrf_token": csrf_token}
 
@@ -264,7 +289,8 @@ async def delete_form(
         else:
             raise HTTPException(status_code=403, detail="Access denied")
 
-    form.deleted_at = datetime.now(timezone.utc)
+    # form.deleted_at = datetime.now(timezone.utc)
+    setattr(form, "deleted_at", datetime.now(timezone.utc))
     await db.commit()
     await db.refresh(form)
 

@@ -1,7 +1,7 @@
 services:
-  art-lab-join-page-backend:
+  art-lab-backend:
     build: ./back
-    container_name: art-lab-join-page-backend
+    container_name: art-lab-backend
     environment:
       POSTGRES_URL: ${POSTGRES_URL}
       JWT_SECRET: ${JWT_SECRET}
@@ -24,3 +24,4 @@ networks:
     external: true
 
 # docker compose -f docker-compose-debug-back.yml up
+# ddc -f docker-compose-debug-back.yml up --remove-orphans
