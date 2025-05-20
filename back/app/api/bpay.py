@@ -24,7 +24,7 @@ def verify_signature(data: str, key: str) -> bool:
     """
     Verifies the signature using two keys: DEV_BPAY_SECRET_KEY and BPAY_SECRET_KEY
     """
-    for secret in [settings.DEV_BPAY_SECRET_KEY, settings.BPAY_SECRET_KEY]:
+    for secret in [settings.DEV_BPAY_SECRET_KEY.get_secret_value(), settings.BPAY_SECRET_KEY.get_secret_value()]:
         if not secret:
             continue
         expected_key = hashlib.sha256((data + secret).encode()).hexdigest()
@@ -252,7 +252,7 @@ async def create_order(
 
     payload = {
         'uuid': order.uuid,
-        'merchantid': settings.DEV_BPAY_MERCHANT_ID,
+        'merchantid': settings.DEV_BPAY_MERCHANT_ID.get_secret_value(),
         'dtime': current_time,
         'description': 'Art-Labyrinth Summer Festival 2025',
         'amount': data.quantity * amount,
@@ -271,7 +271,7 @@ async def create_order(
     json_data = json.dumps(payload, separators=(',', ':'))
     base64_data = base64.b64encode(json_data.encode('utf-8')).decode('utf-8')
 
-    signature_string = base64_data + settings.DEV_BPAY_SECRET_KEY
+    signature_string = base64_data + settings.DEV_BPAY_SECRET_KEY.get_secret_value()
     signature = hashlib.sha256(signature_string.encode('utf-8')).hexdigest()
 
     form_data = {

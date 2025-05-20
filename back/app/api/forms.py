@@ -122,7 +122,7 @@ async def save_files_to_disk_and_telegram(form_id: int, files: List[tuple]):
     media_dir = f"/srv/data/media/art-lab/fest2025/form/{form_id}"
     os.makedirs(media_dir, exist_ok=True)
 
-    url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendDocument"
+    url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN.get_secret_value()}/sendDocument"
 
     for filename, file_content, content_type in files:
         sanitized_filename = re.sub(r'[^\w\-.]', '', filename)
@@ -197,7 +197,7 @@ async def save_form(
 
 
 async def send_to_telegram(data: dict, form_type: str):
-    url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
+    url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN.get_secret_value()}/sendMessage"
     message = f"{form_type}\n\n"
     for key, value in data.items():
         text = ""

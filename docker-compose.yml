@@ -17,6 +17,8 @@ services:
     restart: unless-stopped
 
     environment:
+      BPAY_MERCHANT_ID: ${BPAY_MERCHANT_ID}
+      BPAY_SECRET_KEY: ${BPAY_SECRET_KEY}
       POSTGRES_URL: ${POSTGRES_URL}
       JWT_SECRET: ${JWT_SECRET}
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}

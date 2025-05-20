@@ -35,14 +35,14 @@ async def create_access_token(data: dict) -> JWTPayload:
     })
 
     data.update({
-        "token": jwt.encode(to_encode, settings.JWT_SECRET, algorithm=settings.ALGORITHM)
+        "token": jwt.encode(to_encode, settings.JWT_SECRET.get_secret_value(), algorithm=settings.ALGORITHM)
     })
     return JWTPayload(**data)
 
 
 async def verify_token(request: Request, token: str = Depends(oauth2_scheme)) -> JWTPayload:
     try:
-        payload: dict = jwt.decode(str(token), settings.JWT_SECRET, algorithms=[settings.ALGORITHM])
+        payload: dict = jwt.decode(str(token), settings.JWT_SECRET.get_secret_value(), algorithms=[settings.ALGORITHM])
         username: str = payload.get("name", "")
         if username is None or payload.get("ip") != request.headers.get("CF-Connecting-IP", request.client.host if request.client else 'unknown'):
             raise credentials_exception
