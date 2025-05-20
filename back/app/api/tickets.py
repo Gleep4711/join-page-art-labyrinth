@@ -92,7 +92,7 @@ async def generate_ticket(
 
 
 async def send_to_telegram(img_stream):
-    url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendPhoto"
+    url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN.get_secret_value()}/sendPhoto"
     payload = {"chat_id": settings.TELEGRAM_CHAT_ID}
     files = {"photo": ("ticket.png", img_stream, "image/png")}
 
