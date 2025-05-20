@@ -93,6 +93,19 @@ def only_post_allowed_response():
     }
 
 
+def success_response(order: Order):
+    return JSONResponse(status_code=200, content={
+        "code": 100,
+        "text": "success",
+        "amount": order.amount,
+        "params": {
+            "order_id": order.id + 12344,
+            "customer_name": order.customer,
+            "quantity": len(str(order.ticket_ids).split(",")),
+        }
+    })
+
+
 async def process_bpay_callback(payload: dict, db: AsyncSession):
     try:
         if not payload.get("order_id"):
@@ -103,10 +116,7 @@ async def process_bpay_callback(payload: dict, db: AsyncSession):
         if str(order.status) == "new":
             setattr(order, "status", "paid")
             await db.commit()
-            return JSONResponse(status_code=200, content={
-                "code": 100,
-                "text": "success"
-            })
+            return success_response(order)
         return JSONResponse(status_code=200, content={
             "code": -40,
             "text": "An error occurred while processing your request."
@@ -123,16 +133,7 @@ async def process_bpay_check(payload: dict, db: AsyncSession):
         order = await get_order_by_payload(payload, db)
         if not order or str(order.status) == "paid":
             return order_not_found_response()
-        return JSONResponse(status_code=200, content={
-            "code": 100,
-            "text": "success",
-            "amount": order.amount,
-            "params": {
-                "order_id": order.id + 12344,
-                "customer_name": order.customer,
-                "quantity": len(str(order.tickets_ids).split(",")),
-            }
-        })
+        return success_response(order)
     except Exception as e:
         logging.error(f"Error in process_bpay_check: {str(e)}")
         return internal_error_response(e)
