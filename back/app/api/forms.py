@@ -268,7 +268,7 @@ async def get_forms(
     return return_data
 
 
-@router.get('/delete/{form_id}')
+@router.delete('/delete/{form_id}')
 async def delete_form(
     form_id: int,
     db: AsyncSession = Depends(get_db),
