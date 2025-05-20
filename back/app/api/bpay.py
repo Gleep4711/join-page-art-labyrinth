@@ -1,20 +1,19 @@
 import base64
-from datetime import datetime
 import hashlib
 import json
 import logging
 import uuid
+from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel
 import requests
-
 from app.api.tickets import generate_ticket_id
 from app.config import settings
 from app.db.base import get_db
 from app.db.models import Order, Ticket
 from fastapi import APIRouter, Depends, Form, HTTPException
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -126,7 +125,13 @@ async def process_bpay_check(payload: dict, db: AsyncSession):
             return order_not_found_response()
         return JSONResponse(status_code=200, content={
             "code": 100,
-            "text": "success"
+            "text": "success",
+            "amount": order.amount,
+            "params": {
+                "order_id": order.id + 12344,
+                "customer_name": order.customer,
+                "quantity": len(str(order.tickets_ids).split(",")),
+            }
         })
     except Exception as e:
         logging.error(f"Error in process_bpay_check: {str(e)}")
@@ -157,6 +162,7 @@ async def bpay_check(
         # })
     # Base64 decoding
     payload = decode_base64(data)
+    logging.info(f"Decoded payload: {payload}")
     command = payload.get("comand", None)
     if not command:
         command = payload.get("command", None)
