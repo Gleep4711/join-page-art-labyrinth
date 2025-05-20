@@ -32,6 +32,7 @@ class Form(Base):
     email = Column(String, nullable=True)
     previously_participated = Column(String, nullable=True)
     program_direction = Column(String, nullable=True)
+    program_name = Column(String, nullable=True)
     program_description = Column(String, nullable=True)
     program_example = Column(String, nullable=True)
     event_dates = Column(String, nullable=True)

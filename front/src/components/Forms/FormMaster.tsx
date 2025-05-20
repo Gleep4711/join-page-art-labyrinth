@@ -18,6 +18,7 @@ function FormMaster() {
         tg: '',
         email: '',
         previously_participated: false,
+        program_name: '',
         description: '',
         programUrl: '',
         socialUrl: '',
@@ -164,6 +165,7 @@ function FormMaster() {
                         <hr className="pt-4 mt-4" />
                         <h2 className="text-2xl">{t("el.welcome-team")}</h2>
                         <h2 className="text-2xl text-customOrange">{t("el.al")}</h2>
+                        <h3 className="text-lg font-bold mb-5 text-justify bg-orange-200 p-5">{t("forms.master.instruction")}</h3>
                         <h3 className="mb-5 font-inter italic">{t("forms.master.title")}</h3>
                         <form onSubmit={submitForm} className="space-y-4 font-inter">
                             <div className="flex flex-col">
@@ -242,6 +244,18 @@ function FormMaster() {
                                     </div>
                                 </div>
                             </div>
+                            <div className="flex flex-col">
+                                <label>{t("forms.master.program_name")} *</label>
+                                <input
+                                    type="text"
+                                    name="program_name"
+                                    value={formData?.program_name}
+                                    onChange={(e) => setFormData({ ...formData, program_name: e.target.value })}
+                                    required={true}
+                                    className={inputClass}
+                                />
+                            </div>
+
                             <div className="flex flex-col">
                                 <label>{t("forms.master.description-info")} *</label>
                                 <label className="font-light italic">{t("forms.master.description-info-italic")}</label>
