@@ -66,6 +66,7 @@
             "submit": "SUBMIT"
         },
         "master": {
+            "instruction": "If you are offering different workshops (for example, yoga and a lecture, or a musical workshop and a dance one), a separate form needs to be filled out for each. If the workshop is repeated, it is sufficient to fill out the form once, indicating the number of repetitions.",
             "title": "Please introduce yourself:",
             "name": "Name / creative pseudonym (if any) / band name.",
             "country": "Where are you from?",
@@ -84,6 +85,7 @@
                 "game": "Game",
                 "other": "Other"
             },
+            "program_name": "Program name",
             "description": "Please fill out the artist form",
             "description-info": "Tell us what you would like to conduct at the festival? In which field do you create? (What can festival participants learn, feel, or create with you?)",
             "description-info-italic": "Describe your experience in a way that is engaging and visually appealing for our Instagram audience.",

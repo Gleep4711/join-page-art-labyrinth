@@ -49,6 +49,7 @@ class FormDataMasters(BaseModel):
     email: Optional[str] | None
     previously_participated: Optional[bool] | None
     direction: Optional[List[str]]
+    program_name: Optional[str] | None
     description: Optional[str] | None
     date: Optional[List[str]] | None
     programUrl: Optional[str] | None
@@ -96,6 +97,7 @@ async def save_form_data(
             email=master_data.email,
             previously_participated=str(master_data.previously_participated) if master_data.previously_participated else None,
             program_direction=",".join(master_data.direction) if master_data.direction else None,
+            program_name=master_data.program_name,
             program_description=master_data.description,
             event_dates=",".join(master_data.date) if master_data.date else None,
             program_example=master_data.programUrl,

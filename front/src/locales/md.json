@@ -66,6 +66,7 @@
             "submit": "TRIMITE"
         },
         "master": {
+            "instruction": "Dacă oferiți diferite ateliere (de exemplu, yoga și o prelegere sau un atelier muzical și unul de dans), trebuie să completați un formular separat pentru fiecare. Dacă atelierul se repetă, este suficient să completați formularul o singură dată, indicând numărul de repetiții.",
             "title": "Vă rugăm să vă prezentați:",
             "name": "Nume / pseudonim artistic (dacă există) / numele trupei.",
             "country": "De unde sunteți?",
@@ -84,6 +85,7 @@
                 "game": "Joc",
                 "other": "Altceva"
             },
+            "program_name": "Numele programului",
             "description": "Vă rugăm să completați formularul pentru artiști",
             "description-info": "Spuneți-ne ce ați dori să organizați la festival? În ce domeniu creați? (Ce pot învăța, simți sau crea participanții festivalului împreună cu dumneavoastră?)",
             "description-info-italic": "Descrieți-vă experiența într-un mod captivant și atractiv vizual pentru publicul nostru de pe Instagram.",
