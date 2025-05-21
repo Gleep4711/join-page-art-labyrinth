@@ -67,13 +67,14 @@ class Feedback(Base):
 
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
+
 class Ticket(Base):
     __tablename__ = "tickets"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     ticket_id = Column(String, unique=True, nullable=False)
     name = Column(String, nullable=True)
-    phone= Column(String, nullable=True)
+    phone = Column(String, nullable=True)
     email = Column(String, nullable=True)
     active = Column(Boolean, default=True)
     is_sold = Column(Boolean, default=False)
@@ -81,6 +82,7 @@ class Ticket(Base):
     comment = Column(String, nullable=True)
 
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
 
 class Order(Base):
     __tablename__ = "orders"
@@ -97,3 +99,22 @@ class Order(Base):
 
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+
+
+class Payment(Base):
+    __tablename__ = "payments"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    uuid = Column(String, nullable=True)
+    merchantid = Column(String, nullable=True)
+    order_id = Column(String, nullable=True)
+    command = Column(String, nullable=True)
+    receipt = Column(String, nullable=True)
+    time = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    amount = Column(Integer, nullable=True)
+    currency = Column(Integer, nullable=True)
+    settl_amount = Column(Integer, nullable=True)
+    settl_currency = Column(Integer, nullable=True)
+    point_id = Column(Integer, nullable=True)
+    prov_account = Column(String, nullable=True)
+    params = Column(JSON, nullable=True)
