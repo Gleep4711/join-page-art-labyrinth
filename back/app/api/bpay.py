@@ -71,14 +71,10 @@ async def get_order_by_payload(payload: dict, db: AsyncSession) -> Optional[Orde
 
 
 def order_not_found_response():
-    # return JSONResponse(status_code=200, content={
-    #     "code": 50,
-    #     "text": "Account not found"
-    # })
-    return {
+    return JSONResponse(status_code=200, content={
         "code": 50,
         "text": "Account not found"
-    }
+    })
 
 
 def order_payed():
