@@ -71,10 +71,14 @@ async def get_order_by_payload(payload: dict, db: AsyncSession) -> Optional[Orde
 
 
 def order_not_found_response():
-    return JSONResponse(status_code=200, content={
+    # return JSONResponse(status_code=200, content={
+    #     "code": 50,
+    #     "text": "Account not found"
+    # })
+    return {
         "code": 50,
         "text": "Account not found"
-    })
+    }
 
 
 def order_payed():
@@ -199,7 +203,7 @@ async def bpay_check(
 
     if client_ip not in bpay_ip_list:
         logging.error(f"IP {client_ip} not in allowed list")
-        return forbidden_response()
+        # return forbidden_response()
 
     # Signature verification
     if not verify_signature(data, key):
