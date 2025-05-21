@@ -11,13 +11,23 @@ from app.api.tickets import generate_ticket_id
 from app.config import settings
 from app.db.base import get_db
 from app.db.models import Order, Ticket
-from fastapi import APIRouter, Depends, Form, HTTPException
+from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
+
+# Bpay white list
+# Prod
+# 185.212.10.30
+# 87.255.67.243
+
+# Dev
+# 185.212.10.5
+# 185.212.10.11
+# 185.212.10.91
 
 
 def verify_signature(data: str, key: str) -> bool:
@@ -61,7 +71,13 @@ async def get_order_by_payload(payload: dict, db: AsyncSession) -> Optional[Orde
 def order_not_found_response():
     return JSONResponse(status_code=200, content={
         "code": 50,
-        "text": "Order not found"
+        "text": "Account not found"
+    })
+
+def order_payed():
+    return JSONResponse(status_code=200, content={
+        "code": 50,
+        "text": "Account already payed"
     })
 
 
@@ -131,8 +147,10 @@ async def process_bpay_check(payload: dict, db: AsyncSession):
         if not payload.get("order_id"):
             return order_missing_id_response()
         order = await get_order_by_payload(payload, db)
-        if not order or str(order.status) == "paid":
+        if not order:
             return order_not_found_response()
+        if str(order.status) == "paid":
+            return order_payed()
         return success_response(order)
     except Exception as e:
         logging.error(f"Error in process_bpay_check: {str(e)}")
@@ -150,10 +168,12 @@ async def bpay_get():
 @router.post("/check")
 @router.post("/callback")
 async def bpay_check(
+    request: Request,
     data: str = Form(...),
     key: str = Form(...),
     db: AsyncSession = Depends(get_db),
 ):
+    logging.info(f"ip: {request.client.host if request.client else 'unknown'}")
     # Signature verification
     if not verify_signature(data, key):
         logging.error("Signature verification failed")
