@@ -157,6 +157,8 @@ async def bpay_check(
     # Signature verification
     if not verify_signature(data, key):
         logging.error("Signature verification failed")
+        logging.info(f"Data: {data}")
+        logging.info(f"Key: {key}")
         # return JSONResponse(status_code=400, content={
         #     "code": -21,
         #     "text": "Incorrect signature"
@@ -250,9 +252,13 @@ async def create_order(
     callback_url = 'https://admin.art-labyrinth.org/api/v1/bpay/callback'
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
+    merchantid = settings.DEV_BPAY_MERCHANT_ID.get_secret_value() if settings.BPAY_DEV_MODE else settings.BPAY_MERCHANT_ID.get_secret_value()
+    secret_key = settings.DEV_BPAY_SECRET_KEY.get_secret_value() if settings.BPAY_DEV_MODE else settings.BPAY_SECRET_KEY.get_secret_value()
+    server_url = settings.DEV_BPAY_SERVER_URL if settings.BPAY_DEV_MODE else settings.BPAY_SERVER_URL
+
     payload = {
         'uuid': order.uuid,
-        'merchantid': settings.BPAY_MERCHANT_ID.get_secret_value(),
+        'merchantid': merchantid,
         'dtime': current_time,
         'description': 'Art-Labyrinth Summer Festival 2025',
         'amount': data.quantity * amount,
@@ -271,7 +277,7 @@ async def create_order(
     json_data = json.dumps(payload, separators=(',', ':'))
     base64_data = base64.b64encode(json_data.encode('utf-8')).decode('utf-8')
 
-    signature_string = base64_data + settings.BPAY_SECRET_KEY.get_secret_value()
+    signature_string = base64_data + secret_key
     signature = hashlib.sha256(signature_string.encode('utf-8')).hexdigest()
 
     form_data = {
@@ -282,7 +288,7 @@ async def create_order(
     try:
         headers = {'User-Agent': 'curl/7.68.0'}
         response = requests.post(
-            settings.BPAY_SERVER_URL + 'merchant',
+            server_url + 'merchant',
             json=form_data,
             headers=headers,
             allow_redirects=False,
