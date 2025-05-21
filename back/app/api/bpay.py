@@ -10,7 +10,7 @@ import requests
 from app.api.tickets import generate_ticket_id
 from app.config import settings
 from app.db.base import get_db
-from app.db.models import Order, Ticket
+from app.db.models import Order, Payment, Ticket
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
@@ -127,11 +127,15 @@ async def process_bpay_callback(payload: dict, db: AsyncSession):
         if not payload.get("order_id"):
             return order_missing_id_response()
         order = await get_order_by_payload(payload, db)
-        if not order or str(order.status) == "paid":
+        if not order:
             return order_not_found_response()
+        if str(order.status) == "paid":
+            return order_payed()
+
         if str(order.status) == "new":
             setattr(order, "status", "paid")
             await db.commit()
+            await save_payments(db, payload)
             return success_response(order)
         return JSONResponse(status_code=200, content={
             "code": -40,
@@ -173,7 +177,12 @@ async def bpay_check(
     key: str = Form(...),
     db: AsyncSession = Depends(get_db),
 ):
-    logging.info(f"ip: {request.client.host if request.client else 'unknown'}")
+    x_forwarded_for = request.headers.get("x-forwarded-for")
+    if x_forwarded_for:
+        client_ip = x_forwarded_for.split(",")[0].strip()
+    else:
+        client_ip = request.client.host if request.client else 'unknown'
+    logging.info(f"ip: {client_ip}")
     # Signature verification
     if not verify_signature(data, key):
         logging.error("Signature verification failed")
@@ -272,9 +281,14 @@ async def create_order(
     callback_url = 'https://admin.art-labyrinth.org/api/v1/bpay/callback'
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    merchantid = settings.DEV_BPAY_MERCHANT_ID.get_secret_value() if settings.BPAY_DEV_MODE else settings.BPAY_MERCHANT_ID.get_secret_value()
-    secret_key = settings.DEV_BPAY_SECRET_KEY.get_secret_value() if settings.BPAY_DEV_MODE else settings.BPAY_SECRET_KEY.get_secret_value()
-    server_url = settings.DEV_BPAY_SERVER_URL if settings.BPAY_DEV_MODE else settings.BPAY_SERVER_URL
+    if settings.BPAY_DEV_MODE:
+        merchantid = settings.DEV_BPAY_MERCHANT_ID.get_secret_value()
+        secret_key = settings.DEV_BPAY_SECRET_KEY.get_secret_value()
+        server_url = settings.DEV_BPAY_SERVER_URL
+    else:
+        merchantid = settings.BPAY_MERCHANT_ID.get_secret_value()
+        secret_key = settings.BPAY_SECRET_KEY.get_secret_value()
+        server_url = settings.BPAY_SERVER_URL
 
     payload = {
         'uuid': order.uuid,
@@ -324,3 +338,48 @@ async def create_order(
     except requests.exceptions.RequestException as e:
         logging.error(f"Request error: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to create order")
+
+
+async def save_payments(db: AsyncSession, payload: dict):
+    try:
+        def to_int(val):
+            try:
+                return int(val)
+            except (TypeError, ValueError):
+                return None
+
+        def to_float(val):
+            try:
+                return float(val)
+            except (TypeError, ValueError):
+                return None
+
+        def to_datetime(val):
+            try:
+                if isinstance(val, datetime):
+                    return val
+                return datetime.strptime(val, "%Y-%m-%d %H:%M:%S")
+            except Exception:
+                return None
+
+        payment = Payment(
+            uuid=payload.get("uuid"),
+            merchantid=payload.get("merchantid"),
+            order_id=str(payload.get("order_id")) if payload.get("order_id") is not None else None,
+            command=payload.get("command"),
+            receipt=str(payload.get("receipt")) if payload.get("receipt") is not None else None,
+            time=to_datetime(payload.get("time")),
+            amount=to_float(payload.get("amount")),
+            currency=to_int(payload.get("currency")),
+            settl_amount=to_float(payload.get("settl_amount")),
+            settl_currency=to_int(payload.get("settl_currency")),
+            point_id=to_int(payload.get("point_id")),
+            prov_account=str(payload.get("prov_account")) if payload.get("prov_account") is not None else None,
+            params=json.dumps(payload.get("params")),
+        )
+        db.add(payment)
+        await db.commit()
+        await db.refresh(payment)
+        logging.info(f"Payment saved: {payload} {payment}")
+    except Exception as e:
+        logging.error(f"Error saving payment: {str(e)}")
