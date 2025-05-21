@@ -21,14 +21,14 @@ router = APIRouter()
 
 if settings.BPAY_DEV_MODE:
     bpay_ip_list = [
-        "185.212.10.30",
-        "87.255.67.243",
-    ]
-else:
-    bpay_ip_list = [
         "185.212.10.5",
         "185.212.10.11",
         "185.212.10.91",
+    ]
+else:
+    bpay_ip_list = [
+        "185.212.10.30",
+        "87.255.67.243",
     ]
 
 
@@ -70,66 +70,6 @@ async def get_order_by_payload(payload: dict, db: AsyncSession) -> Optional[Orde
         return None
 
 
-def order_not_found_response():
-    # return JSONResponse(status_code=200, content={
-    #     "code": 50,
-    #     "text": "Account not found"
-    # })
-    return {
-        "code": 50,
-        "text": "Account not found"
-    }
-
-
-def order_payed():
-    return JSONResponse(status_code=200, content={
-        "code": 50,
-        "text": "Account already payed"
-    })
-
-
-def order_missing_id_response():
-    return JSONResponse(status_code=400, content={
-        "code": -11,
-        "text": "Order ID is missing"
-    })
-
-
-def forbidden_response():
-    return JSONResponse(status_code=403, content={
-        "code": -43,
-        "text": "Forbidden"
-    })
-
-
-def unknown_response():
-    return JSONResponse(status_code=200, content={
-        "code": -40,
-        "text": "An error occurred while processing your request."
-    })
-
-
-def internal_error_response(e: Exception):
-    return JSONResponse(status_code=500, content={
-        "code": -500,
-        "text": f"Internal error: {str(e)}"
-    })
-
-
-def invalid_command_response():
-    return JSONResponse(status_code=400, content={
-        "code": -10,
-        "text": "Invalid command"
-    })
-
-
-def only_post_allowed_response():
-    return {
-        "code": -1,
-        "text": "This endpoint only accepts POST requests."
-    }
-
-
 def success_response(order: Order):
     return JSONResponse(status_code=200, content={
         "code": 100,
@@ -140,6 +80,62 @@ def success_response(order: Order):
             "customer_name": order.customer,
             "quantity": len(str(order.ticket_ids).split(",")),
         }
+    })
+
+
+def order_not_found_response():
+    return {
+        "code": 50,
+        "text": "Account not found"
+    }
+
+
+def order_payed():
+    return {
+        "code": 50,
+        "text": "Account already payed"
+    }
+
+
+def unknown_response():
+    return {
+        "code": 50,
+        "text": "An error occurred while processing your request."
+    }
+
+
+def only_post_allowed_response():
+    return {
+        "code": -1,
+        "text": "This endpoint only accepts POST requests."
+    }
+
+
+def order_missing_id_response():
+    return JSONResponse(status_code=400, content={
+        "code": -10,
+        "text": "Order ID is missing"
+    })
+
+
+def invalid_command_response():
+    return JSONResponse(status_code=400, content={
+        "code": -11,
+        "text": "Invalid command"
+    })
+
+
+def forbidden_response():
+    return JSONResponse(status_code=403, content={
+        "code": -43,
+        "text": "Forbidden"
+    })
+
+
+def internal_error_response(e: Exception):
+    return JSONResponse(status_code=500, content={
+        "code": -500,
+        "text": f"Internal error: {str(e)}"
     })
 
 
@@ -203,7 +199,7 @@ async def bpay_check(
 
     if client_ip not in bpay_ip_list:
         logging.error(f"IP {client_ip} not in allowed list")
-        # return forbidden_response()
+        return forbidden_response()
 
     # Signature verification
     if not verify_signature(data, key):
@@ -385,6 +381,5 @@ async def save_payments(db: AsyncSession, payload: dict):
         db.add(payment)
         await db.commit()
         await db.refresh(payment)
-        logging.info(f"Payment saved: {payload} {payment}")
     except Exception as e:
         logging.error(f"Error saving payment: {str(e)}")
