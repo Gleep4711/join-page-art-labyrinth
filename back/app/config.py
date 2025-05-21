@@ -20,6 +20,8 @@ class PydanticSettings(BaseSettings):
 
     DEV_MODE: bool = False
 
+    BPAY_DEV_MODE: bool = False
+
     BPAY_SECRET_KEY: SecretStr = SecretStr("")
     BPAY_MERCHANT_ID: SecretStr = SecretStr("")
     BPAY_SERVER_URL: str = "https://pay.bpay.md/"
