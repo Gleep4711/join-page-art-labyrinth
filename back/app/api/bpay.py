@@ -19,15 +19,17 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
 
-# Bpay white list
-# Prod
-# 185.212.10.30
-# 87.255.67.243
-
-# Dev
-# 185.212.10.5
-# 185.212.10.11
-# 185.212.10.91
+if settings.BPAY_DEV_MODE:
+    bpay_ip_list = [
+        "185.212.10.30",
+        "87.255.67.243",
+    ]
+else:
+    bpay_ip_list = [
+        "185.212.10.5",
+        "185.212.10.11",
+        "185.212.10.91",
+    ]
 
 
 def verify_signature(data: str, key: str) -> bool:
@@ -69,10 +71,15 @@ async def get_order_by_payload(payload: dict, db: AsyncSession) -> Optional[Orde
 
 
 def order_not_found_response():
-    return JSONResponse(status_code=200, content={
+    # return JSONResponse(status_code=200, content={
+    #     "code": 50,
+    #     "text": "Account not found"
+    # })
+    return {
         "code": 50,
         "text": "Account not found"
-    })
+    }
+
 
 def order_payed():
     return JSONResponse(status_code=200, content={
@@ -83,8 +90,22 @@ def order_payed():
 
 def order_missing_id_response():
     return JSONResponse(status_code=400, content={
-        "code": -1,
+        "code": -11,
         "text": "Order ID is missing"
+    })
+
+
+def forbidden_response():
+    return JSONResponse(status_code=403, content={
+        "code": -43,
+        "text": "Forbidden"
+    })
+
+
+def unknown_response():
+    return JSONResponse(status_code=200, content={
+        "code": -40,
+        "text": "An error occurred while processing your request."
     })
 
 
@@ -137,10 +158,7 @@ async def process_bpay_callback(payload: dict, db: AsyncSession):
             await db.commit()
             await save_payments(db, payload)
             return success_response(order)
-        return JSONResponse(status_code=200, content={
-            "code": -40,
-            "text": "An error occurred while processing your request."
-        })
+        return unknown_response()
     except Exception as e:
         logging.error(f"Error in process_bpay_callback: {str(e)}")
         return internal_error_response(e)
@@ -182,16 +200,17 @@ async def bpay_check(
         client_ip = x_forwarded_for.split(",")[0].strip()
     else:
         client_ip = request.client.host if request.client else 'unknown'
-    logging.info(f"ip: {client_ip}")
+
+    if client_ip not in bpay_ip_list:
+        logging.error(f"IP {client_ip} not in allowed list")
+        return forbidden_response()
+
     # Signature verification
     if not verify_signature(data, key):
         logging.error("Signature verification failed")
         logging.info(f"Data: {data}")
         logging.info(f"Key: {key}")
-        # return JSONResponse(status_code=400, content={
-        #     "code": -21,
-        #     "text": "Incorrect signature"
-        # })
+        # return forbidden_response()
     # Base64 decoding
     payload = decode_base64(data)
     logging.info(f"Decoded payload: {payload}")
@@ -203,20 +222,6 @@ async def bpay_check(
     if command == "check":
         return await process_bpay_check(payload, db)
     return invalid_command_response()
-
-# Example request structure:
-# {
-#     "merchantid": "test_merchant",
-#     "comand": "check",
-#     "order_id": "123456789",
-#     "amount": 10000,
-#     "valute": 498,
-#     "params": {
-#         "customer_name": "John Doe",
-#         "phone_number": "069123456",
-#         "email": "john.doe@example.com"
-#     }
-# }
 
 
 class Orderdata(BaseModel):
