@@ -254,6 +254,8 @@ async def create_order(
     tickets_ids = []
     if data.quantity > 10:
         data.quantity = 10
+    if data.quantity < 1:
+        data.quantity = 1
     for i in range(data.quantity):
         id = await add_ticket(data, db)
         tickets_ids.append(id)
@@ -306,6 +308,8 @@ async def create_order(
         'lang': data.lang,
         'params': {
             "order_id": order.id + 12344,
+            "customer_name": data.name,
+            "quantity": data.quantity,
         }
     }
 

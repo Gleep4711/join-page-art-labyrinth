@@ -47,6 +47,7 @@ class FormDataMasters(BaseModel):
     country: Optional[str] | None
     tg: Optional[str] | None
     email: Optional[str] | None
+    fb: Optional[str] | None
     previously_participated: Optional[bool] | None
     direction: Optional[List[str]]
     program_name: Optional[str] | None
@@ -95,6 +96,7 @@ async def save_form_data(
             country=master_data.country,
             phone=master_data.tg,
             email=master_data.email,
+            fb=master_data.fb,
             previously_participated=str(master_data.previously_participated) if master_data.previously_participated else None,
             program_direction=",".join(master_data.direction) if master_data.direction else None,
             program_name=master_data.program_name,
