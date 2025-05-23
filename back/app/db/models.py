@@ -30,6 +30,7 @@ class Form(Base):
     country = Column(String, nullable=True)
     phone = Column(String, nullable=True)
     email = Column(String, nullable=True)
+    fb = Column(String, nullable=True)
     previously_participated = Column(String, nullable=True)
     program_direction = Column(String, nullable=True)
     program_name = Column(String, nullable=True)

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import BackButton from "./BackButton";
 import Checkbox from "./Checkbox";
 import DropzoneUI from "./Dropzone";
 import ThankYouPage from "./ThankYouPage";
+import TextInput from "./TextInput";
 
 import { API_URL } from '../../config';
 import { fetchCsrfToken } from "../../utils/fetchCsrfToken";
@@ -17,6 +18,7 @@ function FormMaster() {
         country: '',
         tg: '',
         email: '',
+        fb: '',
         previously_participated: false,
         program_name: '',
         description: '',
@@ -30,6 +32,10 @@ function FormMaster() {
         file: null as File[] | null,
     });
     const [langError, setLangError] = useState(false);
+    const [directionsError, setDirectionsError] = useState(false);
+    const [dateError, setDateError] = useState(false);
+    const [fileError, setFileError] = useState(false);
+
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -38,7 +44,8 @@ function FormMaster() {
     const [unknownfError, setUnknownfError] = useState(false);
 
     const { t } = useTranslation();
-
+    const directionsErrorRef = useRef<HTMLDivElement>(null);
+    const datesErrorRef = useRef<HTMLDivElement>(null);
 
     const handleCheckboxGroupChange = (e: { target: { value: any; checked: any; }; }, setState: React.Dispatch<React.SetStateAction<string[]>>) => {
         const { value, checked } = e.target;
@@ -66,8 +73,28 @@ function FormMaster() {
         setTooLargeError(false);
         setUnknownfError(false);
 
+        if (selectedDirections.length === 0) {
+            setDirectionsError(true);
+            setIsSubmitting(false);
+            directionsErrorRef.current?.focus();
+            return;
+        }
+
+        if (selectedDates.length === 0) {
+            setDateError(true);
+            setIsSubmitting(false);
+            datesErrorRef.current?.focus();
+            return;
+        }
+
         if (selectedLangs.length === 0) {
             setLangError(true);
+            setIsSubmitting(false);
+            return;
+        }
+
+        if (!formData.file || formData.file.length === 0) {
+            setFileError(true);
             setIsSubmitting(false);
             return;
         }
@@ -156,6 +183,14 @@ function FormMaster() {
         return () => clearTimeout(timeoutId);
     }, [isSubmitted]);
 
+    useEffect(() => {
+        if (directionsError && directionsErrorRef.current) {
+            directionsErrorRef.current.focus();
+        } else if (dateError && datesErrorRef.current) {
+            datesErrorRef.current.focus();
+        }
+    }, [directionsError, dateError]);
+
     return (
         <div className="master-form leading-none">
             {isSubmitted ? <ThankYouPage type="master" /> : (
@@ -165,54 +200,15 @@ function FormMaster() {
                         <hr className="pt-4 mt-4" />
                         <h2 className="text-2xl">{t("el.welcome-team")}</h2>
                         <h2 className="text-2xl text-customOrange">{t("el.al")}</h2>
-                        <h3 className="text-lg font-bold mb-5 text-justify bg-orange-200 p-5">{t("forms.master.instruction")}</h3>
+                        <h3 className="text-lg font-bold mb-5 text-justify bg-matchaGreen-50 p-5">{t("forms.master.instruction")}</h3>
                         <h3 className="mb-5 font-inter italic">{t("forms.master.title")}</h3>
                         <form onSubmit={submitForm} className="space-y-4 font-inter">
-                            <div className="flex flex-col">
-                                <label>{t("forms.master.name")} *</label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={formData?.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    required
-                                    className={inputClass}
-                                />
-                            </div>
-                            <div className="flex flex-col">
-                                <label>{t("forms.master.country")} *</label>
-                                <input
-                                    type="text"
-                                    name="country"
-                                    value={formData?.country}
-                                    onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                                    required
-                                    className={inputClass}
-                                />
-                            </div>
-                            <div className="flex flex-col">
-                                <label>{t("forms.master.tg")} *</label>
-                                <input
-                                    type="text"
-                                    name="tg"
-                                    value={formData?.tg}
-                                    onChange={(e) => setFormData({ ...formData, tg: e.target.value })}
-                                    required={true}
-                                    className={inputClass}
-                                />
-                            </div>
-                            <div className="flex flex-col">
-                                <label>{t("forms.master.email")}</label>
-                                <input
-                                    type="text"
-                                    name="email"
-                                    value={formData?.email}
-                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className={inputClass}
-                                />
-                            </div>
 
-
+                            <TextInput name="name" formData={formData} setFormData={setFormData} required={true} />
+                            <TextInput name="country" formData={formData} setFormData={setFormData} required={true} />
+                            <TextInput name="tg" formData={formData} setFormData={setFormData} required={true} />
+                            <TextInput name="email" formData={formData} setFormData={setFormData} required={true} />
+                            <TextInput name="fb" formData={formData} setFormData={setFormData} required={false} />
 
                             <div className="flex flex-col">
                                 <Checkbox
@@ -223,14 +219,23 @@ function FormMaster() {
                                     }}
                                 />
                             </div>
-
                             <div className="flex flex-col">
-                                <label>{t("forms.master.direction.title")}</label>
+                                <label>{t("forms.master.direction.title")} *</label>
+                                {directionsError && (
+                                    <div
+                                        ref={directionsErrorRef}
+                                        tabIndex={-1}
+                                        className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300"
+                                    >
+                                        {t("forms.master.direction-error")}
+                                    </div>
+                                )}
                                 <div className={checkClass}>
                                     <div className="bg-matchaGreen-50 pt-4 pl-5 pb-4">
                                         <label className="text-gray-400">{t("forms.master.change")}</label>
                                     </div>
-                                    <div className="flex flex-col gap-3 px-4 py-3 w-full bg-amber-50">
+
+                                    <div className={`flex flex-col gap-3 px-4 py-3 w-full bg-amber-50 ${directionsError ? 'border-2 border-red-500' : 'border border-gray-300'}`}>
                                         {directions.map((item) => (
                                             <Checkbox
                                                 key={item.id}
@@ -238,23 +243,17 @@ function FormMaster() {
                                                 label={item.label}
                                                 onChange={(checked) => {
                                                     handleCheckboxGroupChange({ target: { value: item.id, checked } }, setSelectedDirections);
+                                                    if (directionsError) {
+                                                        setDirectionsError(false);
+                                                    }
                                                 }}
                                             />
                                         ))}
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex flex-col">
-                                <label>{t("forms.master.program_name")} *</label>
-                                <input
-                                    type="text"
-                                    name="program_name"
-                                    value={formData?.program_name}
-                                    onChange={(e) => setFormData({ ...formData, program_name: e.target.value })}
-                                    required={true}
-                                    className={inputClass}
-                                />
-                            </div>
+
+                            <TextInput name="program_name" formData={formData} setFormData={setFormData} required={true} />
 
                             <div className="flex flex-col">
                                 <label>{t("forms.master.description-info")} *</label>
@@ -269,12 +268,21 @@ function FormMaster() {
                                 />
                             </div>
                             <div className="flex flex-col">
-                                <label>{t("forms.master.dates.title")}</label>
+                                <label>{t("forms.master.dates.title")} *</label>
+                                {dateError && (
+                                    <div
+                                        ref={datesErrorRef}
+                                        tabIndex={-1}
+                                        className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300"
+                                    >
+                                        {t("forms.master.dates-error")}
+                                    </div>
+                                )}
                                 <div className={checkClass}>
                                     <div className="bg-matchaGreen-50 pt-4 pl-5 pb-4">
                                         <label className="text-gray-400">{t("forms.master.change")}</label>
                                     </div>
-                                    <div className="flex flex-col gap-3 px-4 py-3 w-full bg-amber-50">
+                                    <div className={`flex flex-col gap-3 px-4 py-3 w-full bg-amber-50 ${dateError ? 'border-2 border-red-500' : 'border border-gray-300'}`}>
                                         {dates.map((item) => (
                                             <Checkbox
                                                 key={item.id}
@@ -282,66 +290,22 @@ function FormMaster() {
                                                 label={item.label}
                                                 onChange={(checked) => {
                                                     handleCheckboxGroupChange({ target: { value: item.id, checked } }, setSelectedDates);
+                                                    if (dateError) {
+                                                        setDateError(false);
+                                                    }
                                                 }}
                                             />
                                         ))}
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex flex-col">
-                                <label>{t("forms.master.program-url")}</label>
-                                <input
-                                    type="text"
-                                    name="programUrl"
-                                    value={formData?.programUrl}
-                                    onChange={(e) => setFormData({ ...formData, programUrl: e.target.value })}
-                                    className={inputClass}
-                                />
-                            </div>
-                            <div className="flex flex-col">
-                                <label>{t("forms.master.social")} *</label>
-                                <input
-                                    type="text"
-                                    name="socialUrl"
-                                    value={formData?.socialUrl}
-                                    onChange={(e) => setFormData({ ...formData, socialUrl: e.target.value })}
-                                    required={true}
-                                    className={inputClass}
-                                />
-                            </div>
-                            <div className="flex flex-col">
-                                <label>{t("forms.master.quantity")} *</label>
-                                <input
-                                    type="text"
-                                    name="quantity"
-                                    value={formData?.quantity}
-                                    onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                                    required={true}
-                                    className={inputClass}
-                                />
-                            </div>
-                            <div className="flex flex-col">
-                                <label>{t("forms.master.time")} *</label>
-                                <input
-                                    type="text"
-                                    name="time"
-                                    value={formData?.time}
-                                    onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                                    required={true}
-                                    className={inputClass}
-                                />
-                            </div>
-                            <div className="flex flex-col">
-                                <label>{t("forms.master.duration")} *</label>
-                                <input
-                                    type="text"
-                                    name="duration"
-                                    value={formData?.duration}
-                                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                                    required={true}
-                                    className={inputClass}
-                                />
-                            </div>
+
+                            <TextInput name="programUrl" formData={formData} setFormData={setFormData} required={false} />
+                            <TextInput name="socialUrl" formData={formData} setFormData={setFormData} required={true} />
+                            <TextInput name="quantity" formData={formData} setFormData={setFormData} required={true} />
+                            <TextInput name="time" formData={formData} setFormData={setFormData} required={true} />
+                            <TextInput name="duration" formData={formData} setFormData={setFormData} required={true} />
+
                             <div className="flex flex-col">
                                 <label>{t("forms.master.langs.title")} *</label>
                                 {langError && (
@@ -371,8 +335,13 @@ function FormMaster() {
                                 </div>
                             </div>
                             <div className="flex flex-col">
-                                <label className="font-bold leading-6">{t("forms.master.image.title")}</label>
+                                <label className="font-bold leading-6">{t("forms.master.image.title")} *</label>
                                 <label className="font-light italic">{t("forms.master.image.description")}</label>
+                                {fileError && (
+                                    <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300">
+                                        {t("forms.master.image.error")}
+                                    </div>
+                                )}
                                 <DropzoneUI onFilesChange={handleFilesFromDropzone} />
                             </div>
                             <div className="flex flex-col">

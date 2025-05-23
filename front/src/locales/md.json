@@ -71,7 +71,8 @@
             "name": "Nume / pseudonim artistic (dacă există) / numele trupei.",
             "country": "De unde sunteți?",
             "tg": "Telegram (WhatsApp sau număr de contact)",
-            "email": "Facebook",
+            "email": "Email",
+            "fb": "Facebook",
             "previously-participated": "Ați participat anterior la Festivalul Art Labyrinth în calitate de maestru?",
             "direction": {
                 "title": "Direcția programului",
@@ -85,6 +86,7 @@
                 "game": "Joc",
                 "other": "Altceva"
             },
+            "direction-error": "Vă rugăm să selectați direcția programului dumneavoastră. Dacă doriți să desfășurați programul în mai multe direcții, selectați toate opțiunile aplicabile.",
             "program_name": "Numele programului",
             "description": "Vă rugăm să completați formularul pentru artiști",
             "description-info": "Spuneți-ne ce ați dori să organizați la festival? În ce domeniu creați? (Ce pot învăța, simți sau crea participanții festivalului împreună cu dumneavoastră?)",
@@ -96,8 +98,9 @@
                 "12": "12 iulie (sâmbătă)",
                 "13": "13 iulie (duminică)"
             },
-            "program-url": "Link către videoclip, dacă există, sau un raport foto de la atelierul dumneavoastră sau concert",
-            "social": "Link către rețeaua dvs. socială (FB/IG/Vk)",
+            "dates-error": "Vă rugăm să selectați datele în care puteți desfășura programul dumneavoastră. Dacă doriți să desfășurați programul în mai multe zile, selectați toate opțiunile aplicabile.",
+            "programUrl": "Link către videoclip, dacă există, sau un raport foto de la atelierul dumneavoastră sau concert",
+            "socialUrl": "Link către rețeaua dvs. socială (FB/IG/Vk)",
             "quantity": "Numărul de evenimente dorite",
             "time": "Ora preferată pentru prestația dumneavoastră",
             "duration": "Durata programului dumneavoastră",
@@ -112,7 +115,8 @@
                 "description": "Adăugați aici fotografii și, dacă este posibil, un videoclip scurt care să surprindă atmosfera atelierului dumneavoastră + o fotografie de calitate, profesională sau semiprofesională, în care să fiți clar vizibil. Mulțumim :)",
                 "input": "Faceți clic sau trageți fișierele dvs. în această zonă",
                 "drag": "Trageți fișierele aici...",
-                "added": "Fișierele au fost adăugate"
+                "added": "Fișierele au fost adăugate",
+                "error": "Vă rugăm să încărcați cel puțin o imagine sau un videoclip."
             },
             "raider": "Cerințele dumneavoastră tehnice și orice altceva ați dori să adăugați",
             "additional": "Dacă ați putea transmite participanților un mesaj important, care ar fi acesta? Ar putea fi un gând, o filozofie sau un sentiment legat de arta dumneavoastră.",

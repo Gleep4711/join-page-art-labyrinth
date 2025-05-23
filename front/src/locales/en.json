@@ -71,7 +71,8 @@
             "name": "Name / creative pseudonym (if any) / band name.",
             "country": "Where are you from?",
             "tg": "Telegram (WhatsApp or contact number)",
-            "email": "Facebook",
+            "email": "Email",
+            "fb": "Facebook",
             "previously-participated": "Have you previously participated in the Art Labyrinth Festival as a facilitator?",
             "direction": {
                 "title": "Program direction",
@@ -85,6 +86,7 @@
                 "game": "Game",
                 "other": "Other"
             },
+            "direction-error": "Please select the direction of your program. If you want to conduct the program in multiple directions, select all applicable options.",
             "program_name": "Program name",
             "description": "Please fill out the artist form",
             "description-info": "Tell us what you would like to conduct at the festival? In which field do you create? (What can festival participants learn, feel, or create with you?)",
@@ -96,8 +98,9 @@
                 "12": "July 12 (Saturday)",
                 "13": "July 13 (Sunday)"
             },
-            "program-url": "Link to a video or photo report from your workshop or concert, if available",
-            "social": "Link to your social network (FB/IG/Vk)",
+            "dates-error": "Please select the dates when you can conduct your program. If you want to conduct the program on multiple days, select all applicable options.",
+            "programUrl": "Link to a video or photo report from your workshop or concert, if available",
+            "socialUrl": "Link to your social network (FB/IG/Vk)",
             "quantity": "Number of desired events",
             "time": "Preferred time of your performance",
             "duration": "Duration of your program",
@@ -112,7 +115,8 @@
                 "description": "Add photos here and, if possible, a short video capturing the atmosphere of your workshop + one high-quality photo, professional or semi-professional, where you are clearly visible. Thank you:)",
                 "input": "Click or drag your files into this area",
                 "drag": "Drag files here...",
-                "added": "Added"
+                "added": "Added",
+                "error": "Please upload at least one image or video."
             },
             "raider": "Your technical requirements and anything else you would like to add",
             "additional": "If you could convey one important message to the participants, what would it be? It could be a thought, philosophy, or feeling related to your art.",
