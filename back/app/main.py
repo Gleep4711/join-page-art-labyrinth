@@ -1,6 +1,7 @@
 import logging
 
-from app.api import bpay, feedback, forms, login, payment, root_route, tickets, admin_zone
+from app.api import (admin_zone, bpay, feedback, forms, login, payment,
+                     root_route, tickets)
 from app.config import settings
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,9 +20,10 @@ options = {
         "email": "team@art-labyrinth.org",
     },
 }
-# if not settings.DEV_MODE:
-#     options["docs_url"] = None
-#     options["redoc_url"] = None
+if not settings.DEV_MODE:
+    # options["docs_url"] = None
+    # options["redoc_url"] = None
+    options["openapi_url"] = "/api/v1/openapi.json"
 
 app = FastAPI(**options)
 
