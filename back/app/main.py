@@ -19,9 +19,9 @@ options = {
         "email": "team@art-labyrinth.org",
     },
 }
-if not settings.DEV_MODE:
-    options["docs_url"] = None
-    options["redoc_url"] = None
+# if not settings.DEV_MODE:
+#     options["docs_url"] = None
+#     options["redoc_url"] = None
 
 app = FastAPI(**options)
 
