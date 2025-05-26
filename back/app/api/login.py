@@ -3,7 +3,7 @@ from typing import Optional
 
 from app.db.base import get_db
 from app.db.models import User
-from app.jwt import JWTPayload, create_access_token, verify_token
+from app.jwt import JWTPayload, create_access_token, create_token, verify_token
 from fastapi import APIRouter, Depends
 from fastapi import Form as FastForm
 from fastapi import HTTPException, Request
@@ -40,13 +40,16 @@ async def login(
     username: str = FastForm(None),
     password: str = FastForm(None),
 ):
-    if username or password:
-        data = LoginRequest(
-            username=username,
-            password=password
-        )
-    else:
-        data = LoginRequest(**(await request.json()))
+    try:
+        if username or password:
+            data = LoginRequest(
+                username=username,
+                password=password
+            )
+        else:
+            data = LoginRequest(**(await request.json()))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Validation error: {str(e)}")
 
     if not data.username or not data.password:
         raise HTTPException(status_code=400, detail="Username and password are required")
@@ -82,6 +85,53 @@ async def login(
         # return {"access_token": access_token.get("token"), "token_type": "bearer"}
 
     return {"access_token": access_token, "token": access_token.get("token"), "token_type": "bearer", "redirect_url": redirect_url}
+
+@router.post("/auth")
+async def auth(
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+    username: str = FastForm(None),
+    password: str = FastForm(None),
+
+):
+    if not username or not password:
+        raise HTTPException(status_code=400, detail="Username and password are required")
+    query = await db.execute(
+        select(User).where(User.username == username)
+    )
+    user: User = query.scalar_one_or_none()
+    if not user or not check_password_hash(str(user.password_hash), password):
+        raise HTTPException(status_code=401, detail="Invalid username or password")
+    if not bool(user.is_active):
+        raise HTTPException(status_code=403, detail="User is inactive")
+    jwt_data = {
+        "id": user.id,
+        "name": user.username,
+        "role": user.role,
+        "ip": request.headers.get("CF-Connecting-IP", request.client.host if request.client else 'unknown'),
+    }
+    access_token = await create_token(jwt_data)
+
+    role = "admin" if int(str(user.role)) == 1 else "user"
+    redirect_url = "dashboard"
+    if str(user.username) == "VolnaFest":
+        role = "volunteer"
+        redirect_url = "volunteers"
+    elif str(user.username) == "MuzArt":
+        role = "master"
+        redirect_url = "masters"
+
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user_id": user.id,
+        "username": user.username,
+        "role_id": user.role,
+        "role": role,
+        "redirect_url": redirect_url,
+    }
+
 
 
 @router.post("/add")

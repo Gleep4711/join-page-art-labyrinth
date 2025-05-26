@@ -25,3 +25,4 @@ networks:
 
 # docker compose -f docker-compose-debug-back.yml up
 # ddc -f docker-compose-debug-back.yml up --remove-orphans
+# ddc -f docker-compose-debug-back.yml up
