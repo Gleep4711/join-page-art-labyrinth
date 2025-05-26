@@ -103,6 +103,7 @@ async def send_to_telegram(img_stream):
 
 
 @router.get('/get')
+@router.get('/list')
 async def get_tickets(
     offset: int = 0,
     limit: int = 100,
