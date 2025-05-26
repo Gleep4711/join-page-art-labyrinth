@@ -23,7 +23,10 @@ options = {
 if not settings.DEV_MODE:
     # options["docs_url"] = None
     # options["redoc_url"] = None
-    options["openapi_url"] = "/api/v1/openapi.json"
+    # options["openapi_url"] = None
+    options["docs_url"] = "https://admin.art-labyrinth.org/api/v1/docs"
+    options["redoc_url"] = "https://admin.art-labyrinth.org/api/v1/redoc"
+    options["openapi_url"] = "https://admin.art-labyrinth.org/api/v1/openapi.json"
 
 app = FastAPI(**options)
 
