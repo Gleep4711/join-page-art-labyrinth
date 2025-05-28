@@ -1,4 +1,5 @@
 import io
+import os
 import smtplib
 from email import encoders
 from email.message import EmailMessage
@@ -26,6 +27,9 @@ EMAIL_TEMPLATES: Dict[str, Dict[str, str | bool]] = {
         'is_html': True
     }
 }
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SOURCE_FILE = os.path.join(BASE_DIR, "M2.png")
+
 
 class SMTPClient:
     def __init__(self, host: str, port: int, user: str, password: str, use_tls: bool = True):
@@ -53,7 +57,7 @@ class SMTPClient:
 
         # Attachments: accept BytesIO or file-like objects with filename
         if attachments:
-            path = Path("M2.png")
+            path = Path(SOURCE_FILE)
             with open(path, 'rb') as f:
                 msg.add_attachment(f.read(), maintype='application', subtype='octet-stream', filename=path.name)
             for att in attachments:
