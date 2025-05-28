@@ -192,13 +192,13 @@ async def test_send_ticket(
         'P': 'Parasite', 'F': 'Friends', 'C': 'Cash', 'S': 'Family', 'L': 'Discounted'
     }.get(request.prefix, 'Guest')
 
-    _, pdf_buffer = generate_ticket_buffers(
+    pdf_buffer = generate_ticket_buffers(
         ticket_id=ticket_id,
         client_name=client_name,
         ticket_type=ticket_type,
     )
 
-    png_buffer, _ = generate_m_ticket_buffers(
+    png_buffer = generate_m_ticket_buffers(
         ticket_id=ticket_id,
         client_name=client_name,
         ticket_type=ticket_type,
