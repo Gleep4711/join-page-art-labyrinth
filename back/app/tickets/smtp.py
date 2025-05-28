@@ -20,8 +20,8 @@ EMAIL_TEMPLATES: Dict[str, Dict[str, str | bool]] = {
         'is_html': True
     },
     'with_attachments': {
-        'subject': 'Документы для вас',
-        'body': '<h2>Здравствуйте, {name}!</h2><p>Во вложении три файла.</p>',
+        'subject': 'Art-Labyrinth Ticket',
+        'body': '<h2>Здравствуйте, {name}!</h2><p>Спасибо за поддержку нашего фестиваля.</p>',
         'is_html': True
     }
 }
