@@ -8,7 +8,7 @@ from app.config import settings
 from app.db.base import get_db
 from app.db.models import Ticket
 from app.jwt import JWTPayload, verify_token
-from app.tickets.generator import (FONT_PATH, FONT_PATH_BOLD, SOURCE_FILE,
+from app.tickets.generator import (FONT_PATH, FONT_PATH_BOLD, SOURCE_FILE, generate_m_ticket_buffers,
                                    generate_ticket_buffers)
 from app.tickets.smtp import smtp_client
 from fastapi import APIRouter, Depends, HTTPException
@@ -192,20 +192,22 @@ async def test_send_ticket(
         'P': 'Parasite', 'F': 'Friends', 'C': 'Cash', 'S': 'Family', 'L': 'Discounted'
     }.get(request.prefix, 'Guest')
 
-    png_buffer, pdf_buffer = generate_ticket_buffers(
+    _, pdf_buffer = generate_ticket_buffers(
         ticket_id=ticket_id,
         client_name=client_name,
         ticket_type=ticket_type,
-        source_file=SOURCE_FILE,
-        font_path=FONT_PATH,
-        font_path_bold=FONT_PATH_BOLD,
-        as_pdf=True
+    )
+
+    png_buffer, _ = generate_m_ticket_buffers(
+        ticket_id=ticket_id,
+        client_name=client_name,
+        ticket_type=ticket_type,
     )
 
     # Prepare attachments for smtp_client
     attachments = [
-        {'buffer': png_buffer, 'filename': f'{ticket_id}.png'},
-        {'buffer': pdf_buffer, 'filename': f'{ticket_id}.pdf'}
+        {'buffer': png_buffer, 'filename': 'ticket.png'},
+        {'buffer': pdf_buffer, 'filename': 'ticket.pdf'}
     ]
 
     # Send email
