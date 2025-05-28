@@ -1,5 +1,4 @@
 import io
-import logging
 import os
 import smtplib
 from email.message import EmailMessage
@@ -37,10 +36,8 @@ class SMTPClient:
         self.user = user
         self.password = password.get_secret_value() if isinstance(password, SecretStr) else password
         self.use_tls = use_tls
-        self.logger = logging.getLogger("smtp_client")
 
     def send_mail(self, to_email: str, template: str, context: Dict[str, str], attachments: Optional[List[Dict[str, io.BytesIO | str]]] = None):
-        self.logger.info(f"Preparing to send email to {to_email} with template '{template}' and context {context}")
         tpl = EMAIL_TEMPLATES[template]
         subject = str(tpl['subject']).format(**context) if isinstance(tpl['subject'], str) else ''
         body = str(tpl['body']).format(**context) if isinstance(tpl['body'], str) else ''
@@ -56,9 +53,7 @@ class SMTPClient:
             msg.set_content(body)
 
         if attachments:
-            self.logger.info(f"Attachments count: {len(attachments)}")
             for att in attachments:
-                self.logger.info(f"Processing attachment: {att}")
                 if isinstance(att, dict) and 'buffer' in att and 'filename' in att:
                     if isinstance(att['buffer'], io.BytesIO):
                         buf = att['buffer']
@@ -67,7 +62,6 @@ class SMTPClient:
                         maintype = 'application'
                         subtype = 'octet-stream'
                         data = buf.read()
-                        self.logger.info(f"Adding BytesIO attachment: {filename}, size={len(data)} bytes")
                         msg.add_attachment(data, maintype=maintype, subtype=subtype, filename=filename)
                 elif hasattr(att, 'read') and hasattr(att, 'name'):
                     if isinstance(att, io.BytesIO):
@@ -77,25 +71,20 @@ class SMTPClient:
                         maintype = 'application'
                         subtype = 'octet-stream'
                         data = buf.read()
-                        self.logger.info(f"Adding file-like attachment: {filename}, size={len(data)} bytes")
                         msg.add_attachment(data, maintype=maintype, subtype=subtype, filename=filename)
                 elif isinstance(att, str):
                     path = Path(att)
                     with open(path, 'rb') as f:
                         file_data = f.read()
-                        self.logger.info(f"Adding file path attachment: {path.name}, size={len(file_data)} bytes")
                         msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=path.name)
 
-        self.logger.info(f"Connecting to SMTP server {self.host}:{self.port} as {self.user}")
         try:
             with smtplib.SMTP(self.host, self.port) as server:
                 if self.use_tls:
                     server.starttls()
                 server.login(self.user, self.password)
                 server.send_message(msg)
-            self.logger.info(f"Email sent to {to_email} successfully.")
         except Exception as e:
-            self.logger.error(f"Failed to send email to {to_email}: {e}")
             raise
 
 # Example of the client’s initialization (parameters should be in settings)
