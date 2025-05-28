@@ -15,6 +15,7 @@ FONT_PATH = os.path.join(BASE_DIR, "PlayfairDisplay-SemiBold.ttf")
 FONT_PATH_BOLD = os.path.join(BASE_DIR, "PlayfairDisplay-Bold.ttf")
 SOURCE_FILE = os.path.join(BASE_DIR, "A4.png")
 M_SOURCE_FILE = os.path.join(BASE_DIR, "M1.png")
+M2_SOURCE_FILE = os.path.join(BASE_DIR, "M2.png")
 TICKETS_DIR = os.path.join(BASE_DIR, "source")
 
 TICKETS = [
