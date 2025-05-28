@@ -9,12 +9,13 @@ from PIL import Image, ImageDraw, ImageFont
 from PIL.Image import Image as PILImage
 from qrcode.image.pil import PilImage
 
-# --- Константы ---
-FONT_PATH = "PlayfairDisplay-SemiBold.ttf"
-FONT_PATH_BOLD = "PlayfairDisplay-Bold.ttf"
-SOURCE_FILE = "A4.png"
-M_SOURCE_FILE = "M1.png"
-TICKETS_DIR = "source"
+# --- Constants ---
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FONT_PATH = os.path.join(BASE_DIR, "PlayfairDisplay-SemiBold.ttf")
+FONT_PATH_BOLD = os.path.join(BASE_DIR, "PlayfairDisplay-Bold.ttf")
+SOURCE_FILE = os.path.join(BASE_DIR, "A4.png")
+M_SOURCE_FILE = os.path.join(BASE_DIR, "M1.png")
+TICKETS_DIR = os.path.join(BASE_DIR, "source")
 
 TICKETS = [
     {"ticket_id": "G-086-3730", "client_name": "Elena Petrova", "ticket_type": "Guest"},
