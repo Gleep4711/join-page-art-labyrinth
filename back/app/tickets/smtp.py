@@ -57,9 +57,6 @@ class SMTPClient:
 
         # Attachments: accept BytesIO or file-like objects with filename
         if attachments:
-            path = Path(SOURCE_FILE)
-            with open(path, 'rb') as f:
-                msg.add_attachment(f.read(), maintype='application', subtype='octet-stream', filename=path.name)
             for att in attachments:
                 if isinstance(att, dict) and 'buffer' in att and 'filename' in att:
                     # Handle dict with 'buffer' and 'filename'
@@ -69,7 +66,7 @@ class SMTPClient:
                         buf.seek(0)
                         maintype = 'application'
                         subtype = 'octet-stream'
-                        msg.add_attachment(buf, maintype='application', subtype='octet-stream', filename=filename)
+                        msg.add_attachment(buf.read(), maintype=maintype, subtype=subtype, filename=filename)
                 elif hasattr(att, 'read') and hasattr(att, 'name'):
                     # Fallback for file-like objects with .name
                     if isinstance(att, io.BytesIO):
