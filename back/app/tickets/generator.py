@@ -43,21 +43,21 @@ def save_ticket_images(background: PILImage, ticket_id, as_pdf=True):
 
 
 
-def generate_ticket(ticket_id, client_name, ticket_type, source_file, font_path, font_path_bold):
+def generate_ticket(ticket_id, client_name, ticket_type):
     """Legacy: generates and saves ticket to disk."""
-    qr_block = create_qr_code(ticket_id, font_path_bold)
-    text_block = create_client_info(client_name, ticket_type, font_path)
-    background = Image.open(source_file).convert("RGBA")
+    qr_block = create_qr_code(ticket_id, FONT_PATH_BOLD)
+    text_block = create_client_info(client_name, ticket_type, FONT_PATH)
+    background = Image.open(SOURCE_FILE).convert("RGBA")
     background.alpha_composite(qr_block, (133, 429))
     background.alpha_composite(text_block, (485, 550))
     save_ticket_images(background, ticket_id)
 
 
-def generate_m_ticket(ticket_id, client_name, ticket_type, m_source_file, font_path, font_path_bold):
+def generate_m_ticket(ticket_id, client_name, ticket_type):
     """Legacy: generates and saves M-ticket to disk."""
-    qr_block = create_qr_code(ticket_id, font_path_bold, box_size=8)
-    text_block = create_client_info(client_name, ticket_type, font_path, size=(24, 20))
-    background = Image.open(m_source_file).convert("RGBA")
+    qr_block = create_qr_code(ticket_id, FONT_PATH_BOLD, box_size=8)
+    text_block = create_client_info(client_name, ticket_type, FONT_PATH, size=(24, 20))
+    background = Image.open(M_SOURCE_FILE).convert("RGBA")
     background.alpha_composite(qr_block, (78, 250))
     background.alpha_composite(text_block, (75, 620))
     if not os.path.exists(TICKETS_DIR):
@@ -66,39 +66,33 @@ def generate_m_ticket(ticket_id, client_name, ticket_type, m_source_file, font_p
     background.save(png_path)
 
 
-def generate_ticket_buffers(ticket_id, client_name, ticket_type, source_file, font_path, font_path_bold, as_pdf=True):
+def generate_ticket_buffers(ticket_id, client_name, ticket_type):
     """
     Generates a ticket and returns PNG and PDF buffers (or only PNG if as_pdf=False).
     Returns: (png_buffer, pdf_buffer)
     """
-    qr_block = create_qr_code(ticket_id, font_path_bold)
-    text_block = create_client_info(client_name, ticket_type, font_path)
-    background = Image.open(source_file).convert("RGBA")
+    qr_block = create_qr_code(ticket_id, FONT_PATH_BOLD)
+    text_block = create_client_info(client_name, ticket_type, FONT_PATH)
+    background = Image.open(SOURCE_FILE).convert("RGBA")
     background.alpha_composite(qr_block, (133, 429))
     background.alpha_composite(text_block, (485, 550))
 
-    png_buffer = io.BytesIO()
-    background.save(png_buffer, format="PNG")
-    png_buffer.seek(0)
+    pdf_buffer = io.BytesIO()
+    background_rgb = background.convert("RGB")
+    background_rgb.save(pdf_buffer, format="PDF")
+    pdf_buffer.seek(0)
 
-    pdf_buffer = None
-    if as_pdf:
-        pdf_buffer = io.BytesIO()
-        background_rgb = background.convert("RGB")
-        background_rgb.save(pdf_buffer, format="PDF")
-        pdf_buffer.seek(0)
-
-    return png_buffer, pdf_buffer
+    return pdf_buffer
 
 
-def generate_m_ticket_buffers(ticket_id, client_name, ticket_type, m_source_file, font_path, font_path_bold, as_pdf=False):
+def generate_m_ticket_buffers(ticket_id, client_name, ticket_type):
     """
     Generates an M-ticket and returns PNG and PDF buffers (or only PNG if as_pdf=False).
     Returns: (png_buffer, pdf_buffer)
     """
-    qr_block = create_qr_code(ticket_id, font_path_bold, box_size=8)
-    text_block = create_client_info(client_name, ticket_type, font_path, size=(24, 20))
-    background = Image.open(m_source_file).convert("RGBA")
+    qr_block = create_qr_code(ticket_id, FONT_PATH_BOLD, box_size=8)
+    text_block = create_client_info(client_name, ticket_type, FONT_PATH, size=(24, 20))
+    background = Image.open(M_SOURCE_FILE).convert("RGBA")
     background.alpha_composite(qr_block, (78, 250))
     background.alpha_composite(text_block, (75, 620))
 
@@ -106,14 +100,7 @@ def generate_m_ticket_buffers(ticket_id, client_name, ticket_type, m_source_file
     background.save(png_buffer, format="PNG")
     png_buffer.seek(0)
 
-    pdf_buffer = None
-    if as_pdf:
-        pdf_buffer = io.BytesIO()
-        background_rgb = background.convert("RGB")
-        background_rgb.save(pdf_buffer, format="PDF")
-        pdf_buffer.seek(0)
-
-    return png_buffer, pdf_buffer
+    return png_buffer
 
 
 def create_qr_code(ticket_id, font_path_bold, box_size=9):
@@ -190,8 +177,8 @@ def create_client_info(client_name, ticket_type, font_path, size=(36, 30)):
 
 def main():
     for ticket in TICKETS:
-        generate_ticket(ticket["ticket_id"], ticket["client_name"], ticket["ticket_type"], SOURCE_FILE, FONT_PATH, FONT_PATH_BOLD)
-        generate_m_ticket(ticket["ticket_id"], ticket["client_name"], ticket["ticket_type"], M_SOURCE_FILE, FONT_PATH, FONT_PATH_BOLD)
+        generate_ticket(ticket["ticket_id"], ticket["client_name"], ticket["ticket_type"])
+        generate_m_ticket(ticket["ticket_id"], ticket["client_name"], ticket["ticket_type"])
 
 if __name__ == "__main__":
     main()

