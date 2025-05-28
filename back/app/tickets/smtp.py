@@ -1,12 +1,13 @@
 import io
+import logging
 import os
 import smtplib
 from email.message import EmailMessage
 from pathlib import Path
 from typing import Dict, List, Optional
-import logging
 
 from app.config import settings
+from pydantic import SecretStr
 
 # Example templates message
 EMAIL_TEMPLATES: Dict[str, Dict[str, str | bool]] = {
@@ -30,11 +31,11 @@ SOURCE_FILE = os.path.join(BASE_DIR, "M2.png")
 
 
 class SMTPClient:
-    def __init__(self, host: str, port: int, user: str, password: str, use_tls: bool = True):
+    def __init__(self, host: str, port: int, user: str, password: SecretStr, use_tls: bool = True):
         self.host = host
         self.port = port
         self.user = user
-        self.password = password
+        self.password = password.get_secret_value() if isinstance(password, SecretStr) else password
         self.use_tls = use_tls
         self.logger = logging.getLogger("smtp_client")
 
@@ -102,7 +103,7 @@ smtp_client = SMTPClient(
     host=getattr(settings, 'SMTP_HOST', 'smtp.example.com'),
     port=int(getattr(settings, 'SMTP_PORT', 587)),
     user=getattr(settings, 'SMTP_USER', 'user@example.com'),
-    password=getattr(settings, 'SMTP_PASSWORD', 'password'),
+    password=getattr(settings, 'SMTP_PASSWORD', SecretStr('password')),
     use_tls=True
 )
 
