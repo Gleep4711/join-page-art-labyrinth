@@ -1,6 +1,5 @@
 import asyncio
 import json
-import logging
 import os
 import random
 import re
@@ -11,7 +10,7 @@ from typing import List, Optional, cast
 
 import httpx
 from app.config import settings
-from app.csrf import generate_csrf_token, validate_csrf_token
+from app.csrf import generate_csrf_token
 from app.db.base import get_db
 from app.db.models import Form
 from app.jwt import JWTPayload, verify_token
@@ -163,20 +162,20 @@ async def save_files_to_disk_and_telegram(form_id: int, files: List[tuple]):
 
 @router.post('/save')
 async def save_form(
-    request: Request,
+    # request: Request,
     background_tasks: BackgroundTasks,
     form_type: str = FastAPIForm(...),
     data: str = FastAPIForm(...),
-    csrf_token: str = FastAPIForm(...),
+    # csrf_token: str = FastAPIForm(...),
     file: Optional[List[UploadFile]] = File(None),
     db: AsyncSession = Depends(get_db),
 ):
-    session_id = request.headers.get("X-Session-ID")
+    # session_id = request.headers.get("X-Session-ID")
 
-    if not session_id:
-        return {"status": "ok", "form_id": random.randint(100, 999)}
+    # if not session_id:
+    #     return {"status": "ok", "form_id": random.randint(100, 999)}
 
-    validate_csrf_token(csrf_token, session_id + request.client.host if request.client else "")
+    # validate_csrf_token(csrf_token, session_id + request.client.host if request.client else "")
 
     if form_type == "master":
         parsed_data = FormDataMasters(**json.loads(data))

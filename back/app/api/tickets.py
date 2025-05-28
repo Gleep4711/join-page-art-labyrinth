@@ -2,15 +2,15 @@ import asyncio
 import random
 from io import BytesIO
 
-import PIL.Image
 import httpx
 import qrcode
-import PIL
-
 from app.config import settings
 from app.db.base import get_db
 from app.db.models import Ticket
 from app.jwt import JWTPayload, verify_token
+from app.tickets.generator import (FONT_PATH, FONT_PATH_BOLD, SOURCE_FILE,
+                                   generate_ticket_buffers)
+from app.tickets.smtp import smtp_client
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -171,5 +171,51 @@ async def add_ticket(
         db.add(ticket)
         await db.commit()
         return {"status": "ok"}
+    except Exception as e:
+        return {"status": "fail", "error": str(e)}
+
+
+@router.post('/test_send_ticket')
+async def test_send_ticket(
+    request: TicketRequest,
+    db: AsyncSession = Depends(get_db),
+    current_user: JWTPayload = Depends(verify_token),
+):
+    if current_user.get("role") != 1:
+        raise HTTPException(status_code=403, detail="Access denied")
+
+    # Generate ticket image and PDF in memory
+    ticket_id = generate_ticket_id(request.prefix, request.part)
+    client_name = request.name or "Test User"
+    ticket_type = {
+        'G': 'Guest', 'M': 'Master', 'V': 'Volunteer', 'O': 'Organizer',
+        'P': 'Parasite', 'F': 'Friends', 'C': 'Cash', 'S': 'Family', 'L': 'Discounted'
+    }.get(request.prefix, 'Guest')
+
+    png_buffer, pdf_buffer = generate_ticket_buffers(
+        ticket_id=ticket_id,
+        client_name=client_name,
+        ticket_type=ticket_type,
+        source_file=SOURCE_FILE,
+        font_path=FONT_PATH,
+        font_path_bold=FONT_PATH_BOLD,
+        as_pdf=True
+    )
+
+    # Prepare attachments for smtp_client
+    attachments = [
+        {'buffer': png_buffer, 'filename': f'{ticket_id}.png'},
+        {'buffer': pdf_buffer, 'filename': f'{ticket_id}.pdf'}
+    ]
+
+    # Send email
+    try:
+        smtp_client.send_mail(
+            to_email=request.email,
+            template='with_attachments',
+            context={'name': client_name},
+            attachments=attachments
+        )
+        return {"status": "ok", "ticket_id": ticket_id}
     except Exception as e:
         return {"status": "fail", "error": str(e)}

@@ -30,6 +30,11 @@ class PydanticSettings(BaseSettings):
     DEV_BPAY_MERCHANT_ID: SecretStr = SecretStr("testMerchant44")
     DEV_BPAY_SERVER_URL: str = "https://pay.dev5.bpay.md/"
 
+    SMTP_HOST: str = "smtp.example.com"
+    SMTP_PORT: int = 587
+    SMTP_USER: str = ""
+    SMTP_PASSWORD: SecretStr = SecretStr("")
+
 
     model_config = SettingsConfigDict(
         env_file=".env",
