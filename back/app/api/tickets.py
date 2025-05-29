@@ -207,16 +207,16 @@ async def test_send_ticket(
     # Prepare attachments for smtp_client
     attachments = [
         {'buffer': png_buffer, 'filename': 'ticket.png'},
-        {'buffer': pdf_buffer, 'filename': 'ticket.pdf'}
+        {'buffer': pdf_buffer, 'filename': 'A4-print.pdf'}
     ]
 
     # Send email
     try:
-        smtp_client.send_mail(
+        smtp_client.send_ticket_email(
             to_email=request.email,
-            template='with_attachments',
-            context={'name': client_name},
-            attachments=attachments
+            name=client_name,
+            ticket_png=png_buffer.getvalue(),
+            ticket_pdf=pdf_buffer.getvalue(),
         )
         return {"status": "ok", "ticket_id": ticket_id}
     except Exception as e:

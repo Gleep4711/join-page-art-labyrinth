@@ -163,7 +163,8 @@ def create_client_info(client_name, ticket_type, font_path, size=(36, 30)):
     draw_text = ImageDraw.Draw(text_block)
     cur_y = 10
 
-    if len(client_name) > 22:
+    # if len(client_name) > 22:
+    if len(client_name) > 1:
         for i, line in enumerate(name_lines):
             draw_text.text((0, cur_y), line, font=font_name, fill="#364921")
             cur_y += name_heights[i] + (6 if i < len(name_lines)-1 else 0)
