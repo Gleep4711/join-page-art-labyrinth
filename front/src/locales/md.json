@@ -30,12 +30,13 @@
             },
             "unknown": {
                 "title": "Eroare necunoscută",
-                "description": "Ceva nu a mers bine. Vă rugăm să încercați din nou mai târziu"
+                "description": "Ceva nu a mers bine. Vă rugăm să încercați din nou mai târziu."
             },
             "content-too-large": {
                 "title": "Eroare",
                 "description": "Dimensiunea fișierului este prea mare. Vă rugăm să selectați un fișier mai mic și să încercați din nou"
-            }
+            },
+            "feedback": "Dacă eroarea persistă, vă rugăm să ne contactați pe Telegram: <a>@Hridayama</a>."
         },
         "submitting": "Trimiterea formularului",
         "volunteer": {
@@ -116,7 +117,8 @@
                 "input": "Faceți clic sau trageți fișierele dvs. în această zonă",
                 "drag": "Trageți fișierele aici...",
                 "added": "Fișierele au fost adăugate",
-                "error": "Vă rugăm să încărcați cel puțin o imagine sau un videoclip."
+                "error": "Vă rugăm să încărcați cel puțin o imagine sau un videoclip.",
+                "supported": "Dacă aveți dificultăți la încărcare, vă rugăm să lăsați un link către fișier în câmpul de mai jos sau să ne trimiteți pe Telegram: <a>@AndreiCaraion</a>."
             },
             "raider": "Cerințele dumneavoastră tehnice și orice altceva ați dori să adăugați",
             "additional": "Dacă ați putea transmite participanților un mesaj important, care ar fi acesta? Ar putea fi un gând, o filozofie sau un sentiment legat de arta dumneavoastră.",
@@ -131,19 +133,13 @@
         "sign": "Art-Labyrinth Family",
         "feedback": "Feedback -🙏🏽",
         "master": {
-            "general": "Nastya",
-            "general_contact": "SAVITRI_anastasiya",
+            "general": "Andrei",
             "general_role": "programul cultural general",
             "music": "Marina",
-            "music_contact": "burningmannnn",
             "music_role": "partea muzicală"
         },
         "volunteer": {
-            "general": "Daniela",
-            "general_contact": "sziromszirup",
-            "general_role": "programul cultural general",
-            "phone_link": "+37368127786",
-            "phone": "+373 68 127 786"
+            "general": "Anna"
         }
     },
     "department": {

@@ -16,8 +16,30 @@ const ThankYouPage: React.FC<ThankYouPageProps> = ({ type }) => {
                 <p className="text-gray-700 mb-4">{t("thanks.feedback")}</p>
                 {type === "master" ? (
                     <>
-                        <p className="text-gray-700 mb-4">{t("thanks.master.general")} <a href={`https://t.me/${t("thanks.master.general_contact")}`} target="_blank" rel="noreferrer" className="underline text-blue-700 font-bold italic">@{t("thanks.master.general_contact")}</a> ({t("thanks.master.general_role")})</p>
-                        <p className="text-gray-700 mb-4">{t("thanks.master.music")} <a href={`https://t.me/${t("thanks.master.music_contact")}`} target="_blank" rel="noreferrer" className="underline text-blue-700 font-bold italic">@{t("thanks.master.music_contact")}</a> ({t("thanks.master.music_role")})</p>
+                        <p className="text-gray-700 mb-1">
+                            {t("thanks.master.general")}
+                            <a href={`https://t.me/${t("thanks.master.general_contact")}`} target="_blank" rel="noreferrer" className="underline text-blue-700 font-bold italic px-3">
+                                @{t("thanks.master.general_contact")}
+                            </a>
+                        </p>
+                        <p className="text-gray-700 mb-1">
+                            <a href={`tel:${t("thanks.master.phone_link")}`}>{t("thanks.master.phone")}</a>
+                        </p>
+                        <p className="text-gray-700 mb-4">
+                            ({t("thanks.master.general_role")})
+                        </p>
+                        <p className="text-gray-700 mb-1">
+                            {t("thanks.master.music")}
+                            <a href={`https://t.me/${t("thanks.master.music_contact")}`} target="_blank" rel="noreferrer" className="underline text-blue-700 font-bold italic px-3">
+                                @{t("thanks.master.music_contact")}
+                            </a>
+                        </p>
+                        <p className="text-gray-700 mb-1">
+                            <a href={`tel:${t("thanks.master.music_phone_link")}`}>{t("thanks.master.music_phone")}</a>
+                        </p>
+                        <p className="text-gray-700 mb-1">
+                            ({t("thanks.master.music_role")})
+                        </p>
                     </>
                 ) : (
                     <>
