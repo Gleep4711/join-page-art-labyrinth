@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-export function LanguageSelector() {
+export function LanguageSelector({fill = "#FFF9EC"}: { fill?: string }) {
   const { i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -52,7 +52,7 @@ export function LanguageSelector() {
           className="flex p-[10px_20px] justify-center items-center gap-[8px] w-full rounded-[4px] relative"
         >
           <text
-            fill="#FFF9EC"
+            fill={fill}
             xmlSpace="preserve"
             style={{ whiteSpace: "pre" }}
             fontFamily="Inter"
@@ -63,7 +63,7 @@ export function LanguageSelector() {
               {currentLang.label}
             </tspan>
           </text>
-          <path d="M53 16H68L60.5 28L53 16Z" fill="#FFF9EC"></path>
+          <path d="M53 16H68L60.5 28L53 16Z" fill={fill}></path>
         </svg>
       </button>
 

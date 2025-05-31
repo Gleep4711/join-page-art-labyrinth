@@ -7,7 +7,7 @@ import TextInput from "./TextInput";
 
 import { API_URL } from '../../config';
 import { fetchCsrfToken } from "../../utils/fetchCsrfToken";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 function FormMaster() {
     const [selectedDirections, setSelectedDirections] = useState<string[]>([]);
@@ -34,7 +34,7 @@ function FormMaster() {
     const [langError, setLangError] = useState(false);
     const [directionsError, setDirectionsError] = useState(false);
     const [dateError, setDateError] = useState(false);
-    const [fileError, setFileError] = useState(false);
+    // const [fileError, setFileError] = useState(false);
 
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -93,11 +93,11 @@ function FormMaster() {
             return;
         }
 
-        if (!formData.file || formData.file.length === 0) {
-            setFileError(true);
-            setIsSubmitting(false);
-            return;
-        }
+        // if (!formData.file || formData.file.length === 0) {
+        //     setFileError(true);
+        //     setIsSubmitting(false);
+        //     return;
+        // }
 
         const formDataToSend = new FormData();
         formDataToSend.append("form_type", "master");
@@ -335,14 +335,24 @@ function FormMaster() {
                                 </div>
                             </div>
                             <div className="flex flex-col">
-                                <label className="font-bold leading-6">{t("forms.master.image.title")} *</label>
+                                <label className="font-bold leading-6">{t("forms.master.image.title")}</label>
                                 <label className="font-light italic">{t("forms.master.image.description")}</label>
-                                {fileError && (
+                                {/* {fileError && (
                                     <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300">
                                         {t("forms.master.image.error")}
                                     </div>
-                                )}
+                                )} */}
                                 <DropzoneUI onFilesChange={handleFilesFromDropzone} />
+                                <div>
+                                    <p className="text-gray-500 text-sm">
+                                        <Trans
+                                            i18nKey="forms.master.image.supported"
+                                            components={{
+                                                a: <a className="text-blue-700 font-bold" href="https://t.me/Hridayama" target="_blank" rel="noopener noreferrer" > </a>
+                                            }}
+                                        />
+                                    </p>
+                                </div>
                             </div>
                             <div className="flex flex-col">
                                 <label>{t("forms.master.raider")}</label>
@@ -366,36 +376,57 @@ function FormMaster() {
                             </div>
                             {csrfError && (
                                 <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300">
-                                    <h1>{t("forms.error.csrf.title")}</h1>
-                                    <h2>{t("forms.error.csrf.description")}</h2>
+                                    <h2>{t("forms.error.csrf.title")}</h2>
+                                    <h3>{t("forms.error.csrf.description")}</h3>
                                 </div>
                             )}
                             {tooLargeError && (
                                 <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300">
-                                    <h1>{t("forms.error.content-too-large.title")}</h1>
-                                    <h2>{t("forms.error.content-too-large.description")}</h2>
+                                    <h2>{t("forms.error.content-too-large.title")}</h2>
+                                    <h3>
+                                        <p className="pb-3">{t("forms.error.content-too-large.description")}</p>
+                                        <p>
+                                            <Trans
+                                                i18nKey="forms.error.feedback"
+                                                components={{
+                                                    a: <a className="text-blue-700 font-bold" href="https://t.me/Hridayama" target="_blank" rel="noopener noreferrer" > </a>
+                                                }}
+                                            />
+                                        </p>
+                                    </h3>
                                 </div>
                             )}
                             {unknownfError && (
                                 <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-300">
-                                    <h1>{t("forms.error.unknown.title")}</h1>
-                                    <h2>{t("forms.error.unknown.description")}</h2>
+                                    <h2>{t("forms.error.unknown.title")}</h2>
+                                    <h3>
+                                        <p className="pb-3">{t("forms.error.unknown.description")}</p>
+                                        <p>
+                                            <Trans
+                                                i18nKey="forms.error.feedback"
+                                                components={{
+                                                    a: <a className="text-blue-700 font-bold" href="https://t.me/Hridayama" target="_blank" rel="noopener noreferrer" > </a>
+                                                }}
+                                            />
+                                        </p>
+                                    </h3>
                                 </div>
                             )}
-                            <div className="text-center pt-1">
-                                <button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    className={`font-inter w-full py-3 ${isSubmitting ? 'bg-gray-400' : 'bg-customOrange hover:bg-customOrange-hover'} text-orange-50 rounded-md `}
-                                >
-                                    {isSubmitting ? t("forms.submitting") : t("forms.master.submit")}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                        <div className="text-center pt-1">
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className={`font-inter w-full py-3 ${isSubmitting ? 'bg-gray-400' : 'bg-customOrange hover:bg-customOrange-hover'} text-orange-50 rounded-md `}
+                            >
+                                {isSubmitting ? t("forms.submitting") : t("forms.master.submit")}
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            )}
-        </div>
+                </div>
+    )
+}
+        </div >
     );
 }
 

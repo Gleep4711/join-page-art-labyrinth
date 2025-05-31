@@ -35,7 +35,8 @@
             "content-too-large": {
                 "title": "Error",
                 "description": "The file size is too large. Please select a smaller file and try again"
-            }
+            },
+            "feedback": "If the error persists, please contact us on Telegram: <a>@Hridayama</a>."
         },
         "submitting": "Submitting form",
         "volunteer": {
@@ -116,7 +117,8 @@
                 "input": "Click or drag your files into this area",
                 "drag": "Drag files here...",
                 "added": "Added",
-                "error": "Please upload at least one image or video."
+                "error": "Please upload at least one image or video.",
+                "supported": "If you encounter difficulties uploading media, please leave a link to the file in the field below or send it to us on Telegram: <a>@AndreiCaraion</a>."
             },
             "raider": "Your technical requirements and anything else you would like to add",
             "additional": "If you could convey one important message to the participants, what would it be? It could be a thought, philosophy, or feeling related to your art.",
@@ -131,19 +133,13 @@
         "sign": "Art-Labyrinth Family",
         "feedback": "Feedback -🙏🏽",
         "master": {
-            "general": "Nastya",
-            "general_contact": "SAVITRI_anastasiya",
+            "general": "Andrei",
             "general_role": "general cultural program",
             "music": "Marina",
-            "music_contact": "burningmannnn",
             "music_role": "musical part"
         },
         "volunteer": {
-            "general": "Daniela",
-            "general_contact": "sziromszirup",
-            "general_role": "general cultural program",
-            "phone_link": "+37368127786",
-            "phone": "+373 68 127 786"
+            "general": "Anna"
         }
     },
     "department": {
